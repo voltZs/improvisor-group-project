@@ -4,5 +4,11 @@
 {% block content %}
 <div class="container">
     <h1>Controller</h1>
+    <script>
+        var socket = io();
+        socket.on('connect', function() {
+            socket.emit('event', {data: 'SocketIO Connected'});
+        });
+    </script>
 </div>
 {% endblock %}

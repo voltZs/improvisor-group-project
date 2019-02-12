@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for
 from flask_bootstrap import Bootstrap
-from improvisor import app
+from flask_socketio import SocketIO, send
+from improvisor import app, socketio
 
 @app.route('/', methods=['GET'])
 def index():
@@ -13,3 +14,8 @@ def controller():
 @app.route('/presenter', methods=['GET'])
 def presenter():
 	return render_template('presenter.html')
+
+@socketio.on('event')
+def handleMessage(data):
+    print('Event: ' + str(data))
+    send(data, broadcast=True)
