@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, abort, session
 from improvisor import app, socketio, sample_files
 from operator import itemgetter
 import json
+import copy
 
 # Retrieve the sample assets from sample_files.py
 assets = sample_files.assets
@@ -57,10 +58,10 @@ def compare_phrases():
             recent_tags = mentioned_tags.get('recent')
             if not all_tags.get(word):
                 mentioned_tags['all'][word] = {'mentions' : 0}
-                print("Initialised mentioned_tags['all']['" + word)
+                print("Initialised mentioned_tags['all']['" + word + "]")
             if not recent_tags.get(word):
                 mentioned_tags['recent'][word] = {'mentions' : 0}
-                print("Initialised mentioned_tags['recent']['" + word)
+                print("Initialised mentioned_tags['recent']['" + word + "]")
 
             # ADD THE NEW TAG TO THE MENTIONED_TAGS OBJ
             mentioned_tags['all'][word]['mentions'] += 1
@@ -81,10 +82,12 @@ def compare_phrases():
         mentioned_all = mentioned_tags['all'].keys()
         asset['weight'] = 0
         # LOOP FOR UPDATING WEIGHT
+        print("asset: " + str(asset['id']) + " to frequent")
         for tag in mentioned_all:
             if tag in asset['tags']:
+                print("---adding" + str(mentioned_tags['all'][tag]['mentions']))
                 asset['weight'] += mentioned_tags['all'][tag]['mentions']
-
+        print("--------weight:" + str(asset['weight']))
         # LOOP TO ADD FOUND ONES, BREAK SO IT ONLY ADDS ASSET ONCE IF
         # IT HAS MORE THAN ONE MATCHING TAG
         for tag in mentioned_all:
@@ -92,19 +95,21 @@ def compare_phrases():
                 frequent_assets.append(asset)
                 break
 
+        #CREATE A COPY OF THE ASSET SO THE FREQUENT_ASSETS IS NOT OVERRIDEN
+        asset2 = copy.copy(asset)
         ###### FOR RECENT -> CURRENT
         mentioned_recent = mentioned_tags['recent'].keys()
-        asset['weight'] = 0
+        asset2['weight'] = 0
         # LOOP FOR UPDATING WEIGHT
         for tag in mentioned_recent:
-            if tag in asset['tags']:
-                asset['weight'] += mentioned_tags['recent'][tag]['mentions']
+            if tag in asset2['tags']:
+                asset2['weight'] += mentioned_tags['recent'][tag]['mentions']
 
         # LOOP TO ADD FOUND ONES, BREAK SO IT ONLY ADDS ASSET ONCE IF
         # IT HAS MORE THAN ONE MATCHING TAG
         for tag in mentioned_recent:
-            if tag in asset['tags']:
-                current_assets.append(asset)
+            if tag in asset2['tags']:
+                current_assets.append(asset2)
                 break
 
     sorted_frequent =  sorted(frequent_assets, key=itemgetter('weight'), reverse=True)
