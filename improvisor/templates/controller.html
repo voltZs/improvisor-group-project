@@ -4,11 +4,105 @@
 {% block content %}
 <div class="container">
     <h1>Controller</h1>
-    <script>
-        var socket = io();
-        socket.on('connect', function() {
-            socket.emit('event', {data: 'SocketIO Connected'});
+    <h3>Current </h3>
+    <div class="imageRow" id="currentRow"></div>
+    <h3>Frequent</h3>
+    <div class="imageRow" id="frequentRow"></div>
+    <script type="text/javascript">
+      var currentResults = document.getElementById("currentRow");
+      var frequentResults = document.getElementById("frequentRow");
+      var storageBool = storageAvailable('localStorage');
+      annyang.start({ autoRestart: true });
+      var socket;
+      $(document).ready(function () {
+          socket = io();
+      });
+      //only works if local storage is a available in th browser
+      if(storageBool){
+        console.log("localStorage available");
+        if (annyang){
+          annyang.addCallback('result', function(phrases) {
+            var phrase = phrases[0];
+            console.log("Speech Recognised: ", phrase);
+            var mentionedTags = localStorage.getItem('mentionedTags');
+            if(mentionedTags){
+              $.ajax({
+                type: "POST",
+                url:"/compare_phrases",
+                data: { 'phrase': phrase,
+                        'mentionedTags': mentionedTags},
+                timeout: 60000,
+                success: function(data) {
+                  var retrieved = JSON.parse(data);
+                  console.log(retrieved);
+                  updateResults(retrieved['assetResults']);
+                  localStorage.setItem('mentionedTags', JSON.stringify(retrieved['mentionedTags']));
+                }
+              });
+            } else {
+              $.ajax({
+                type: "POST",
+                url:"/compare_phrases",
+                data: { 'phrase': phrase},
+                timeout: 60000,
+                success: function(data) {
+                  var retrieved = JSON.parse(data);
+                  console.log(retrieved);
+                  updateResults(retrieved['assetResults']);
+                  localStorage.setItem('mentionedTags', JSON.stringify(retrieved['mentionedTags']));
+                }
+              });
+            }
+          });
+        }
+      }
+      function updateResults(assets){
+        frequentResults.innerHTML = "";
+        for(asset in assets['frequent']){
+          var image = document.createElement("IMG");
+          image.src = "/static/resources/images/" + assets['frequent'][asset]['thumbnail'];
+          image.setAttribute("data-id", assets['frequent'][asset]['id'] );
+          image.classList.add("assetThumbnail");
+          frequentResults.appendChild(image);
+        }
+        currentResults.innerHTML = "";
+        for(asset in assets['current']){
+          var image = document.createElement("IMG");
+          image.src = "/static/resources/images/" + assets['current'][asset]['thumbnail'];
+          image.setAttribute("data-id", assets['frequent'][asset]['id'] );
+          image.classList.add("assetThumbnail");
+          currentResults.appendChild(image);
+        }
+        $(".assetThumbnail").each(function(index){
+          var element = $(this);
+          console.log(element);
+          element.click(function () {
+              var assetID = element.attr('data-id');
+              socket.send(assetID);
+              console.log(element);
+              console.log("sent ID " + assetID + " to socketIO");
+          });
         });
+      }
+      function storageAvailable(type){
+        try
+        {
+          var storage = window[type];
+          var x = '_storage_test__';
+          storage.setItem(x, x);
+          storage.removeItem(x) ;
+          return true ;
+        }
+        catch (e)
+        {
+          return e instanceof DOMException && (
+          e.code === 22 ||
+          e.code === 1014 ||
+          e.name === 'QuotaExceededError' ||
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+          storage.length !== 0;
+        }
+      }
     </script>
 </div>
 {% endblock %}
