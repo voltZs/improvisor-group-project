@@ -1,0 +1,116 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	min-width: 400px;
+	max-width: 100%;
+}
+
+.container {
+	color:black;
+}
+
+h1 {
+	font-family: 'Montserrat', sans-serif;
+}
+
+/* NAV BAR START (to be replaced) */
+
+.navbar {
+	background: #0f0f0f !important;
+	width: 100%;
+	padding: 0 5%;
+	height: 80px;
+	margin: 0;
+	z-index: 1;
+	border-radius: 0;
+}
+
+.navbar-header {
+	width: 300px;
+}
+
+.navbar-header a {
+	max-width: 100%;
+	margin-left: 0 !important;
+}
+
+.navbar .navbar-brand {
+	max-width: 100%;
+	padding: 0;
+	display: flex;
+	align-items: center;
+}
+
+.navbar-nav {
+	margin: 0;
+	
+}
+.navbar .container-fluid {
+	margin: 15px auto;
+	max-width: 1250px;
+	padding: 0;
+	height: auto;
+}
+
+.navbar .container-fluid {
+	padding: 0;
+	margin-top: 13px;
+	display: flex;
+	justify-content: center;
+}
+
+.navbar .container-fluid ul.spacer {
+	margin-left: 15%;
+}
+
+.navbar li {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	max-width: 200px;
+	margin: 15px 0;
+}
+
+.nav > li {
+	display: inline-block !important;
+}
+
+.navbar li a, .nav-btn {
+	color: white !important;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 4px 0;
+	margin: 0 15px;
+	background: none;
+	border: none;
+	margin-top: -2px;
+}
+
+.navbar li a:hover, .nav-btn:hover {
+	font-weight: bolder;
+	text-decoration: none !important;
+	background: none;
+	color: #ec3642 !important;
+	border-bottom: solid 2px #ec3642;
+	  transition: border-width 0.2s linear;
+	  transition-property: left right;
+	  transition-timing-function: ease-out;
+}
+
+.navbar li a:focus {
+	background: none;
+	outline: 0;
+	text-decoration: none;
+}
+
+.navbar .active a {
+	background: none !important;
+	border-bottom: 2px solid #ec3642;
+}
+
+.nav-btn:hover {
+	color: #ec3642;
+}
+
+/* NAV BAR END */
