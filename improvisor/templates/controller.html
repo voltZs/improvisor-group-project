@@ -110,6 +110,14 @@
                     storage.length !== 0;
             }
         }
+
+        function flushRecentTags(){
+          storedTags = JSON.parse(localStorage.getItem('mentionedTags'));
+          console.log(storedTags);
+          storedTags['recent'] = {};
+          localStorage.setItem('mentionedTags', JSON.stringify(storedTags));
+        }
+
     </script>
     <script>
         function applyGestureControls() {
@@ -131,7 +139,8 @@
 
                         var assetID = element.attr('data-id');
                         socket.emit('event', assetID);
-                        
+                        flushRecentTags();
+
                         console.log("sent ID " + assetID + " to socketIO");
                         // Add the asset back to the display
                         setTimeout(function () {
@@ -162,10 +171,10 @@
     </script>
     <script>
         // Prevent chrome popup menu on hold (android)
-        
+
         var ua = navigator.userAgent.toLowerCase();
         var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-        
+
         if (isAndroid) {
             window.oncontextmenu = function (event) {
                 event.preventDefault();
@@ -173,7 +182,7 @@
                 return false;
             };
         }
-        
+
     </script>
 </div>
 {% endblock %}

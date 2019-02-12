@@ -27,7 +27,7 @@ def compare_phrases():
 
     phrase = request.form.get('phrase')
     mentioned_tags = request.form.get('mentionedTags')
-    flush_recent = request.args.get("flush")
+
 
     if not mentioned_tags:
         mentioned_tags = {'recent' : {},
@@ -48,10 +48,6 @@ def compare_phrases():
                 'mentionedTags' : {}
             }
 
-    # EMPTY RECENT TAGS IF THE REQUEST HAS FLUSH SET TO TRUE
-    if flush_recent == "true":
-        mentioned_tags['recent'] = {}
-
     # UPDATE THE MENTIONED_TAGS OBJECT
     for word in phrase.split(' '):
         word = word.lower()
@@ -61,10 +57,10 @@ def compare_phrases():
             recent_tags = mentioned_tags.get('recent')
             if not all_tags.get(word):
                 mentioned_tags['all'][word] = {'mentions' : 0}
-                print("Initialised mentioned_tags['all']['" + word + "'] in ALL")
+                print("Initialised mentioned_tags['all']['" + word)
             if not recent_tags.get(word):
                 mentioned_tags['recent'][word] = {'mentions' : 0}
-                print("Initialised mentioned_tags['all']['" + word + "'] in RECENT")
+                print("Initialised mentioned_tags['recent']['" + word)
 
             # ADD THE NEW TAG TO THE MENTIONED_TAGS OBJ
             mentioned_tags['all'][word]['mentions'] += 1
