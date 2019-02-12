@@ -4,4 +4,20 @@
 <div class="container">
     <h1>Presenter</h1>
 </div>
+<div class="presenter-view">
+    <img id="display" src="">
+</div>
+
+<script>
+    $(document).ready(function () {
+        var socket = io();
+        socket.on('presenter', function (filename) {
+            var directory = "/static/resources/images/"
+            var file = directory + filename;
+            
+            $('#display').attr('src', file);
+            console.log('Received message ' + file);
+        });
+    });
+</script>
 {% endblock %}

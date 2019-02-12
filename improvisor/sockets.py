@@ -4,4 +4,5 @@ from improvisor import socketio
 @socketio.on('event')
 def handleMessage(data):
     print('Event: ' + str(data))
-    send(data, broadcast=True)
+    filename = str(data) + ".jpg"
+    socketio.emit('presenter', filename)
