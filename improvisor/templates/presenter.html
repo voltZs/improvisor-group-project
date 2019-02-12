@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% set active_page = 'presenter' %}
 {% block content %}
+
 <div class="container">
     <h1>Presenter</h1>
 </div>
@@ -13,11 +14,11 @@
         var socket = io();
         socket.on('presenter', function (filename) {
             var directory = "/static/resources/images/"
-            var file = directory + filename;
-            
+            var file = directory + filename + ".jpg";
             $('#display').attr('src', file);
-            console.log('Received message ' + file);
+            console.log('Received ID ' + filename);
         });
     });
 </script>
+
 {% endblock %}
