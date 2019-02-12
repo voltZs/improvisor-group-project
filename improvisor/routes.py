@@ -30,7 +30,9 @@ def compare_phrases():
     flush_recent = request.args.get("flush")
 
     if not mentioned_tags:
-        mentioned_tags = { 'recent' : {}, 'all' : {} }
+        mentioned_tags = {'recent' : {},
+                    'all' : {}
+                }
     else:
         mentioned_tags = json.loads(mentioned_tags)
 
@@ -41,11 +43,9 @@ def compare_phrases():
             if tag not in tag_pool:
                 tag_pool.append(tag)
 
-    sorting_obj = {
-		'assetResults' : {
-			'current' : [],
-			'frequent' :[]},
-        'mentionedTags' : {}
+    sorting_obj = {'assetResults' : {'current' : [],
+                                    'frequent' :[]},
+                'mentionedTags' : {}
             }
 
     # EMPTY RECENT TAGS IF THE REQUEST HAS FLUSH SET TO TRUE
