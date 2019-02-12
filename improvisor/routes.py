@@ -14,8 +14,3 @@ def controller():
 @app.route('/presenter', methods=['GET'])
 def presenter():
 	return render_template('presenter.html')
-
-@socketio.on('event')
-def handleMessage(data):
-    print('Event: ' + str(data))
-    send(data, broadcast=True)

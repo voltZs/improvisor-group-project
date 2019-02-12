@@ -10,4 +10,4 @@ socketio = SocketIO(app)
 app.config.from_pyfile("config/defaults.py")
 app.secret_key = app.config['SECRET_KEY']
 
-from improvisor import routes
+from improvisor import routes, sockets
