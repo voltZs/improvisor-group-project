@@ -1,6 +1,4 @@
-from flask import Flask, render_template, url_for
-from flask_bootstrap import Bootstrap
-from flask_socketio import SocketIO, send
+from flask import Flask, render_template
 from improvisor import app, socketio
 
 @app.route('/', methods=['GET'])
