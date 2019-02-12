@@ -116,13 +116,16 @@ h1 {
 /* NAV BAR END */
 
 .imageRow {
-	overflow-x: scroll;
-	overflow-y: visible;
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	overflow-y: hidden;
 	width: 100%;
-	height: 150px;
+	height: 160px;
 	white-space: nowrap;
 }
 img {
+	flex: 0 0 auto;
 	margin-left: 5px;
 	margin-right: 5px;
 	max-width: 200px;

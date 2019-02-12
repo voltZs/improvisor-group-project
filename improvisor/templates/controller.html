@@ -123,7 +123,7 @@
                 });
                 var element = $(this);
                 // listen to events...
-                gestures.on("swipeup swipedown swipeleft swiperight tap press pressup", function (ev) {
+                gestures.on("swipeup tap", function (ev) {
                     // Swipe up gesture
                     if (ev.type == "swipeup") {
                         element.removeClass("fadeIn");
@@ -140,7 +140,7 @@
                             element.removeClass("element-reset");
                             element.removeClass("slideOutUp");
                             element.addClass("fadeIn");
-                        }, 1000);
+                        }, 500);
                     }
                     // Tap gesture
                     if (ev.type == "tap") {
@@ -162,9 +162,10 @@
     </script>
     <script>
         // Prevent chrome popup menu on hold (android)
+        
         var ua = navigator.userAgent.toLowerCase();
         var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-
+        
         if (isAndroid) {
             window.oncontextmenu = function (event) {
                 event.preventDefault();
@@ -172,6 +173,7 @@
                 return false;
             };
         }
+        
     </script>
 </div>
 {% endblock %}
