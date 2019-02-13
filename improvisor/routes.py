@@ -22,6 +22,15 @@ def presenter():
 def controller():
 	return render_template('controller.html')
 
+@app.route('/fetch_tagset', methods=['GET'])
+def fetch_tagset():
+    tag_pool = []
+    for asset in assets:
+        for tag in asset['tags']:
+            if tag not in tag_pool:
+                tag_pool.append(tag)
+    return json.dumps(tag_pool)
+
 
 @app.route('/compare_phrases', methods=['POST'])
 def compare_phrases():

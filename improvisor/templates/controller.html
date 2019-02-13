@@ -23,6 +23,8 @@
             socket = io();
         });
 
+        var tagset = fetchTagset();
+
         //only works if local storage is a available in the browser
         if (storageBool) {
             console.log("localStorage available");
@@ -116,6 +118,19 @@
           console.log(storedTags);
           storedTags['recent'] = {};
           localStorage.setItem('mentionedTags', JSON.stringify(storedTags));
+        }
+
+        function fetchTagset(){
+            var tmp = null;
+            $.ajax({
+                async: false,
+                url: "/fetch_tagset",
+                timeout: 60000,
+                success: function (data) {
+                    tmp = JSON.parse(data);
+                }
+            });
+            return tmp;
         }
 
     </script>
