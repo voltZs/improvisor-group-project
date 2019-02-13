@@ -30,14 +30,10 @@ def tagUI(): #this throws an eror when it has the same name as the resource clas
     return render_template('something.html') 
 
 
-@app.route('/tag_form', methods=['POST', 'GET'])
+@app.route('/tag_form')
 def tagform():
     form = FormTag(request.form)
-    if request.method == 'POST' and form.validate():
-            print("Valid form submitted: " + form.tag.data)
-            return redirect('/')
-    
-    return render_template('tag_form.html', form=form)
+    return render_template('tag_form.html', form=form) #only passing form because you were, don't know if you still need it after removing your code 
 
 
 api.add_resource(Tag, "/tagAPI")

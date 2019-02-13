@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators
 
+
 class FormTag(FlaskForm):
     tag = StringField('tag', [
         validators.DataRequired()
