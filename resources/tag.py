@@ -1,6 +1,5 @@
 from flask_restful import Resource
-from models.tag_model import TagModel 
-
+from models.tag_model import TagModel
 
 class Tag(Resource):
     def get(self):
