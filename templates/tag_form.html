@@ -1,6 +1,18 @@
 <h1>Tag form</h1>
-<form method="POST" action="/tagAPI"> <!--submit must direct to the API endpoint and then the API method will issue a redirect to the html page you want to see-->
+<form method="POST" action="/tag_form">
     {{ form.csrf_token }}
     {{ form.tag.label }} {{ form.tag(size=20) }}
     <input type="submit" value="Submit">
 </form>
+<button onClick="myFunction()">Click</button>
+<script>
+    function myFunction(){
+        fetch("http://127.0.0.1:5000/get_tags")
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function(data){
+            console.log(data)
+        })
+
+    }
+
+</script>

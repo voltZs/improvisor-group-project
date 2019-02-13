@@ -16,7 +16,8 @@ class Tag(Resource):
             return redirect("/")
         
         print("bad form")
-        return {"message" : "bad form"}
+        return {"message" : "bad form", "form" : form}
+
 class TagList(Resource):
     def get(self):
         pass
