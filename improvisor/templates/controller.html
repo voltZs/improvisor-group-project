@@ -85,7 +85,7 @@
             for (asset in assets['current']) {
                 var image = document.createElement("IMG");
                 image.src = "/static/resources/images/" + assets['current'][asset]['thumbnail'];
-                image.setAttribute("data-id", assets['frequent'][asset]['id']);
+                image.setAttribute("data-id", assets['current'][asset]['id']);
                 image.classList.add("assetThumbnail");
                 image.classList.add("animated");
                 image.classList.add("faster");

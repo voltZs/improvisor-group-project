@@ -82,12 +82,9 @@ def compare_phrases():
         mentioned_all = mentioned_tags['all'].keys()
         asset['weight'] = 0
         # LOOP FOR UPDATING WEIGHT
-        print("asset: " + str(asset['id']) + " to frequent")
         for tag in mentioned_all:
             if tag in asset['tags']:
-                print("---adding" + str(mentioned_tags['all'][tag]['mentions']))
                 asset['weight'] += mentioned_tags['all'][tag]['mentions']
-        print("--------weight:" + str(asset['weight']))
         # LOOP TO ADD FOUND ONES, BREAK SO IT ONLY ADDS ASSET ONCE IF
         # IT HAS MORE THAN ONE MATCHING TAG
         for tag in mentioned_all:
