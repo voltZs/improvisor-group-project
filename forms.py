@@ -1,9 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators
+from wtforms import StringField, IntegerField, validators, PasswordField
 
 
 class FormTag(FlaskForm):
     tag = StringField('tag', [
+        validators.DataRequired()
+    ])
+    user_id = IntegerField('user_id', [
         validators.DataRequired()
     ])
 
@@ -18,3 +21,9 @@ class FormSignup(FlaskForm):
 		validators.Regexp('^\\w+$', message="Last name may only contain letters")
 		])
     email = StringField('email', [validators.Email()])
+    password = PasswordField('password', [
+		validators.DataRequired(),
+		validators.Length(min=8, max=15, message="Password must be between 8 and 15 characters long inclusive"),
+		validators.EqualTo('confirm', message='Passwords do not match')
+	])
+    confirm = PasswordField('confirm')
