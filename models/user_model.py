@@ -10,8 +10,9 @@ class UserModel(db.Model):
     password = db.Column(db.String(80))
 
     tags = db.relationship("TagModel", lazy="dynamic")
+    assets = db.relationship("AssetModel", lazy = "dynamic")
     def json(self):
-        return {"email":self.email, "tags" : [tag.json() for tag in self.tags.all()], "id" : self.id}
+        return {"email":self.email, "tags" : [tag.json() for tag in self.tags.all()], "assets" : [asset.json() for asset in self.assets.all()], "id" : self.id}
 
     def __init__(self, firstname, lastname, email, password):
         self.firstname = firstname
