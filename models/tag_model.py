@@ -1,5 +1,5 @@
 from db import db
-
+from flask import session
 class TagModel(db.Model):
     __tablename__ = "tags"
 
@@ -19,4 +19,4 @@ class TagModel(db.Model):
 
     @classmethod
     def find_by_tagName(cls, tagname):
-        return cls.query.filter_by(tagname = tagname).first()
+        return cls.query.filter_by(tagname = tagname, user_id = session["user_id"]).first()

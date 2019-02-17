@@ -6,7 +6,7 @@ class AssetModel(db.Model):
     __tablename__ = "assets"
 
     id = db.Column(db.Integer, primary_key=True)
-    assetname = db.Column(db.String(80))
+    assetname = db.Column(db.String(200))
     user = db.relationship("UserModel")
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 

@@ -1,25 +1,29 @@
 import os
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, session
 from flask_cors import CORS
 from resources.tag import Tag, TagList
 from flask_wtf import FlaskForm
-from forms import FormTag, FormSignup
+from forms import FormTag, FormSignup, FormAsset
 from models.tag_model import TagModel
 from models.user_model import UserModel
+from models.asset_model import AssetModel
 
 app = Flask(__name__)
 CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///data.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
-app.secret_key = 'dearest_mother'
+app.secret_key = 'yeet'
 
 
 @app.before_first_request
 def create_tables():
     db.create_all()
 
-
+@app.before_first_request
+def initialiseSession():
+    session["user_id"] = 0
+    session["logged_in"] = False
 
 @app.route('/')
 def index():
@@ -65,6 +69,26 @@ def addUser():
 @app.route('/api/userList', methods=['GET'])
 def getUsers():
     return jsonify({"users": [user.json() for user in UserModel.query.all()]})
+
+#API: inserts asset into database and allows tags to be added to asset
+@app.route('/api/asset', methods=["GET", "POST", "PUT"])
+def addAsset():
+    form = FormAsset(request.form)
+    if (request.method=="POST" and form.validate()):
+        print(f'Valid form submitted Asset-name is : {form.assetname}')
+        if AssetModel.find_by_assetName(form.assetname):
+            #return form back with message saying that an asset already exists with that name 
+        if session["logged_in"] == True:
+            asset = AsserModel(form.assetname, session["user_id"])
+        else:
+            #return form back with message saying that no user is logged in
+        try:
+            asset.save_to_db()
+        except:
+            error = "Error while saving asset to db"
+            #return form back with error message
+        
+
 
 if __name__ =='__main__':
     from db import db
