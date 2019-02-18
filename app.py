@@ -71,10 +71,11 @@ def loginUser():
     form = FormLogin(request.form)
     if form.validate():
         print(f"valid form submitted {form.email.data} and {form.password.data}")
-        user = UserModel.find_by_email(form.email)
+        user = UserModel.find_by_email(form.email.data)
         if user:
             session["user_id"] = user.id
             session["logged_in"] = True
+            print(f'logged in as {user.email} with id {session["user_id"]}')
             return redirect('/')
         else:
             error = "Invalid credentials"

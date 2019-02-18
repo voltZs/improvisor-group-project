@@ -37,6 +37,5 @@ class FormLogin(FlaskForm):
     email = StringField('email', [validators.Email()])
     password = PasswordField('password', [
 	    validators.DataRequired(),
-		validators.Length(min=8, max=15, message="Password must be between 8 and 15 characters long inclusive"),
-		validators.EqualTo('confirm', message='Passwords do not match')
+		validators.Length(min=8, max=15, message="Password must be between 8 and 15 characters long inclusive")
 	])
