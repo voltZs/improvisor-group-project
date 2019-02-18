@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, jsonify, session
 from flask_cors import CORS
 from resources.tag import Tag, TagList
 from flask_wtf import FlaskForm
-from forms import FormTag, FormSignup, FormAsset
+from forms import FormTag, FormSignup, FormAsset, FormLogin
 from models.tag_model import TagModel
 from models.user_model import UserModel
 from models.asset_model import AssetModel
@@ -65,6 +65,23 @@ def addUser():
         return redirect('/')
     return render_template('signup.html', form=form)
 
+#API: gets user from database and updates session dictionary
+@app.route('/api/login', methods=["GET", "POST"])
+def loginUser():
+    form = FormLogin(request.form)
+    if form.validate():
+        print(f"valid form submitted {form.email.data} and {form.password.data}")
+        user = UserModel.find_by_email(form.email)
+        if user:
+            session["user_id"] = user.id
+            session["logged_in"] = True
+            return redirect('/')
+        else:
+            error = "Invalid credentials"
+            return(render_template('login.html', form = form, error = error))
+    print("form not valid")
+    return (render_template('login.html', form= form))
+
 #API: extracts all users from database
 @app.route('/api/userList', methods=['GET'])
 def getUsers():
@@ -77,10 +94,12 @@ def addAsset():
     if (request.method=="POST" and form.validate()):
         print(f'Valid form submitted Asset-name is : {form.assetname}')
         if AssetModel.find_by_assetName(form.assetname):
+            pass
             #return form back with message saying that an asset already exists with that name 
         if session["logged_in"] == True:
-            asset = AsserModel(form.assetname, session["user_id"])
+            asset = AssetModel(form.assetname, session["user_id"])
         else:
+            pass
             #return form back with message saying that no user is logged in
         try:
             asset.save_to_db()

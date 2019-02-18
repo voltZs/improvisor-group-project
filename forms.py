@@ -27,3 +27,16 @@ class FormSignup(FlaskForm):
 		validators.EqualTo('confirm', message='Passwords do not match')
 	])
     confirm = PasswordField('confirm')
+
+class FormAsset(FlaskForm):
+    assetname = StringField('assetname', [
+        validators.Length(min=2, max=200)
+    ])
+
+class FormLogin(FlaskForm):
+    email = StringField('email', [validators.Email()])
+    password = PasswordField('password', [
+	    validators.DataRequired(),
+		validators.Length(min=8, max=15, message="Password must be between 8 and 15 characters long inclusive"),
+		validators.EqualTo('confirm', message='Passwords do not match')
+	])
