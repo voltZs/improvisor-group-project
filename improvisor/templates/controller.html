@@ -26,114 +26,100 @@
         $(document).ready(function () {
             socket = io();
         });
+
+        // ############### ARTYOM ############################
+        const artyom = new Artyom();
+        var recognisedTags = []; // will store recognised tags so they can be removed from the next result
+                                // the list is cleared when there is a gap in speech
+        // the tags will be pulled from the server
+        var recognisedTagsUsed = [];
         var tagset = fetchTagset();
-        //only works if local storage is a available in the browser
-        if (storageBool) {
-            console.log("localStorage available");
 
-            // ############### ARTYOM ############################
-            const artyom = new Artyom();
-            var recognisedTags = []; // will store recognised tags so they can be removed from the next result
-                                    // the list is cleared when there is a gap in speech
-            // the tags will be pulled from the server
-            var tags = ['edinburgh', 'pancake', 'dog', 'nutella'];
+        var settings = {
+            continuous: true, // Don't stop never because i have https connection
+            onResult: function (text) {
+              // converts the result to lower case to match the tags
+              text = text.toLowerCase();
 
-            var settings = {
-                continuous: true, // Don't stop never because i have https connection
-                onResult: function (text) {
-                  // converts the result to lower case to match the tags
-                  text = text.toLowerCase();
+              if(text == ""){
+                recognisedTagsUsed = [];
+              }
 
-                  // when the output clears it returns an empty string. When that happens
-                  // recognisedTags can be cleared as well as it won't be repeated any more
-                  if(text == ""){
-                    recognisedTags.length = 0;
-                  }
-
-                  // checking if the list is not empty before iterating through it!
-                  if(recognisedTags.length != 0){
-
-                    recognisedTags.forEach(function(item){
-                      text = text.replace(item, "");
-                    });
-                  }
-
-                  // prints the result with recognised tags removed
-                  console.log("Recognized text: ", text);
-
-
-                  // goes through the tags and checks if they are in the text
-                  tagset.forEach(function(tag){
-                    if(text.toLowerCase().includes(tag)){
-
-                      // adds the new recognised tag into the recognisedTag list
-                      recognisedTags.push(tag);
-                      console.log(recognisedTags);
-
-                      // ############### ADD YOUR CODE HERE ##################
-                    }
-                  });
-
-                },
-                onStart: function () {
-                  console.log("Dictation started by the user");
-                },
-                onEnd: function () {
-                  console.log("Dictation stopped by the user");
+              // checking if the list is not empty before iterating through it!
+              if(recognisedTagsUsed.length != 0){
+                recognisedTagsUsed.forEach(function(item){
+                  text = text.replace(item, "");
+                });
+              }
+              // prints the result with recognised tags removed
+              console.log("Recognized text: ", text);
+              // goes through the tags and checks if they are in the text
+              tagset.forEach(function(tag){
+                if(text.toLowerCase().includes(tag)){
+                  // adds the new recognised tag into the recognisedTag list
+                  recognisedTags.push(tag);
+                  console.log(recognisedTags);
+                  text.replace(tag, "");
                 }
-            };
+              });
 
-            var UserDictation = artyom.newDictation(settings);
-
-            function startArtyom() {
-                // Make sure artyom is deactvated before dictation..
-                artyom.fatality()
-                // Activate dictation object
-                UserDictation.start();
-            };
-
-            function stopArtyom() {
-                console.log("Stopped Artyom");
-                UserDictation.stop();
+            // this will also empty what's currently in the recognised tags
+            if(recognisedTags){
+                makeAjaxRequest();
+                recognisedTagsUsed = recognisedTagsUsed.concat(recognisedTags);
+                recognisedTags = [];
             }
+            },
+            onStart: function () {
+              console.log("Dictation started by the user");
+            },
+            onEnd: function () {
+              console.log("Dictation stopped by the user");
+            }
+        };
 
-            // Start listening button
-            $("#start").click(function () {
-                $(".control").toggleClass('hidden');
-                //noSleep.enable();
-                startArtyom();
-                console.log("Started listening");
-            });
+        var UserDictation = artyom.newDictation(settings);
 
-            // Stop listening button
-            $("#stop").click(function () {
-                $(".control").toggleClass('hidden');
-                //noSleep.disable();
-                stopArtyom();
-                console.log("Stopped listening");
-            });
+        function startArtyom() {
+            // Make sure artyom is deactvated before dictation..
+            artyom.fatality()
+            // Activate dictation object
+            UserDictation.start();
+        };
 
+        function stopArtyom() {
+            console.log("Stopped Artyom");
+            UserDictation.stop();
+        }
 
-          // ############### END OF ARTYOM ############################
+        // Start listening button
+        $("#start").click(function () {
+            $(".control").toggleClass('hidden');
+            //noSleep.enable();
+            startArtyom();
+            console.log("Started listening");
+        });
 
+        // Stop listening button
+        $("#stop").click(function () {
+            $(".control").toggleClass('hidden');
+            //noSleep.disable();
+            stopArtyom();
+            console.log("Stopped listening");
+        });
 
+        function makeAjaxRequest(){
+            //only works if local storage is a available in the browser
+            if (storageBool) {
+                console.log("localStorage available");
 
-
-
-
-
-
-            if (annyang) {
-              annyang.addCallback('result', function (phrases) {
-                var phrase = phrases[0];
-                console.log("Speech Recognised: ", phrase);
                 var mentionedTags = localStorage.getItem('mentionedTags');
                 if (mentionedTags) {
                   $.ajax({
                     type: "POST",
                     url: "/compare_phrases",
                     data: {
-                      'phrase': phrase,
+                      'recognisedTags': JSON.stringify(recognisedTags),
                       'mentionedTags': mentionedTags
                     },
                     timeout: 60000,
@@ -150,7 +136,7 @@
                     type: "POST",
                     url: "/compare_phrases",
                     data: {
-                      'phrase': phrase
+                      'recognisedTags': JSON.stringify(recognisedTags),
                     },
                     timeout: 60000,
                     success: function (data) {
@@ -162,16 +148,9 @@
                     }
                   });
                 }
-              });
             }
-
-
-
-
-
-
-
         }
+
         function updateResults(assets) {
             frequentResults.innerHTML = "";
             for (asset in assets['frequent']) {

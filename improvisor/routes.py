@@ -35,7 +35,7 @@ def fetch_tagset():
 @app.route('/compare_phrases', methods=['POST'])
 def compare_phrases():
 
-    phrase = request.form.get('phrase')
+    recognised_tags = json.loads(request.form.get('recognisedTags'))
     mentioned_tags = request.form.get('mentionedTags')
 
 
@@ -59,26 +59,24 @@ def compare_phrases():
             }
 
     # UPDATE THE MENTIONED_TAGS OBJECT
-    for word in phrase.split(' '):
-        word = word.lower()
-        if word in tag_pool:
-            # IF THE WORD IS NOT IN THE TAGS, INITIALISE - SSEPARATELY FOR RECENT AND ALL
-            all_tags = mentioned_tags.get('all')
-            recent_tags = mentioned_tags.get('recent')
-            if not all_tags.get(word):
-                mentioned_tags['all'][word] = {'mentions' : 0}
-                print("Initialised mentioned_tags['all']['" + word + "]")
-            if not recent_tags.get(word):
-                mentioned_tags['recent'][word] = {'mentions' : 0}
-                print("Initialised mentioned_tags['recent']['" + word + "]")
+    for word in recognised_tags:
+        # IF THE WORD IS NOT IN THE TAGS, INITIALISE - SSEPARATELY FOR RECENT AND ALL
+        all_tags = mentioned_tags.get('all')
+        recent_tags = mentioned_tags.get('recent')
+        if not all_tags.get(word):
+            mentioned_tags['all'][word] = {'mentions' : 0}
+            print("Initialised mentioned_tags['all']['" + word + "]")
+        if not recent_tags.get(word):
+            mentioned_tags['recent'][word] = {'mentions' : 0}
+            print("Initialised mentioned_tags['recent']['" + word + "]")
 
-            # ADD THE NEW TAG TO THE MENTIONED_TAGS OBJ
-            mentioned_tags['all'][word]['mentions'] += 1
-            mentioned_tags['recent'][word]['mentions'] += 1
-            print("Adding mention to " + word + " in  RECENT")
-        # recent_tags = sortingObj.get(mentionedTags).get('recent')
-        # session['recent']
-        # sesssion['frequent']
+        # ADD THE NEW TAG TO THE MENTIONED_TAGS OBJ
+        mentioned_tags['all'][word]['mentions'] += 1
+        mentioned_tags['recent'][word]['mentions'] += 1
+        print("Adding mention to " + word + " in  RECENT")
+    # recent_tags = sortingObj.get(mentionedTags).get('recent')
+    # session['recent']
+    # sesssion['frequent']
 
     sorting_obj['mentionedTags'] = mentioned_tags
 
