@@ -33,7 +33,7 @@ itsdangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.0
 monotonic==1.5
-pkg-resources==0.0.0
+#pkg-resources==0.0.0
 python-engineio==3.3.1
 python-socketio==3.1.2
 six==1.12.0
