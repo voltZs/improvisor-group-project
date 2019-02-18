@@ -6,9 +6,7 @@ class FormTag(FlaskForm):
     tag = StringField('tag', [
         validators.DataRequired()
     ])
-    user_id = IntegerField('user_id', [
-        validators.DataRequired()
-    ])
+    
 
 # Not implemented yet but will be useful for user signup form
 class FormSignup(FlaskForm):
@@ -31,6 +29,10 @@ class FormSignup(FlaskForm):
 class FormAsset(FlaskForm):
     assetname = StringField('assetname', [
         validators.Length(min=2, max=200)
+    ])
+    tagname = StringField('tagname',[
+        validators.Optional(True),
+        validators.Length(min=2,max=200)
     ])
 
 class FormLogin(FlaskForm):

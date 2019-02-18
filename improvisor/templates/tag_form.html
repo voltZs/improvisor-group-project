@@ -2,13 +2,12 @@
 <form method="POST" action="/api/tag">
     {{ form.csrf_token }}
     {{ form.tag.label }} {{ form.tag(size=20) }}
-    {{ form.user_id.label }} {{ form.user_id(size=3) }}
     <input type="submit" value="Submit">
 </form>
 <button onClick="getTags()">AllTagsInDB</button>
 <script>
     function getTags(){
-        fetch("http://127.0.0.1:5000/api/tagsList")
+        fetch("http://127.0.0.1:5000/api/user_tags_list")
         .then((resp) => resp.json()) // Transform the data into json
         .then(function(data){
             console.log(data)
