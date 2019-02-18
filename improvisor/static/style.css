@@ -43,7 +43,7 @@ h1 {
 
 .navbar-nav {
 	margin: 0;
-	
+
 }
 .navbar .container-fluid {
 	margin: 15px auto;
@@ -154,4 +154,7 @@ h1 {
 	max-width: 100%;
 	height: auto;
 	margin: auto;
+}
+.hidden {
+	display: none;
 }
