@@ -2,14 +2,21 @@ import os
 from db import db
 from flask import Flask, session
 from flask_cors import CORS
+from flask_bootstrap import Bootstrap
+from flask_socketio import SocketIO
 
 
 app = Flask(__name__)
 CORS(app)
+bootstrap = Bootstrap(app)
+socketio = SocketIO(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///data.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
-app.secret_key = 'yeet'
+# Load config file
+app.config.from_pyfile("config/defaults.py")
+# Setup server using config variables
+app.secret_key = app.config['SECRET_KEY']
 
 @app.before_first_request
 def create_tables():
@@ -24,4 +31,6 @@ def initialiseSession():
 
 
 
-from improvisor import routes
+
+
+from improvisor import routes, sockets
