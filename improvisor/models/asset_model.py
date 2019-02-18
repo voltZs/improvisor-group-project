@@ -1,5 +1,5 @@
 from db import db
-from models.associationTable_tag_asset import asset_tags
+from improvisor.models.associationTable_tag_asset import asset_tags
 from flask import session
 
 class AssetModel(db.Model):
