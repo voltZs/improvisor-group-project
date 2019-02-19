@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-~ Tested using Python 3.6.7 ~
+~~ Tested using Python 3.6.7 ~~
 
 Once all of the dependencies have been installed:
 * Start up the server using "python run.py"
