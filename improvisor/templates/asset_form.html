@@ -1,0 +1,19 @@
+<h1>Asset form</h1>
+<form method="POST" action="/api/asset">
+    {{ form.csrf_token }}
+    {{ form.assetname.label }} {{ form.assetname(size=20) }}
+    {{ form.tagname.label}} {{form.tagname(size=20)}}
+    <input type="submit" value="Submit">
+</form>
+<button onClick="getAssets()">AllAssetsInDB</button>
+<script>
+    function getAssets(){
+        fetch("http://127.0.0.1:5000/api/all_assets")
+        .then((resp) => resp.json()) // Transform the data into json
+        .then(function(data){
+            console.log(data)
+        })
+
+    }
+
+</script>
