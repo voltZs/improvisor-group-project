@@ -1,4 +1,7 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
+import os
+from os.path import join
 from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
@@ -97,6 +100,19 @@ def getAssets():
 def allAssets():
     print("all_assets")
     return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
+
+
+@app.route('/upload', methods=["GET", "POST"])
+def upload():
+    if request.method == "POST":
+        print("uploading")
+        theFile= request.files['inputFile']
+        os.mkdir("uploadedFiles")
+        save_location = join("uploadedFiles", theFile.filename )
+        open(save_location, "w")
+        return theFile.filename
+    return render_template("asset_form.html")
+
 
 #API: inserts asset into database and allows tags to be added to asset
 @app.route('/api/asset', methods=["GET", "POST"])

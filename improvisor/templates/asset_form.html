@@ -5,6 +5,14 @@
     {{ form.tagname.label}} {{form.tagname(size=20)}}
     <input type="submit" value="Submit">
 </form>
+
+<form method ="POST" action="/upload" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="inputFile">File Input</label>
+        <input type = "file" name ="inputFile">
+    </div>
+    <input type="submit">
+</form>
 <button onClick="getAssets()">AllAssetsInDB</button>
 <script>
     function getAssets(){
