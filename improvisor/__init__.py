@@ -5,16 +5,18 @@ from flask_cors import CORS
 from flask_bootstrap import Bootstrap
 from flask_socketio import SocketIO
 
-
 app = Flask(__name__)
-CORS(app)
-bootstrap = Bootstrap(app)
-socketio = SocketIO(app)
 
 # Load config file
 app.config.from_pyfile("config/defaults.py")
 # Setup server using config variables
 app.secret_key = app.config['SECRET_KEY']
+
+CORS(app)
+bootstrap = Bootstrap(app)
+socketio = SocketIO(app)
+db.init_app(app)
+
 
 @app.before_first_request
 def create_tables():
@@ -24,6 +26,5 @@ def create_tables():
 def initialiseSession():
     session["user_id"] = 0
     session["logged_in"] = False
-
 
 from improvisor import routes, sockets
