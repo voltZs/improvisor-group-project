@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
 from wtforms import StringField, IntegerField, validators, PasswordField
 
 
@@ -34,6 +35,7 @@ class FormAsset(FlaskForm):
         validators.Optional(True),
         validators.Length(min=2,max=200)
     ])
+
 
 class FormLogin(FlaskForm):
     email = StringField('email', [validators.Email()])
