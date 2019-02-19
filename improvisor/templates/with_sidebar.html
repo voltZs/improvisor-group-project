@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block main_content%}
+    <div class="pageContainer">
+        {% block page_content %}
+        {% endblock page_content %}
+    </div>
+
+    <div class="rightContainer">
+        <a href="/user_settings">
+            <div class="rightContItem whiteText" id="user_field">
+                <div class="rightContItem">
+                    <img src="https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="
+                    class="avatarImg" alt="" width="120px" height="120px">
+                </div>
+                Brian Davidson
+            </div>
+        </a>
+        <a href="/join_session">
+            <div class="rightContItem bubbleButtonDark" id="newSessionOption">
+                New Session
+            </div>
+        </a>
+        <br>
+        <a href="/sessions">
+            <div class="rightContItem bubbleButtonDark" id="prevSessionOption">
+                Previous Sessions
+            </div>
+        </a>
+        <a href="/assets">
+            <div class="rightContItem bubbleButtonDark" id="assetPoolOption">
+                Asset Pool
+            </div>
+        </a>
+    </div>
+
+{% endblock main_content%}

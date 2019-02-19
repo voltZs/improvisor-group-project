@@ -12,16 +12,6 @@ assets = sample_files.assets
 def index():
 	return render_template('index.html')
 
-
-@app.route('/presenter', methods=['GET'])
-def presenter():
-	return render_template('presenter.html')
-
-
-@app.route('/controller', methods=['GET'])
-def controller():
-	return render_template('controller.html')
-
 @app.route('/fetch_tagset', methods=['GET'])
 def fetch_tagset():
     tag_pool = []
@@ -31,6 +21,41 @@ def fetch_tagset():
                 tag_pool.append(tag)
     return json.dumps(tag_pool)
 
+@app.route('/join_session', methods=['GET'])
+def enter_session():
+    return render_template('enter_session.html')
+
+@app.route('/presenter', methods=['GET'])
+def presenter_view():
+    return render_template('presenter.html')
+
+@app.route('/controller', methods=['GET'])
+def controller_view():
+    return render_template('controller.html')
+
+@app.route('/user_settings', methods=['GET', 'POST'])
+def user_settings_view():
+    return render_template('user_settings.html')
+
+@app.route('/sessions', methods=['GET'])
+def previous_sessions_view():
+    return render_template('previous_sessions.html')
+
+@app.route('/assets', methods=['GET', 'POST'])
+def asset_management_view():
+    return render_template('asset_management.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_view():
+    return render_template('login.html')
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    pass
+
+@app.route('/register', methods=['GET', 'POST'])
+def register_view():
+    return render_template('register.html')
 
 @app.route('/compare_phrases', methods=['POST'])
 def compare_phrases():

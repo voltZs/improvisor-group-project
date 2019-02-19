@@ -1,0 +1,51 @@
+{%- extends "bootstrap/base.html" %}
+
+{% set page_title = page_title|default('Improvisor') -%}
+{% block title %}{{ page_title}}{% endblock %}
+
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block head %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='javascript.js')}}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='libraries/nosleep/nosleep.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='libraries/artyom/artyom.window.min.js')}}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='libraries/hammer/hammer.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='libraries/dragend/dragend.min.js')}}"></script>
+    {{super()}}
+
+{%- endblock %}
+
+{% block styles -%}
+    {{super()}}
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='animate.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Rubik" rel="stylesheet">
+{% endblock %}
+
+{% block navbar %}
+{% set navigation_bar = [
+('/', 'index', 'Home'),
+('/presenter', 'presenter', 'Presenter'),
+('/controller', 'controller', 'Controller'),
+] -%}
+
+{% set active_page = active_page|default('index') -%}
+
+<div id="navbar" class="navbar navbar-expand-sm {% if active_page !='index' %} solid-nav {% endif %}">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            {% for href, id, caption in navigation_bar %}
+            <li {% if id==active_page %} class="active" {% endif %}>
+                <a href="{{ href|e }}">{{ caption|e }}</a>
+            </li>
+            {% endfor%}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

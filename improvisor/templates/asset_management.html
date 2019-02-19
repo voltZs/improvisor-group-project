@@ -1,0 +1,16 @@
+{% extends "with_sidebar.html" %}
+
+{% block title %}
+    <title></title>
+{% endblock title %}
+
+{% block page_content %}
+    <h2 class="darkText">Asset Pool</h2>
+
+{% endblock page_content %}
+
+{% block end_body %}
+    <script>
+        document.getElementById('assetPoolOption').classList.add('selected');
+    </script>
+{% endblock end_body %}

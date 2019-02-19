@@ -19,33 +19,63 @@
 {%- endblock %}
 
 {% block styles -%}
-    {{super()}}
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='animate.css')}}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}"> -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='CSS/improvisor_styles.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='CSS/animate.css')}}">
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Rubik" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 {% endblock %}
 
-{% block navbar %}
-{% set navigation_bar = [
-('/', 'index', 'Home'),
-('/presenter', 'presenter', 'Presenter'),
-('/controller', 'controller', 'Controller'),
-] -%}
+{% block body %}
+    {% block navigbar %}
+    <div class="navigbar floatingShadow">
+      <a href="/sessions">
+        <div class="navigbarItem">
+          Improvisor
+        </div>
+      </a>
 
-{% set active_page = active_page|default('index') -%}
+      <!--IF LOGGED IN  -->
+      <a href="/logout">
+        <div class="navigbarItem navigbarItemRight">
+          Log Out
+        </div>
+      </a>
 
-<div id="navbar" class="navbar navbar-expand-sm {% if active_page !='index' %} solid-nav {% endif %}">
-    <div class="container-fluid">
-        <ul class="nav navbar-nav">
-            {% for href, id, caption in navigation_bar %}
-            <li {% if id==active_page %} class="active" {% endif %}>
-                <a href="{{ href|e }}">{{ caption|e }}</a>
-            </li>
-            {% endfor%}
-        </ul>
+      <div class="navigbarItem navigbarItemRight" id="usernameNavigbar">
+        Brian Davidson
+      </div>
+
+      <!-- IF NOT LOGGED IN -->
+      <!-- <a href="/register">
+        <div class="navigbarItem navigbarItemRight">
+          Sign Up
+        </div>
+      </a>
+
+      <a href="/login">
+        <div class="navigbarItem navigbarItemRight">
+          Log In
+        </div>
+      </a> -->
+      <!-- END IF -->
     </div>
-</div>
-{% endblock %}
+    {% endblock navigbar %}
 
-{% block content %}
-{% endblock %}
+
+  {% block content %}
+      <div class="mainContainer">
+          <div class="topSpace"></div>
+          {% block main_content %}
+
+          <div class="pageContainer">
+              {% block page_content %}
+              {% endblock page_content %}
+          </div>
+          {% endblock main_content %}
+      </div>
+  {% endblock content %}
+
+  {% block end_body %}
+  {% endblock end_body %}
+{% endblock body%}

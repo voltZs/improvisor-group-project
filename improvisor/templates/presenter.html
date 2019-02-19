@@ -1,24 +1,36 @@
 {% extends "base.html" %}
-{% set active_page = 'presenter' %}
+
+{% block navigbar %}
+    <div class="navigbar floatingShadow flexnavig">
+        <a href="/sessions">
+            <div class="navigbarItem">
+              <i class="fas fa-arrow-left"></i>
+            </div>
+        </a>
+
+        <a href="/controller">
+            <div class="navigbarItem navigbarItemMid" id="controllerMode">
+              Controller
+            </div>
+        </a>
+
+        <a href="/presenter">
+            <div class="navigbarItem navigbarItemMid" id="presenterMode">
+                Presenter
+            </div>
+        </a>
+    </div>
+{% endblock navigbar %}
+
 {% block content %}
+    <div class="presenter-view">
+        <img id="display" src="">
+    </div>
+{% endblock content %}
 
-<div class="container">
-    <h1>Presenter</h1>
-</div>
-<div class="presenter-view">
-    <img id="display" src="">
-</div>
-
-<script>
-    $(document).ready(function () {
-        var socket = io();
-        socket.on('presenter', function (filename) {
-            var directory = "/static/resources/images/"
-            var file = directory + filename + ".jpg";
-            $('#display').attr('src', file);
-            console.log('Received ID ' + filename);
-        });
-    });
-</script>
-
-{% endblock %}
+{% block end_body %}
+    <script>
+        document.getElementById('presenterMode').classList.add('selected');
+    </script>
+    <script type="text/javascript" src="{{url_for('static', filename='JS/presenter.js')}}"></script>
+{% endblock end_body %}
