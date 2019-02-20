@@ -6,7 +6,7 @@ from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
-from flask import Flask, render_template, request, redirect, jsonify, session, abort
+from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash
 from improvisor import app, socketio, sample_files
 from operator import itemgetter
 import json
@@ -245,6 +245,7 @@ def signup_view():
             flash('Account already exists', 'danger')
             return render_template('signup.html', form=form)
         else:
+            pass
             # do your funky encryption shit 
             # Make the new user using the user model (with the encrypted password, not original) 
             #user = UserModel(form.firstname.data, form.lastname.data, form.email.data, ***encrypted password of death***)
