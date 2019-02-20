@@ -24,6 +24,7 @@ def create_tables():
 def initialiseSession():
     session["user_id"] = 0
     session["logged_in"] = False
+    session["selected_asset"] = ""
 
 
 from improvisor import routes, sockets

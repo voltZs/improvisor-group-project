@@ -91,9 +91,6 @@ def getAssets():
         return {"assets-with-tag" : [asset.json() for asset in tag.assets]}
     else: 
         return {"message" : "Tag does not exist in database"}
-    #if not mentioned_tags:
-        #mentioned_tags = {"recent" : {},
-           # }
 
 #API: returns all assets in the database
 @app.route('/api/all_assets', methods=["GET"])
@@ -106,11 +103,36 @@ def allAssets():
 def upload():
     if request.method == "POST":
         print("uploading")
-        theFile= request.files['inputFile']
-        os.mkdir("uploadedFiles")
-        save_location = join("uploadedFiles", theFile.filename )
-        open(save_location, "w")
-        return theFile.filename
+        if 'inputFile' in request.files:
+            theFile= request.files['inputFile']
+        else:
+            theFile = None
+        
+        if 'thumbnailFile' in request.files:
+            theThumbNail = request.files['thumbnailFile']
+        else:
+            theThumbNail = None
+
+        asset = AssetModel.find_by_assetName(session["selected_asset"])
+        directory = join ("uploadedFiles", asset.assetname)
+
+        if theFile:
+            save_location = join(directory, theFile.filename )
+            
+            if not os.path.exists("uploadedFiles"): #initialise somewhere else
+                os.mkdir("uploadedFiles")
+                if not os.path.exists(directory):
+                    os.mkdir(directory)
+            open(save_location, "w")
+            asset.assetLocation = save_location
+
+        if os.path.exists(directory) and theThumbNail:
+            save_location = join(directory, theThumbNail.filename)
+            open(save_location, "w")
+            asset.thumbnailLocation = save_location
+
+        asset.save_to_db()
+        return jsonify({"asset" : asset.json()},)
     return render_template("asset_form.html")
 
 
@@ -144,6 +166,7 @@ def addAsset():
                     asset.tags.append(tag)
         try:
             asset.save_to_db()
+            session["selected_asset"] = asset.assetname
         except:
             error = "Error while saving asset to db"
             return render_template("asset_form.html", form=form, error=error)
