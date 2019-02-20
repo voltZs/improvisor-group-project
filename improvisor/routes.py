@@ -13,7 +13,6 @@ import json
 import copy
 
 
-
 #API: inserts tag into database
 @app.route('/api/tag', methods=['GET','POST'])
 def addTag():
@@ -44,27 +43,11 @@ def getTags():
         return redirect('/')
 
 
-#API: gets user from database and updates session dictionary -- not secure yet
-@app.route('/api/login', methods=["GET", "POST"])
-def loginUser():
-    form = FormLogin(request.form)
-    if (request.method == "POST" and form.validate()):
-        print(f"valid form submitted {form.email.data} and {form.password.data}")
-        user = UserModel.find_by_email(form.email.data)
-        if user:
-            session["user_id"] = user.id
-            session["logged_in"] = True
-            print(f'logged in as {user.email} with id {session["user_id"]}')
-            return redirect('/')
-        else:
-            error = "Invalid credentials"
-            return(render_template('login.html', form = form, error = error))
-    return (render_template('login.html', form= form))
-
 #API: extracts all users from database
 @app.route('/api/userList', methods=['GET'])
 def getUsers():
     return jsonify({"users": [user.json() for user in UserModel.query.all()]})
+
 
 #API: given a tag, returns a list of the user's assets containing that tag
 @app.route('/api/assets_with_tag', methods=['GET'])
@@ -76,6 +59,7 @@ def getAssets():
         return {"assets-with-tag" : [asset.json() for asset in tag.assets]}
     else: 
         return {"message" : "Tag does not exist in database"}
+
 
 #API: returns all assets in the database
 @app.route('/api/all_assets', methods=["GET"])
@@ -158,8 +142,6 @@ def addAsset():
         return redirect('/')
     return render_template("asset_form.html", form=form )
     
-        
-
 
 # Retrieve the sample assets from sample_files.py
 assets = sample_files.assets
@@ -168,6 +150,7 @@ assets = sample_files.assets
 @app.route('/', methods=['GET'])
 def index():
 	return render_template('index.html')
+
 
 @app.route('/fetch_tagset', methods=['GET'])
 def fetch_tagset():
@@ -178,40 +161,62 @@ def fetch_tagset():
                 tag_pool.append(tag)
     return json.dumps(tag_pool)
 
+
 @app.route('/join_session', methods=['GET'])
 def enter_session():
     return render_template('enter_session.html')
+
 
 @app.route('/presenter', methods=['GET'])
 def presenter_view():
     return render_template('presenter.html')
 
+
 @app.route('/controller', methods=['GET'])
 def controller_view():
     return render_template('controller.html')
+
 
 @app.route('/user_settings', methods=['GET', 'POST'])
 def user_settings_view():
     return render_template('user_settings.html')
 
+
 @app.route('/sessions', methods=['GET'])
 def previous_sessions_view():
     return render_template('previous_sessions.html')
+
 
 @app.route('/assets', methods=['GET', 'POST'])
 def asset_management_view():
     return render_template('asset_management.html')
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
-    return render_template('login.html')
+    # ------------- NOT IMPLEMENTED YET -------------
+    form = FormLogin(request.form)
+    if request.method == "POST" and form.validate():
+        print(f"valid form submitted {form.email.data} and {form.password.data}")
+        user = UserModel.find_by_email(form.email.data)
+        if user:
+            session["user_id"] = user.id
+            session["logged_in"] = True
+            print(f'logged in as {user.email} with id {session["user_id"]}')
+            return redirect('/')
+        else:
+            error = "Invalid credentials"
+            return(render_template('login.html', form = form, error = error))
+    return (render_template('login.html', form= form))
+
 
 @app.route('/logout', methods=['GET'])
 def logout():
     pass
 
+
 @app.route('/signup', methods=['GET','POST'])
-def signup():
+def signup_view():
     
     # Check if they are already logged in first..
     # something like: if session.get('logged_in') then redirect to index
