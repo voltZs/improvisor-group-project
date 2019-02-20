@@ -22,9 +22,11 @@ db.init_app(app)
 def create_tables():
     db.create_all()
 
+
 @app.before_first_request
 def initialiseSession():
     session["user_id"] = 0
     session["logged_in"] = False
+
 
 from improvisor import routes, sockets

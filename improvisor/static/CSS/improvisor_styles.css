@@ -9,9 +9,14 @@ html{
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2664c9', endColorstr='#4b89ed',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
+.container {
+    background: none;
+}
+
 body{
   font-family: 'Nunito', sans-serif;
   margin: 0;
+  background: none;
 }
 
 .normalFont{
@@ -163,6 +168,7 @@ a{
 }
 
 
+
 .imageRow {
 	display: flex;
 	flex-wrap: nowrap;
@@ -178,4 +184,50 @@ a{
 	margin-right: 5px;
 	max-width: 200px;
 	max-height: 150px;
+}
+
+.element-increase {
+	z-index: 1;
+	transition: all .2s ease-in-out;
+	transform: scale(1.5);
+}
+
+.element-reset {
+	transition: all .2s ease-in-out;
+	transform: scale(1);
+}
+
+.presenter-view {
+	width: 100%;
+	height: 100%;
+    margin-top: 80px;
+}
+
+.presenter-view #display {
+	display: block;
+    max-width: 100%;
+	height: auto;
+    margin: auto;
+    background: none;
+}
+.hidden {
+	display: none;
+}
+
+.controls button {
+	padding: 4px 20px;
+	border-radius: 15px;
+	height: 45px;
+	width: 220px;
+	text-align: center;
+    font-size: 25px;
+	margin-bottom: 2px;
+	margin-left: 10px;
+    margin-right: 10px;
+}
+
+.controls {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 }

@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}
-    <title></title>
-{% endblock title %}
+{% set page_title = 'Controller' %}
 
 {% block navigbar %}
     <div class="navigbar floatingShadow flexnavig">
@@ -43,9 +41,9 @@
 
     </div>
 
-    <div class="container">
-      <button class="control btn btn-success btn-lg" id="start">Start Listening</button>
-      <button class="control btn btn-danger btn-lg hidden" id="stop">Stop Listening</button>
+    <div title="Toggle Speech Recognition" class="controls">
+        <button class="control btn btn-success btn-lg" id="start">Start Listening</button>
+        <button class="control btn btn-danger btn-lg hidden" id="stop">Stop Listening</button>
     </div>
 {% endblock content %}
 
