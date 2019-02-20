@@ -197,9 +197,10 @@ def login_view():
     # ------------- NOT IMPLEMENTED YET -------------
     form = FormLogin(request.form)
     if request.method == "POST" and form.validate():
+        password = form.password.data
         print(f"valid form submitted {form.email.data} and {form.password.data}")
         user = UserModel.find_by_email(form.email.data)
-        if user:
+        if user and password == user.password: #user.password will need to be decrypted
             session["user_id"] = user.id
             session["logged_in"] = True
             print(f'logged in as {user.email} with id {session["user_id"]}')
@@ -239,23 +240,20 @@ def signup_view():
         print(email, first_name, last_name)
 
         # Check if the email address already exists
-        # If it does exist
-            # flash('Account already exists', 'danger')
-            # return render_template('signup.html', form=form)
-        # If it doesn't exist
-            # Encrypt the password using bcrypt
+        user = UserModel.find_by_email(email)
+        if user:
+            flash('Account already exists', 'danger')
+            return render_template('signup.html', form=form)
+        else:
+            # do your funky encryption shit 
             # Make the new user using the user model (with the encrypted password, not original) 
-            # Save the new user to the database
-            # Redirect to the login page
-        
-        
-        #user = UserModel(form.firstname.data, form.lastname.data, form.email.data, form.password.data)
-        #try: 
-        #    user.save_to_db()
-        #except: 
-        #    error = "Error while saving user to db"
-        #    return render_template('signup.html', form=form, error=error)
-        return redirect('/')
+            #user = UserModel(form.firstname.data, form.lastname.data, form.email.data, ***encrypted password of death***)
+            #try: 
+            #    user.save_to_db()
+            #except: 
+            #    error = "Error while saving user to db"
+            #    return render_template('signup.html', form=form, error=error)
+            #redirect("login.html")
     else:
         return render_template('signup.html', form=form)
 
