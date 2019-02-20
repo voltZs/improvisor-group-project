@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% set active_page = 'signup' %}
+{% set page_title = 'Sign Up | Improvisor' %}
+{% block content %}
+	<div class="page-background two">
+		<div id="userModal" class="modal-popup" style="display: block;">
+			<div class="modal-popup-content">
+				<div class="left">
+				</div>
+				<div class="right">
+					<div class="modal-tabs">
+						<button id="sign-up-tab"  class="modal-tab-btn active">
+							<a href="#">SIGN UP</a> 
+						</button>
+						<button id="sign-in-tab" class="modal-tab-btn">
+							<a href="/api/login">LOGIN</a>
+						</button>
+					</div>
+		
+					<div id="sign-up-content" class="modal-tab-content">
+						<div class="upper">
+							
+						</div>
+						<div class="lower">
+							{% from "includes/_formhelpers.html" import render_field %}
+							<form method='POST' action="/api/userRegister">
+								<div class="section">
+									<p>FIRST NAME:</p>
+									{{render_field(form.firstname, autocomplete="given-name")}}
+								</div>
+								<div class="section">
+									<p>LAST NAME:</p>
+									{{render_field(form.lastname, autocomplete="family-name")}}
+								</div>
+								<div class="section">
+									<p>EMAIL:</p>
+									{{render_field(form.email, autocomplete="email")}}
+								</div>
+								<div class="section">
+									<p>PASSWORD:</p>
+									{{render_field(form.password, autocomplete="new-password")}}
+								</div>
+								<div class="section">
+									<p>CONFIRM PASSWORD:</p>
+									{{render_field(form.confirm, autocomplete="new-password")}}
+								</div>
+								<div class="footer">
+									<button type="submit">SIGN UP</button>
+								</div>
+								{{ form.hidden_tag() }}
+							</form>
+						</div>
+						<div class="flashes">
+							{% include 'includes/_messages.html' %}
+						</div>			
+					</div>
+				</div>
+			</div>
+		</div>
+		{#<div class="container">
+			<h1>Header</h1>
+			{% if email %}
+				<h2>Logged in as: {{email}}</h2>
+			{% endif %}
+		</div>#}
+	</div>
+{% endblock %}

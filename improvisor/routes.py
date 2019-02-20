@@ -44,21 +44,6 @@ def getTags():
         return redirect('/')
 
 
-#API: inserts user into database
-@app.route('/api/userRegister', methods=['GET','POST'])
-def addUser():
-    form = FormSignup(request.form)
-    if (request.method=="POST" and form.validate()):
-        print(f'Valid form submitted Firstname: {form.firstname.data} Lastname: {form.lastname.data} Email: {form.email.data} ')
-        user = UserModel(form.firstname.data, form.lastname.data, form.email.data, form.password.data)
-        try: 
-            user.save_to_db()
-        except: 
-            error = "Error while saving user to db"
-            return render_template('signup.html', form=form, error=error)
-        return redirect('/')
-    return render_template('signup.html', form=form)
-
 #API: gets user from database and updates session dictionary -- not secure yet
 @app.route('/api/login', methods=["GET", "POST"])
 def loginUser():
@@ -225,9 +210,50 @@ def login_view():
 def logout():
     pass
 
-@app.route('/register', methods=['GET', 'POST'])
-def register_view():
-    return render_template('register.html')
+@app.route('/signup', methods=['GET','POST'])
+def signup():
+    
+    # Check if they are already logged in first..
+    # something like: if session.get('logged_in') then redirect to index
+
+    
+    form = FormSignup(request.form)
+    if request.method == "POST" and form.validate():
+        
+        # Set the user inputs
+		# Force only the initial character in first name to be capitalised
+        first_name = (form.firstname.data.lower()).capitalize()
+		
+        # Make sure the first letter is capitalised. Don't care about capitalisation on the rest
+        last_name = form.lastname.data
+        last_name_first_letter = last_name[0].capitalize()
+        last_name_remaining_letters = last_name[1:]
+        last_name = last_name_first_letter + last_name_remaining_letters
+
+        email = form.email.data
+        print(email, first_name, last_name)
+
+        # Check if the email address already exists
+        # If it does exist
+            # flash('Account already exists', 'danger')
+            # return render_template('signup.html', form=form)
+        # If it doesn't exist
+            # Encrypt the password using bcrypt
+            # Make the new user using the user model (with the encrypted password, not original) 
+            # Save the new user to the database
+            # Redirect to the login page
+        
+        
+        #user = UserModel(form.firstname.data, form.lastname.data, form.email.data, form.password.data)
+        #try: 
+        #    user.save_to_db()
+        #except: 
+        #    error = "Error while saving user to db"
+        #    return render_template('signup.html', form=form, error=error)
+        return redirect('/')
+    else:
+        return render_template('signup.html', form=form)
+
 
 @app.route('/compare_phrases', methods=['POST'])
 def compare_phrases():
