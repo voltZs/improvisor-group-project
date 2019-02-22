@@ -7,9 +7,9 @@ from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
 from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash
-from improvisor import app, socketio, sample_files
+from improvisor import app, socketio, sample_files, login_manager
 from operator import itemgetter
-
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 #API: inserts tag into database
 @app.route('/api/tag', methods=['GET','POST'])
@@ -190,28 +190,34 @@ def asset_management_view():
     return render_template('asset_management.html')
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return UserModel.query.get(int(user_id))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
-    # ------------- NOT IMPLEMENTED YET -------------
+    
     form = FormLogin(request.form)
+    
     if request.method == "POST" and form.validate():
-        password = form.password.data
-        print(f"valid form submitted {form.email.data} and {form.password.data}")
+        
         user = UserModel.find_by_email(form.email.data)
-        if user and password == user.password: #user.password will need to be decrypted
-            session["user_id"] = user.id
-            session["logged_in"] = True
-            print(f'logged in as {user.email} with id {session["user_id"]}')
+        
+        if user is not None and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password):
+            login_user(user)
             return redirect('/')
         else:
-            error = "Invalid credentials"
-            return(render_template('login.html', form = form, error = error))
-    return (render_template('login.html', form= form))
+            flash('Invalid email or password', 'danger')
+            return render_template('login.html', form=form)
+    return render_template('login.html', form=form)
 
 
 @app.route('/logout', methods=['GET'])
+@login_required
 def logout():
-    pass
+    logout_user()
+    return redirect('/')
 
 
 @app.route('/signup', methods=['GET','POST'])
