@@ -283,6 +283,7 @@ a {
     font-size: 18px;
     border: none;
     color: white;
+    margin: 0 0 15px 0;
 }
 
 .register .inputs .footer button:hover,

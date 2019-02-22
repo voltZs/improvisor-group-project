@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-import os
+import os, json, copy, bcrypt
 from os.path import join
 from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin
 from improvisor.models.tag_model import TagModel
@@ -9,8 +9,6 @@ from improvisor.models.asset_model import AssetModel
 from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash
 from improvisor import app, socketio, sample_files
 from operator import itemgetter
-import json
-import copy
 
 
 #API: inserts tag into database
@@ -221,7 +219,6 @@ def signup_view():
     
     # Check if they are already logged in first..
     # something like: if session.get('logged_in') then redirect to index
-
     
     form = FormSignup(request.form)
     if request.method == "POST" and form.validate():
@@ -231,6 +228,7 @@ def signup_view():
         first_name = (form.firstname.data.lower()).capitalize()
 		
         # Make sure the first letter is capitalised. Don't care about capitalisation on the rest
+        # Can't use .capitalize() here because it changes all other characters to lowercase
         last_name = form.lastname.data
         last_name_first_letter = last_name[0].capitalize()
         last_name_remaining_letters = last_name[1:]
@@ -240,21 +238,22 @@ def signup_view():
         print(email, first_name, last_name)
 
         # Check if the email address already exists
+        # (Need to make sure this is not case sensitive)
         user = UserModel.find_by_email(email)
         if user:
             flash('Account already exists', 'danger')
             return render_template('signup.html', form=form)
         else:
-            pass
-            # do your funky encryption shit 
-            # Make the new user using the user model (with the encrypted password, not original) 
-            #user = UserModel(form.firstname.data, form.lastname.data, form.email.data, ***encrypted password of death***)
-            #try: 
-            #    user.save_to_db()
-            #except: 
-            #    error = "Error while saving user to db"
-            #    return render_template('signup.html', form=form, error=error)
-            #redirect("login.html")
+            # Encrypt the password using bcrypt
+            hashpass = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
+            # Make the new user using the user model
+            user = UserModel(form.firstname.data, form.lastname.data, form.email.data, hashpass)
+            try: 
+                user.save_to_db()
+            except: 
+                flash('Error saving user to database', 'danger')
+                return render_template('signup.html', form=form)
+            return redirect("login")
     else:
         return render_template('signup.html', form=form)
 
