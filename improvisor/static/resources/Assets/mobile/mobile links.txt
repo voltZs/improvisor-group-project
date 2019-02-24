@@ -1,0 +1,3 @@
+Android developers  https://developer.android.com/
+xamarin https://docs.microsoft.com/en-us/xamarin/xamarin-forms/
+React Native    https://facebook.github.io/react-native/

@@ -1,0 +1,4 @@
+Database answers    http://databaseanswers.org/data_models/index.htm
+SQL Alchemy     https://www.sqlalchemy.org/library.html#tutorials
+MongoDB     https://docs.mongodb.com/
+SQLzoo      https://sqlzoo.net/
