@@ -23,15 +23,12 @@ db.init_app(app)
 
 
 @app.before_first_request
-def create_tables():
+def initialisation():
     db.create_all()
+    session["selected_asset"] = ""
+    if not os.path.exists("uploadedFiles"): 
+        os.mkdir("uploadedFiles")
 
-
-#@app.before_first_request
-#def initialiseSession():
-#    session["user_id"] = 0
-#    session["logged_in"] = False
-#    session["selected_asset"] = ""
 
 
 from improvisor import routes, sockets
