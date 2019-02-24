@@ -66,44 +66,6 @@ def allAssets():
     return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
 
 
-@app.route('/upload', methods=["GET", "POST"])
-def upload2():
-    if request.method == "POST":
-        print("uploading")
-        if 'inputFile' in request.files:
-            theFile= request.files['inputFile']
-        else:
-            theFile = None
-        
-        if 'thumbnailFile' in request.files:
-            theThumbNail = request.files['thumbnailFile']
-        else:
-            theThumbNail = None
-
-        asset = AssetModel.find_by_assetName(session["selected_asset"])
-        if asset:
-            directory = join ("uploadedFiles", "user_" + str(current_user.get_id()), asset.assetname)
-        else:
-            print("No asset selected")
-
-        if theFile:
-            save_location = join(directory, theFile.filename )  
-            if not os.path.exists(directory):
-                os.mkdir(directory)
-            open(save_location, "w")
-            asset.assetLocation = save_location
-
-        if theThumbNail:
-            save_location = join(directory, theThumbNail.filename)
-            open(save_location, "w")
-            asset.thumbnailLocation = save_location
-
-        asset.save_to_db()
-        return jsonify({"asset" : asset.json()},)
-    return render_template("asset_form.html")
-
-
-
 #API: inserts asset into database and allows tags to be added to asset
 @app.route('/api/asset', methods=["GET", "POST"])
 def addAsset():
