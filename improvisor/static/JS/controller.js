@@ -9,6 +9,8 @@ $(document).ready(function () {
     socket = io();
 });
 
+setupPage();
+
 // ############### ARTYOM ############################
 const artyom = new Artyom();
 var recognisedTags = []; // will store recognised tags so they can be removed from the next result
@@ -90,6 +92,14 @@ $("#stop").click(function () {
     console.log("Stopped listening");
 });
 
+function setupPage(){
+    var items = JSON.parse(localStorage.getItem("lastAssets"));
+    if(items){
+        updateResults(items);
+    }
+    populateTabs();
+}
+
 function makeAjaxRequest(){
     //only works if local storage is a available in the browser
     if (storageBool) {
@@ -111,6 +121,8 @@ function makeAjaxRequest(){
               updateResults(retrieved['assetResults']);
               localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
               'mentionedTags']));
+              localStorage.setItem('lastAssets', JSON.stringify(retrieved[
+              'assetResults']));
             }
           });
         } else {
@@ -127,6 +139,8 @@ function makeAjaxRequest(){
               updateResults(retrieved['assetResults']);
               localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
               'mentionedTags']));
+              localStorage.setItem('lastAssets', JSON.stringify(retrieved[
+              'assetResults']));
             }
           });
         }
@@ -155,6 +169,10 @@ function updateResults(assets) {
         currentResults.appendChild(image);
     }
     applyGestureControls();
+}
+
+function populateTabs(){
+
 }
 
 function storageAvailable(type) {

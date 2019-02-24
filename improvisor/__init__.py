@@ -7,6 +7,7 @@ from flask_socketio import SocketIO
 from flask_login import LoginManager
 
 app = Flask(__name__)
+app.debug = True
 
 # Load config file
 app.config.from_pyfile("config/defaults.py")
