@@ -1,0 +1,4 @@
+Instructables   https://www.instructables.com/
+Design spark    https://www.rs-online.com/designspark/academic-articles
+Arduino projects    https://create.arduino.cc/projecthub
+How to mechatronics https://howtomechatronics.com/arduino-projects/

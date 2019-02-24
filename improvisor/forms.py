@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, IntegerField, validators, PasswordField
 
 
@@ -31,6 +31,13 @@ class FormAsset(FlaskForm):
     tagname = StringField('tagname',[
         validators.Optional(True),
         validators.Length(min=2,max=200)
+    ])
+    assetResource = FileField("UPLOAD ASSET FILE:", validators=[
+        FileRequired()
+    ])
+    assetThumbnail = FileField("UPLOAD ASSET THUMBNAIL:", validators=[
+        validators.Optional(True),
+        FileAllowed(['jpg', 'png'])
     ])
 
 

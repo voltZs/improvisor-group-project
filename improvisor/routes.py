@@ -15,14 +15,14 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 @app.route('/api/tag', methods=['GET','POST'])
 def addTag():
     form = FormTag(request.form)
-    if (session["logged_in"] == False): #A valid user must be logged in before a tag can be added to db
+    if (not current_user.is_authenticated): #A valid user must be logged in before a tag can be added to db
         print("No user is logged in. won't add tag")
         error ="User must be logged in to add a tag" #I don't really know how to use these error things for the flask forms Alex
         return render_template ("tag_form.html", form = form, error = error)
     
     if form.validate() and request.method=="POST":
         print("Valid form submitted: " + form.tag.data)
-        tag = TagModel(form.tag.data, session["user_id"]) #creates tag database object
+        tag = TagModel(form.tag.data, current_user.get_id()) #creates tag database object
         try:
             tag.save_to_db()
         except:
@@ -34,7 +34,7 @@ def addTag():
 #API: extracts all of the current user's tags from the database returning a json 
 @app.route('/api/user_tags_list', methods=['GET'])
 def getTags():
-    if session["logged_in"] == True:
+    if current_user.is_authenticated:
         return jsonify({"tags":[tag.json() for tag in TagModel.query.filter_by(user_id = session["user_id"]).all()]})
     else:
         print("No user is logged in, can't get tags")
@@ -67,7 +67,7 @@ def allAssets():
 
 
 @app.route('/upload', methods=["GET", "POST"])
-def upload():
+def upload2():
     if request.method == "POST":
         print("uploading")
         if 'inputFile' in request.files:
@@ -81,19 +81,19 @@ def upload():
             theThumbNail = None
 
         asset = AssetModel.find_by_assetName(session["selected_asset"])
-        directory = join ("uploadedFiles", asset.assetname)
+        if asset:
+            directory = join ("uploadedFiles", "user_" + str(current_user.get_id()), asset.assetname)
+        else:
+            print("No asset selected")
 
         if theFile:
-            save_location = join(directory, theFile.filename )
-            
-            if not os.path.exists("uploadedFiles"): #initialise somewhere else
-                os.mkdir("uploadedFiles")
-                if not os.path.exists(directory):
-                    os.mkdir(directory)
+            save_location = join(directory, theFile.filename )  
+            if not os.path.exists(directory):
+                os.mkdir(directory)
             open(save_location, "w")
             asset.assetLocation = save_location
 
-        if os.path.exists(directory) and theThumbNail:
+        if theThumbNail:
             save_location = join(directory, theThumbNail.filename)
             open(save_location, "w")
             asset.thumbnailLocation = save_location
@@ -103,11 +103,13 @@ def upload():
     return render_template("asset_form.html")
 
 
+
 #API: inserts asset into database and allows tags to be added to asset
 @app.route('/api/asset', methods=["GET", "POST"])
 def addAsset():
-    form = FormAsset(request.form)
-    if (session["logged_in"] == False): #A valid user must be logged in before an asset can be added to db
+    form = FormAsset()
+    print (f'form is {form.data}')
+    if (not current_user.is_authenticated): #A valid user must be logged in before an asset can be added to db
         print("No user is logged in. won't add asset")
         error ="User must be logged in to add a asset" 
         return render_template ("asset_form.html", form = form, error = error)
@@ -132,14 +134,41 @@ def addAsset():
                 if tag:
                     asset.tags.append(tag)
         try:
+            print(f'asset resource in addAsset is {form.assetResource.data}')
+            upload(asset, form.assetResource.data, form.assetThumbnail.data)
+        except Exception as e:
+            print(e)
+            flash("Error uploading file", "danger")
+            return render_template("asset_form.html", form=form)
+        try:
             asset.save_to_db()
-            session["selected_asset"] = asset.assetname
         except:
             error = "Error while saving asset to db"
             return render_template("asset_form.html", form=form, error=error)
         return redirect('/')
+    elif (request.method=="POST"):
+        print("problem with form")
     return render_template("asset_form.html", form=form )
     
+
+def upload(asset, assetResource, assetThumbnail = None ):   
+    print ("saving upload")
+    directory = join ("uploadedFiles", "user_" + str(current_user.get_id()), asset.assetname)
+    print (f'assetResource is {assetResource}')
+    if assetResource:
+        print("saving asset Resource")
+        save_location = join(directory, assetResource.filename)  
+        print (f'saving to {save_location}')
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+        open(save_location, "w")
+        asset.assetLocation = save_location
+
+    if assetThumbnail:
+        save_location = join(directory, assetThumbnail.filename)
+        open(save_location, "w")
+        asset.thumbnailLocation = save_location
+
 
 # Retrieve the sample assets from sample_files.py
 assets = sample_files.assets
@@ -205,7 +234,7 @@ def login_view():
         user = UserModel.find_by_email(form.email.data)
         
         if user is not None and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password):
-            login_user(user)
+            login_user(user, remember = True)
             return redirect('/')
         else:
             flash('Invalid email or password', 'danger')
@@ -217,15 +246,13 @@ def login_view():
 @login_required
 def logout():
     logout_user()
+    session["selected_asset"] = ""
     return redirect('/')
 
 
 @app.route('/signup', methods=['GET','POST'])
 def signup_view():
-    
-    # Check if they are already logged in first..
-    # something like: if session.get('logged_in') then redirect to index
-    
+
     form = FormSignup(request.form)
     if request.method == "POST" and form.validate():
         
@@ -256,13 +283,21 @@ def signup_view():
             user = UserModel(form.firstname.data, form.lastname.data, form.email.data, hashpass)
             try: 
                 user.save_to_db()
+                
             except: 
                 flash('Error saving user to database', 'danger')
                 return render_template('signup.html', form=form)
+            addDirectory(user.id)
             return redirect("login")
     else:
         return render_template('signup.html', form=form)
 
+def addDirectory(user_id):
+    directory = join("uploadedFiles", "user_" + str(user_id))
+    try:
+        os.mkdir(directory)
+    except:
+        print("error making directory")
 
 @app.route('/compare_phrases', methods=['POST'])
 def compare_phrases():

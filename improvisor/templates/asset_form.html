@@ -1,20 +1,13 @@
 <h1>Asset form</h1>
-<form method="POST" action="/api/asset">
+<form method="POST" action="/api/asset" enctype="multipart/form-data">
     {{ form.csrf_token }}
     {{ form.assetname.label }} {{ form.assetname(size=20) }}
     {{ form.tagname.label}} {{form.tagname(size=20)}}
+    {{ form.assetResource.label}} {{ form.assetResource()}}
+    {{ form.assetThumbnail.label}} {{ form.assetThumbnail()}}
     <input type="submit" value="Submit">
 </form>
 
-<form method ="POST" action="/upload" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="inputFile">File Input</label>
-        <input type = "file" name ="inputFile">
-        <label for="thumbnailFile">Thumbnail Input</label>
-        <input type = "file" name ="thumbnailFile">
-    </div>
-    <input type="submit">
-</form>
 <button onClick="getAssets()">AllAssetsInDB</button>
 <script>
     function getAssets(){
