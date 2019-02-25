@@ -66,6 +66,7 @@ def allAssets():
     return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
 
 
+<<<<<<< HEAD
 @app.route('/upload', methods=["GET", "POST"])
 def upload2():
     if request.method == "POST":
@@ -104,6 +105,8 @@ def upload2():
 
 
 
+=======
+>>>>>>> 8c5d8eb523975a68137f66273d16cfa291b0ecdf
 #API: inserts asset into database and allows tags to be added to asset
 @app.route('/api/asset', methods=["GET", "POST"])
 def addAsset():
