@@ -72,9 +72,8 @@ def addAsset():
     form = FormAsset()
     print (f'form is {form.data}')
     if (not current_user.is_authenticated): #A valid user must be logged in before an asset can be added to db
-        print("No user is logged in. won't add asset")
-        error ="User must be logged in to add a asset"
-        return render_template ("asset_form.html", form = form, error = error)
+        flash ("No user is logged in, log in to add an asset", "danger")
+        return render_template ("asset_form.html", form = form)
 
     if (request.method=="POST" and form.validate()):
         print(f'Valid form submitted Asset-name is : {form.assetname.data}')
@@ -93,8 +92,12 @@ def addAsset():
              asset = AssetModel(form.assetname.data, session["user_id"]) #if there is no asset in database then create it and check for possible tag entry
              if form.tagname.data:
                 tag = TagModel.find_by_tagName(form.tagname.data)
+                print(f'tag is from db is {tag}')
                 if tag:
                     asset.tags.append(tag)
+                else:
+                    flash("Tag does not exist", "danger")
+                    return render_template("asset_form.html", form = form)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
             upload(asset, form.assetResource.data, form.assetThumbnail.data)
