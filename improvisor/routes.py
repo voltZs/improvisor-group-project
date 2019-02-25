@@ -190,11 +190,9 @@ def previous_sessions_view():
 @login_required
 @app.route('/assets', methods=['GET', 'POST'])
 def asset_management_view():
+    assets = []
     if current_user.is_authenticated:
         assets = AssetModel.query.filter_by(user_id=current_user.id).all()
-    else:
-        assets = []
-    #return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
     return render_template('asset_management.html', assets=assets)
 
 
