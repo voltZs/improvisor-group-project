@@ -19,7 +19,7 @@ def addTag():
         print("No user is logged in. won't add tag")
         error ="User must be logged in to add a tag" #I don't really know how to use these error things for the flask forms Alex
         return render_template ("tag_form.html", form = form, error = error)
-    
+
     if form.validate() and request.method=="POST":
         print("Valid form submitted: " + form.tag.data)
         tag = TagModel(form.tag.data, current_user.get_id()) #creates tag database object
@@ -31,7 +31,7 @@ def addTag():
         return redirect('/')
     return render_template('tag_form.html', form=form)
 
-#API: extracts all of the current user's tags from the database returning a json 
+#API: extracts all of the current user's tags from the database returning a json
 @app.route('/api/user_tags_list', methods=['GET'])
 def getTags():
     if current_user.is_authenticated:
@@ -55,7 +55,7 @@ def getAssets():
     tag = TagModel.find_by_tagName(phrase)
     if tag:
         return {"assets-with-tag" : [asset.json() for asset in tag.assets]}
-    else: 
+    else:
         return {"message" : "Tag does not exist in database"}
 
 
@@ -74,7 +74,7 @@ def upload2():
             theFile= request.files['inputFile']
         else:
             theFile = None
-        
+
         if 'thumbnailFile' in request.files:
             theThumbNail = request.files['thumbnailFile']
         else:
@@ -87,7 +87,7 @@ def upload2():
             print("No asset selected")
 
         if theFile:
-            save_location = join(directory, theFile.filename )  
+            save_location = join(directory, theFile.filename )
             if not os.path.exists(directory):
                 os.mkdir(directory)
             open(save_location, "w")
@@ -111,24 +111,24 @@ def addAsset():
     print (f'form is {form.data}')
     if (not current_user.is_authenticated): #A valid user must be logged in before an asset can be added to db
         print("No user is logged in. won't add asset")
-        error ="User must be logged in to add a asset" 
+        error ="User must be logged in to add a asset"
         return render_template ("asset_form.html", form = form, error = error)
 
     if (request.method=="POST" and form.validate()):
         print(f'Valid form submitted Asset-name is : {form.assetname.data}')
-        
+
         asset = AssetModel.find_by_assetName(form.assetname.data) #tries to retrieve asset from database
-        if asset:   
+        if asset:
             if form.tagname.data: #if the asset already exists then try to add a tag to it
                 print (form.tagname.data)
                 tag = TagModel.find_by_tagName(form.tagname.data)
                 if tag:
                     asset.tags.append(tag)
             else:
-                print("asset already exists") #if no tag is entered then there is nothing to update 
+                print("asset already exists") #if no tag is entered then there is nothing to update
                 return render_template("asset_form.html", form=form)
         else:
-             asset = AssetModel(form.assetname.data, session["user_id"]) #if there is no asset in database then create it and check for possible tag entry 
+             asset = AssetModel(form.assetname.data, session["user_id"]) #if there is no asset in database then create it and check for possible tag entry
              if form.tagname.data:
                 tag = TagModel.find_by_tagName(form.tagname.data)
                 if tag:
@@ -149,15 +149,15 @@ def addAsset():
     elif (request.method=="POST"):
         print("problem with form")
     return render_template("asset_form.html", form=form )
-    
 
-def upload(asset, assetResource, assetThumbnail = None ):   
+
+def upload(asset, assetResource, assetThumbnail = None ):
     print ("saving upload")
     directory = join ("uploadedFiles", "user_" + str(current_user.get_id()), asset.assetname)
     print (f'assetResource is {assetResource}')
     if assetResource:
         print("saving asset Resource")
-        save_location = join(directory, assetResource.filename)  
+        save_location = join(directory, assetResource.filename)
         print (f'saving to {save_location}')
         if not os.path.exists(directory):
             os.mkdir(directory)
@@ -188,6 +188,14 @@ def fetch_tagset():
                 tag_pool.append(tag)
     return json.dumps(tag_pool)
 
+@app.route('/fetch_asset', methods=['GET'])
+def fetch_asset():
+    id = int(request.args.get('id')) ;
+    print(type(id))
+    for asset in assets:
+        if id == asset["id"]:
+            return json.dumps(asset)
+    return None
 
 @app.route('/join_session', methods=['GET'])
 def enter_session():
@@ -226,13 +234,13 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
-    
+
     form = FormLogin(request.form)
-    
+
     if request.method == "POST" and form.validate():
-        
+
         user = UserModel.find_by_email(form.email.data)
-        
+
         if user is not None and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password):
             login_user(user, remember = True)
             return redirect('/')
@@ -255,11 +263,11 @@ def signup_view():
 
     form = FormSignup(request.form)
     if request.method == "POST" and form.validate():
-        
+
         # Set the user inputs
 		# Force only the initial character in first name to be capitalised
         first_name = (form.firstname.data.lower()).capitalize()
-		
+
         # Make sure the first letter is capitalised. Don't care about capitalisation on the rest
         # Can't use .capitalize() here because it changes all other characters to lowercase
         last_name = form.lastname.data
@@ -281,10 +289,10 @@ def signup_view():
             hashpass = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
             # Make the new user using the user model
             user = UserModel(form.firstname.data, form.lastname.data, form.email.data, hashpass)
-            try: 
+            try:
                 user.save_to_db()
-                
-            except: 
+
+            except:
                 flash('Error saving user to database', 'danger')
                 return render_template('signup.html', form=form)
             addDirectory(user.id)

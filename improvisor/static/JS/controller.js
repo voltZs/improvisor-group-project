@@ -8,6 +8,8 @@ var socket;
 $(document).ready(function () {
   socket = io();
 });
+var selectedTab = '1';
+var maxTabs = 5;
 
 setupPage();
 
@@ -93,12 +95,9 @@ if (annyang) {
   var recognisedTagsUsed = [];
   var tagset = fetchTagset();
 
-
-
   annyang.addCallback('result', function(phrases) {
     var text = phrases[0];
     text = text.toLowerCase();
-
 
     // checking if the list is not empty before iterating through it!
     if(recognisedTagsUsed.length != 0){
@@ -125,7 +124,6 @@ if (annyang) {
       recognisedTags = [];
     }
 
-
   });
 
   annyang.addCallback('end', function() {
@@ -134,10 +132,7 @@ if (annyang) {
     }
   });
 
-
   // Start listening. You can call this here, or attach this call to an event, button, etc.
-
-
 
   $("#start").click(function () {
     $(".control").toggleClass('hidden');
@@ -161,19 +156,7 @@ if (annyang) {
 
 }
 
-
-
-
-
-
 //################# ANNYANG END ########################
-
-
-
-
-
-
-
 
 // Start listening button
 // $("#start").click(function () {
@@ -196,7 +179,20 @@ function setupPage(){
     if(items){
         updateResults(items);
     }
-    populateTabs();
+
+    if(!localStorage.getItem('tabs')){
+        localStorage.setItem('tabs', '{}');
+        addTab();
+    } else {
+        renderTabs();
+    }
+
+
+    document.getElementById('addTabBtn').addEventListener(
+        'click', function(){
+            addTab();
+    });
+    populateActiveTab();
 }
 
 function makeAjaxRequest(){
@@ -243,36 +239,113 @@ function makeAjaxRequest(){
             }
           });
         }
-      }
     }
-
-    function updateResults(assets) {
-      frequentResults.innerHTML = "";
-      for (asset in assets['frequent']) {
-        var image = document.createElement("IMG");
-        image.src = "/static/resources/images/" + assets['frequent'][asset]['thumbnail'];
-        image.setAttribute("data-id", assets['frequent'][asset]['id']);
-        image.classList.add("assetThumbnail");
-        image.classList.add("animated");
-        image.classList.add("faster");
-        frequentResults.appendChild(image);
-      }
-      currentResults.innerHTML = "";
-      for (asset in assets['current']) {
-        var image = document.createElement("IMG");
-        image.src = "/static/resources/images/" + assets['current'][asset]['thumbnail'];
-        image.setAttribute("data-id", assets['current'][asset]['id']);
-        image.classList.add("assetThumbnail");
-        image.classList.add("animated");
-        image.classList.add("faster");
-        currentResults.appendChild(image);
-      }
-      applyGestureControls();
-    }
-
-function populateTabs(){
-
 }
+
+function updateResults(assets) {
+  frequentResults.innerHTML = "";
+  for (asset in assets['frequent']) {
+    var image = document.createElement("IMG");
+    image.src = "/static/resources/images/" + assets['frequent'][asset]['thumbnail'];
+    image.setAttribute("data-id", assets['frequent'][asset]['id']);
+    image.classList.add("assetThumbnail");
+    image.classList.add("animated");
+    image.classList.add("faster");
+    frequentResults.appendChild(image);
+  }
+  currentResults.innerHTML = "";
+  for (asset in assets['current']) {
+    var image = document.createElement("IMG");
+    image.src = "/static/resources/images/" + assets['current'][asset]['thumbnail'];
+    image.setAttribute("data-id", assets['current'][asset]['id']);
+    image.classList.add("assetThumbnail");
+    image.classList.add("animated");
+    image.classList.add("faster");
+    currentResults.appendChild(image);
+  }
+  applyGestureControls();
+}
+
+// TABS LOGIC
+function addTab(){
+    //add tab to localstorage
+    var tabs = JSON.parse(localStorage.getItem('tabs'));
+    var totalTabs = Object.keys(tabs).length
+    if(totalTabs< maxTabs){
+        var numOfTab = totalTabs+1;
+        tabs[numOfTab] = [];
+        localStorage.setItem('tabs', JSON.stringify(tabs));
+        renderTabs();
+    } else {
+        console.log("Maximum number of tabs opened");
+    }
+}
+
+function renderTabs(){
+    var tabs = JSON.parse(localStorage.getItem('tabs'));
+    var tabPanel = document.getElementById("tabPanel");
+    tabPanel.innerHTML = "";
+    var keys = Object.keys(tabs);
+    keys.forEach(function(key){
+        var tabDiv = document.createElement("DIV");
+        tabDiv.classList.add("whiteText");
+        tabDiv.classList.add("bubbleButton");
+        tabDiv.classList.add("bubbleButtonDark");
+        tabDiv.classList.add("rowsButton");
+        if(selectedTab == key){
+            tabDiv.classList.add("selected");
+        }
+        tabDiv.innerHTML = "Tab " + key;
+
+        tabDiv.addEventListener("click", function(){
+            selectedTab = key.toString();
+            renderTabs();
+            populateActiveTab();
+        });
+
+        tabPanel.append(tabDiv);
+    });
+}
+
+function addToCurrentTab(assetID){
+    var tabs = JSON.parse(localStorage.getItem('tabs'));
+    var asset = getAsset(assetID);
+    tabs[selectedTab].push(asset);
+    localStorage.setItem('tabs', JSON.stringify(tabs));
+    populateActiveTab();
+}
+
+function getAsset(assetID){
+  var tmp = null;
+  $.ajax({
+    async: false,
+    url: "/fetch_asset",
+    data: {
+      'id': assetID
+    },
+    timeout: 60000,
+    success: function (data) {
+      tmp = JSON.parse(data);
+    }
+  });
+  return tmp;
+}
+
+function populateActiveTab(){
+    var tabRow = document.getElementById("currentTabRow");
+    assets = JSON.parse(localStorage.getItem('tabs'))[selectedTab];
+    tabRow.innerHTML = "";
+    for (asset in assets) {
+      var image = document.createElement("IMG");
+      image.src = "/static/resources/images/" + assets[asset]['thumbnail'];
+      image.setAttribute("data-id", assets[asset]['id']);
+      image.classList.add("assetThumbnail");
+      image.classList.add("animated");
+      image.classList.add("faster");
+      tabRow.appendChild(image);
+    }
+}
+// END OF TABS LOGIC
 
 function storageAvailable(type) {
     try {
@@ -329,6 +402,7 @@ function storageAvailable(type) {
               element.addClass("slideOutUp");
               var assetID = element.attr('data-id');
               socket.emit('event', assetID);
+              addToCurrentTab(assetID);
               flushRecentTags();
               console.log("sent ID " + assetID + " to socketIO");
               // Add the asset back to the display
