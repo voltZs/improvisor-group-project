@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-import os, json, copy, bcrypt
+import os, json, copy, bcrypt, itertools
 from os.path import join
 from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin
 from improvisor.models.tag_model import TagModel
@@ -27,9 +27,10 @@ def addTag():
             tag.save_to_db()
         except:
             error = "Error while saving to db"
-            return render_template('tag_form.html', form=form, error = error)
+            return render_template('tag_form.html', form=form, error=error)
         return redirect('/')
     return render_template('tag_form.html', form=form)
+
 
 #API: extracts all of the current user's tags from the database returning a json
 @login_required
@@ -199,9 +200,46 @@ def asset_management_view():
     return render_template('asset_management.html', assets=assets)
 
 
-@app.route('/assets/select', methods=['POST'])
-def assets_select(tags=None, sorting=None, num=None):
-    return ""
+@login_required
+@app.route('/assets/select', methods=['GET', 'POST'])
+def assets_select(search_tags=None, sorting=None, max_count=None):
+    all_assets = []
+    filter_tags = []
+    match_count = 0
+
+    user = UserModel.find_by_id(current_user.get_id())
+    all_assets = user.assets
+
+    for asset in all_assets:
+        setattr(asset, 'tag_match_count', 0)
+        if search_tags is not None:
+            for search_tag in search_tags:
+                if search_tag in asset.tags:
+                    asset.tag_match_count += 1
+            filter_tags.append(asset)
+            match_count += 1
+    
+    sorted_assets = []
+    
+    # Not actually sure if this works yet, no particularly good way to test it
+    if sorting == "recent":
+        sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'))
+    elif sorting == "old":
+        sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'), reverse=True)
+    elif sorting == "relevant":
+        sorted_assets = sorted(filter_tags, key=itemgetter('tag_match_count'), reverse=True)
+
+    output = []
+    counter = 0
+    for current in sorted_assets:
+        if counter < max_count:
+            output.append(sorted_assets)
+            counter += 1
+        else:
+            break
+
+    return json.dumps(output)
+
 
 
 @login_manager.user_loader
