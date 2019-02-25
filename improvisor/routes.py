@@ -138,8 +138,7 @@ def upload(asset, assetResource, assetThumbnail = None ):
         asset.thumbnailLocation = save_location
 
 
-# Retrieve the sample assets from sample_files.py
-assets = sample_files.assets
+
 
 
 @app.route('/', methods=['GET'])
@@ -149,6 +148,7 @@ def index():
 
 @app.route('/fetch_tagset', methods=['GET'])
 def fetch_tagset():
+    assets = [asset.json() for asset in current_user.assets.all()]
     tag_pool = []
     for asset in assets:
         for tag in asset['tags']:
@@ -158,6 +158,7 @@ def fetch_tagset():
 
 @app.route('/fetch_asset', methods=['GET'])
 def fetch_asset():
+    assets = [asset.json() for asset in current_user.assets.all()]
     id = int(request.args.get('id'))
     print(type(id))
     for asset in assets:
@@ -322,8 +323,13 @@ def addDirectory(user_id):
     except:
         print("error making directory")
 
-@app.route('/compare_phrases', methods=['POST'])
+
+# Retrieve the sample assets from sample_files.py
+#assets = sample_files.assets
+
+@app.route('/compare_phrases', methods=['POST', "GET"])
 def compare_phrases():
+    assets = [asset.json() for asset in current_user.assets.all()]
     recognised_tags = json.loads(request.form.get('recognisedTags'))
     mentioned_tags = request.form.get('mentionedTags')
 
@@ -335,11 +341,11 @@ def compare_phrases():
         mentioned_tags = json.loads(mentioned_tags)
 
     # CREATE LIST OF ALL EXISTING TAGS ON ASSETS - THIS WOULD BE STORED OFC
-    tag_pool = []
-    for asset in assets:
-        for tag in asset['tags']:
-            if tag not in tag_pool:
-                tag_pool.append(tag)
+    tag_pool = [tag.tagname for tag in current_user.tags]
+    # for asset in assets:
+    #     for tag in asset['tags']:
+    #         if tag not in tag_pool:
+    #             tag_pool.append(tag)
 
     sorting_obj = {'assetResults' : {'current' : [],
                                     'frequent' :[]},
