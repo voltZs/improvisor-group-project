@@ -147,12 +147,7 @@ def index():
 
 @app.route('/fetch_tagset', methods=['GET'])
 def fetch_tagset():
-    assets = [asset.json() for asset in current_user.assets.all()]
-    tag_pool = []
-    for asset in assets:
-        for tag in asset['tags']:
-            if tag not in tag_pool:
-                tag_pool.append(tag)
+    tag_pool = [tag.tagname for tag in current_user.tags]
     return json.dumps(tag_pool)
 
 @app.route('/fetch_asset', methods=['GET'])
@@ -238,7 +233,7 @@ def logout():
 def signup_view():
     if current_user.is_authenticated:
         return redirect('/')
-    
+
     form = FormSignup(request.form)
     if request.method == "POST" and form.validate():
 
