@@ -8,6 +8,10 @@
     <input type="submit" value="Submit">
 </form>
 
+<div>
+    {% include 'includes/_messages.html' %}
+</div>
+
 <button onClick="getAssets()">AllAssetsInDB</button>
 <script>
     function getAssets(){

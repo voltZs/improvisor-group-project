@@ -72,9 +72,8 @@ def addAsset():
     form = FormAsset()
     print (f'form is {form.data}')
     if (not current_user.is_authenticated): #A valid user must be logged in before an asset can be added to db
-        print("No user is logged in. won't add asset")
-        error ="User must be logged in to add a asset"
-        return render_template ("asset_form.html", form = form, error = error)
+        flash ("No user is logged in, log in to add an asset", "danger")
+        return render_template ("asset_form.html", form = form)
 
     if (request.method=="POST" and form.validate()):
         print(f'Valid form submitted Asset-name is : {form.assetname.data}')
@@ -93,8 +92,12 @@ def addAsset():
              asset = AssetModel(form.assetname.data, session["user_id"]) #if there is no asset in database then create it and check for possible tag entry
              if form.tagname.data:
                 tag = TagModel.find_by_tagName(form.tagname.data)
+                print(f'tag is from db is {tag}')
                 if tag:
                     asset.tags.append(tag)
+                else:
+                    flash("Tag does not exist", "danger")
+                    return render_template("asset_form.html", form = form)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
             upload(asset, form.assetResource.data, form.assetThumbnail.data)
@@ -152,7 +155,7 @@ def fetch_tagset():
 
 @app.route('/fetch_asset', methods=['GET'])
 def fetch_asset():
-    id = int(request.args.get('id')) ;
+    id = int(request.args.get('id'))
     print(type(id))
     for asset in assets:
         if id == asset["id"]:
@@ -184,9 +187,15 @@ def previous_sessions_view():
     return render_template('previous_sessions.html')
 
 
+@login_required
 @app.route('/assets', methods=['GET', 'POST'])
 def asset_management_view():
-    return render_template('asset_management.html')
+    if current_user.is_authenticated:
+        assets = AssetModel.query.filter_by(user_id=current_user.id).all()
+    else:
+        assets = []
+    #return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
+    return render_template('asset_management.html', assets=assets)
 
 
 @login_manager.user_loader
@@ -196,11 +205,9 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
-
     form = FormLogin(request.form)
 
     if request.method == "POST" and form.validate():
-
         user = UserModel.find_by_email(form.email.data)
 
         if user is not None and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password):
@@ -222,7 +229,9 @@ def logout():
 
 @app.route('/signup', methods=['GET','POST'])
 def signup_view():
-
+    if current_user.is_authenticated:
+        return redirect('/')
+    
     form = FormSignup(request.form)
     if request.method == "POST" and form.validate():
 
@@ -271,10 +280,8 @@ def addDirectory(user_id):
 
 @app.route('/compare_phrases', methods=['POST'])
 def compare_phrases():
-
     recognised_tags = json.loads(request.form.get('recognisedTags'))
     mentioned_tags = request.form.get('mentionedTags')
-
 
     if not mentioned_tags:
         mentioned_tags = {'recent' : {},

@@ -406,3 +406,37 @@ p.error {
 .register .inputs .section input::placeholder {
     color: black;
 }
+
+.assetpool-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.assetpool-asset {
+    width: 160px;
+    height: auto;
+    margin: 5px !important;
+    text-align: center;
+}
+
+.assetpool-asset .thumbnail-placeholder {
+    width: 160px;
+    height: 90px;
+    border:1px solid #000;
+    background-color: aquamarine;
+    padding-top: 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+
+.assetpool-asset img {
+    width: 160px;
+    height: 90px;
+    object-fit: cover;
+    padding: 0;
+    margin: 0;
+}

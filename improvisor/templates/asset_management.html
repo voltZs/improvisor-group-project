@@ -4,7 +4,20 @@
 
 {% block page_content %}
     <h2 class="darkText">Asset Pool</h2>
-
+    <div class="assetpool-list">
+        {% for asset in assets %}
+            <div class="assetpool-asset">
+                {% if asset.thumbnailLocation != None %}
+                    <img class="thumbnail" src="/{{asset.thumbnailLocation}}">
+                {% else %}
+                <!-- Placeholder until we get a default asset thumbnail -->
+                <div class="thumbnail-placeholder">Placeholder</div>
+                {% endif %}
+                <p>{{ asset.assetname }}</p>
+            </div>    
+        
+        {% endfor %}
+    </div>
 {% endblock page_content %}
 
 {% block end_body %}
