@@ -197,6 +197,11 @@ def asset_management_view():
     return render_template('asset_management.html', assets=assets)
 
 
+@app.route('/assets/select', methods=['POST'])
+def assets_select(tags=None, sorting=None, num=None):
+    return ""
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return UserModel.query.get(int(user_id))
