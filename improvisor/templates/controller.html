@@ -26,6 +26,10 @@
 
 {% block content %}
     <div class="topSpace"></div>
+    <div title="Toggle Speech Recognition" class="controls">
+        <button class="control btn btn-success btn-lg" id="start">Start Listening</button>
+        <button class="control btn btn-danger btn-lg hidden" id="stop">Stop Listening</button>
+    </div>
 
     <div class="currentBlock">
         <h2 class="whiteText">Current</h2>
@@ -38,13 +42,15 @@
     </div>
 
     <div class="tabsBlock">
-
+        <div class="tabPanel" id="tabPanel"></div>
+        <div class="whiteText bubbleButton rowsButton" id="addTabBtn">
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="imageRow" id="currentTabRow"></div>
+        <!-- <div class="whiteText bubbleButton bubbleButtonRedHover rowsButton" id="deleteTabBtn">Delete tab</div> -->
     </div>
 
-    <div title="Toggle Speech Recognition" class="controls">
-        <button class="control btn btn-success btn-lg" id="start">Start Listening</button>
-        <button class="control btn btn-danger btn-lg hidden" id="stop">Stop Listening</button>
-    </div>
+
 {% endblock content %}
 
 

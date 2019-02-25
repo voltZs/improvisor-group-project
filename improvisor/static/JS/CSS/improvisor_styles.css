@@ -1,0 +1,183 @@
+html{
+    height: 100vh;
+  /* background: radial-gradient(ellipse at center, #ff8011 15%,#ff5d00 76%); */
+    background-color: rgb(38, 100, 201);
+    background: #2664c9; /* Old browsers */
+    background: -moz-linear-gradient(-55deg, #2664c9 0%, #7db9e8 100%, #4b89ed 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-55deg, #2664c9 0%,#7db9e8 100%,#4b89ed 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(145deg, #2664c9 0%,#7db9e8 100%,#4b89ed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2664c9', endColorstr='#4b89ed',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+body{
+  font-family: 'Nunito', sans-serif;
+  margin: 0;
+}
+
+.normalFont{
+    font-weight: normal;
+}
+
+.midScreen{
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -100%);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.bubbleButtonDark.modeButton{
+    display: inline-block;
+    margin: 5px 12px;
+    font-weight: bold;
+    padding: 20px;
+    font-size: 22px;
+}
+
+.topSpace{
+    width: 100%;
+    height: 100px;
+}
+
+.mainContainer{
+  height: 100vh;
+  position: relative;
+  width: 65%;
+  min-height: 360px;
+  min-width: 670px;
+  margin: 0 auto;
+}
+.pageContainer{
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+    width: 68%;
+    padding: 20px;
+    background-color: rgb(255, 255, 255, 0.9);
+    border-radius: 12px;
+    min-height: 600px;
+}
+.rightContainer{
+    box-sizing: border-box;
+    display: inline-block;
+    float: right;
+    width: 30%;
+}
+.avatarImg{
+    border-radius: 50%;
+}
+
+.rightContItem{
+  width: auto;
+  position: relative;
+  font-size: 19px;
+  font-weight: bold;
+  margin: 8px auto;
+  text-align: center;
+}
+
+.whiteText{
+    color: rgba(255, 255, 255, 0.9);
+}
+.darkText{
+    color: rgb(28, 80, 165);
+}
+
+.bubbleButtonDark{
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 30px;
+    background-color: #2664c9;
+}
+
+.bubbleButtonDark:hover{
+    cursor: pointer;
+    color: rgb(28, 80, 165);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.bubbleButtonDark.selected{
+    color: rgb(28, 80, 165);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+#user_field{
+    font-size: 27px;
+}
+
+#user_field:hover{
+    cursor: pointer;
+}
+
+a{
+    text-decoration: none;
+}
+
+.navigbar{
+  padding: 0 12px;
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background-color: #2664c9;
+  min-width: 640px;
+}
+
+.flexnavig{
+    display: flex;
+    justify-content: center;
+}
+
+.navigbarItem{
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 19px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin: 8px 6px;;
+    line-height: 24px;
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.navigbarItem:hover{
+    color: rgb(28, 80, 165);
+    background-color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+}
+
+.navigbarItem.selected{
+    color: rgb(28, 80, 165);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.navigbarItemRight{
+  float: right;
+}
+
+.floatingShadow{
+  box-shadow: 0 0 25px rgba(0,0,0,0.2);
+}
+
+
+.imageRow {
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	overflow-y: hidden;
+	width: 100%;
+	height: 160px;
+	white-space: nowrap;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.imageRow img {
+	flex: 0 0 auto;
+	margin-left: 5px;
+	margin-right: 5px;
+	max-width: 200px;
+	max-height: 150px;
+}

@@ -19,6 +19,7 @@ html {
 }
 
 body {
+    height: 100vh;
     font-family: 'Nunito', sans-serif;
     margin: 0;
     background: none;
@@ -99,17 +100,37 @@ body {
     color: rgb(28, 80, 165);
 }
 
-.bubbleButtonDark {
-    border-radius: 8px;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 30px;
+.darkBack{
     background-color: #2664c9;
 }
 
-.bubbleButtonDark:hover {
+.rowsButton{
+    font-size: 19px;
+    font-weight: bold;
+    margin: 8px 6px;
+    display: inline-block;
+}
+
+.bubbleButton{
+    border-radius: 5px;
+    line-height: 30px;
+    padding: 0 10px;
+}
+
+.bubbleButtonDark {
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #2664c9;
+}
+
+.bubbleButton:hover {
     cursor: pointer;
     color: rgb(28, 80, 165);
     background-color: rgba(255, 255, 255, 0.9);
+}
+.bubbleButtonRedHover:hover {
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #c92641;
 }
 
 .bubbleButtonDark.selected {
@@ -152,7 +173,6 @@ a {
     font-weight: bold;
     border-radius: 5px;
     margin: 8px 6px;
-    ;
     line-height: 24px;
     display: inline-block;
     padding: 0 10px;
@@ -195,6 +215,10 @@ a {
     margin-right: 5px;
     max-width: 200px;
     max-height: 150px;
+}
+
+.tabPanel{
+    display: inline-block;
 }
 
 .element-increase {
