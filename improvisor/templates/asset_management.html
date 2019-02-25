@@ -8,7 +8,7 @@
         {% for asset in assets %}
             <div class="assetpool-asset">
                 {% if asset.thumbnailLocation != None %}
-                    <img class="thumbnail" src="/{{asset.thumbnailLocation}}">
+                    <img class="thumbnail" src="resources/{{asset.thumbnailLocation}}">
                 {% else %}
                 <!-- Placeholder until we get a default asset thumbnail -->
                 <div class="thumbnail-placeholder">Placeholder</div>
