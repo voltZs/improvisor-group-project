@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 
 {% block main_content%}
-    <div class="pageContainer">
-        {% block page_content %}
-        {% endblock page_content %}
-    </div>
 
     <div class="rightContainer">
         <a href="/user_settings">
@@ -16,24 +12,29 @@
                 Brian Davidson
             </div>
         </a>
-        <a href="/join_session">
-            <div class="rightContItem bubbleButton bubbleButtonDark" id="newSessionOption">
-                New Session
-            </div>
-        </a>
-        <br>
-        <a href="/sessions">
-            <div class="rightContItem bubbleButton bubbleButtonDark" id="prevSessionOption">
-                Previous Sessions
-            </div>
-        </a>
-        <a href="/assets">
-            <div class="rightContItem bubbleButton bubbleButtonDark" id="assetPoolOption">
-                Asset Pool
-            </div>
-        </a>
+        <div class="sideBarButtonsDiv">
+            <a href="/join_session">
+                <div class="rightContItem bubbleButton bubbleButtonDark" id="newSessionOption">
+                    New Session
+                </div>
+            </a>
+            <br>
+            <a href="/sessions">
+                <div class="rightContItem bubbleButton bubbleButtonDark" id="prevSessionOption">
+                    Previous Sessions
+                </div>
+            </a>
+            <a href="/assets">
+                <div class="rightContItem bubbleButton bubbleButtonDark" id="assetPoolOption">
+                    Asset Pool
+                </div>
+            </a>
+        </div>
     </div>
 
-    <script src="url_for('static', filename='/JS/sidebar.js')"></script>
-
+    <div class="pageContainer">
+        {% block page_content %}
+        {% endblock page_content %}
+    </div>
+    
 {% endblock main_content%}

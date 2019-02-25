@@ -1,43 +1,17 @@
-{% extends "base.html" %}
+{% extends "presentation_navigbar.html" %}
 
 {% set page_title = 'Controller' %}
 
-{% block navigbar %}
-    <div class="navigbar floatingShadow flexnavig">
-        <a href="/sessions">
-            <div class="navigbarItem">
-              <i class="fas fa-arrow-left"></i>
-            </div>
-        </a>
-
-        <a href="/controller">
-            <div class="navigbarItem navigbarItemMid" id="controllerMode">
-              Controller
-            </div>
-        </a>
-
-        <a href="/presenter">
-            <div class="navigbarItem navigbarItemMid" id="presenterMode">
-                Presenter
-            </div>
-        </a>
-    </div>
-{% endblock navigbar %}
-
 {% block content %}
     <div class="topSpace"></div>
-    <div title="Toggle Speech Recognition" class="controls">
-        <button class="control btn btn-success btn-lg" id="start">Start Listening</button>
-        <button class="control btn btn-danger btn-lg hidden" id="stop">Stop Listening</button>
-    </div>
 
     <div class="currentBlock">
-        <h2 class="whiteText">Current</h2>
+        <h3 class="whiteText">Current</h2>
         <div class="imageRow" id="currentRow"></div>
     </div>
 
     <div class="frequentBlock">
-        <h2 class="whiteText">Frequent</h2>
+        <h3 class="whiteText">Frequent</h2>
         <div class="imageRow" id="frequentRow"></div>
     </div>
 

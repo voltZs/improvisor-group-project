@@ -11,6 +11,10 @@ $(document).ready(function () {
 var selectedTab = '1';
 var maxTabs = 5;
 
+var listening;
+var microphoneToggle = document.getElementById("microphoneToggle");
+var microphoneIcon= document.getElementById("microphoneIcon");
+
 setupPage();
 
 // ############### ARTYOM ############################
@@ -131,29 +135,40 @@ if (annyang) {
       recognisedTagsUsed = [];
     }
   });
-
   // Start listening. You can call this here, or attach this call to an event, button, etc.
 
-  $("#start").click(function () {
-    $(".control").toggleClass('hidden');
+  microphoneToggle.addEventListener('click', function () {
+      if(listening){
+          stopListening();
+      } else {
+          startListening();
+      }
+  });
+
+}
+
+function startListening(){
     //noSleep.enable();
     //startArtyom();
     annyang.start({ autoRestart: true, continuous: false});
     var  recognition = annyang.getSpeechRecognizer();
     recognition.interimResults = true;
     console.log("Started listening");
-  });
 
-  // Stop listening button
-  $("#stop").click(function () {
-    $(".control").toggleClass('hidden');
+    microphoneIcon.classList.add("fa-microphone");
+    microphoneIcon.classList.remove("fa-microphone-slash");
+    listening = true;
+}
+
+function stopListening(){
     //noSleep.disable();
     //stopArtyom();
     annyang.pause();
     console.log("Stopped listening");
-  });
 
-
+    microphoneIcon.classList.add("fa-microphone-slash");
+    microphoneIcon.classList.remove("fa-microphone");
+    listening = false;
 }
 
 //################# ANNYANG END ########################
@@ -175,10 +190,7 @@ if (annyang) {
 // });
 
 function setupPage(){
-    var items = JSON.parse(localStorage.getItem("lastAssets"));
-    if(items){
-        updateResults(items);
-    }
+    startListening();
 
     if(!localStorage.getItem('tabs')){
         localStorage.setItem('tabs', '{}');
@@ -187,12 +199,17 @@ function setupPage(){
         renderTabs();
     }
 
-
     document.getElementById('addTabBtn').addEventListener(
         'click', function(){
             addTab();
     });
     populateActiveTab();
+
+    var items = JSON.parse(localStorage.getItem("lastAssets"));
+    if(items){
+        updateResults(items);
+    }
+
 }
 
 function makeAjaxRequest(){

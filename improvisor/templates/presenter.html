@@ -1,28 +1,10 @@
-{% extends "base.html" %}
+{% extends "presentation_navigbar.html" %}
 
 {% set page_title = 'Presenter' %}
 
-{% block navigbar %}
-    <div class="navigbar floatingShadow flexnavig">
-        <a href="/sessions">
-            <div class="navigbarItem">
-              <i class="fas fa-arrow-left"></i>
-            </div>
-        </a>
+{% block navigbar_microphone %}
 
-        <a href="/controller">
-            <div class="navigbarItem navigbarItemMid" id="controllerMode">
-              Controller
-            </div>
-        </a>
-
-        <a href="/presenter">
-            <div class="navigbarItem navigbarItemMid" id="presenterMode">
-                Presenter
-            </div>
-        </a>
-    </div>
-{% endblock navigbar %}
+{% endblock navigbar_microphone%}
 
 {% block content %}
     <div class="presenter-view">

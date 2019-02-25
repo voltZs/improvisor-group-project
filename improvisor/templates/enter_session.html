@@ -4,17 +4,19 @@
 
 {% block content %}
     <div class="midScreen whiteText">
-        <h2 class="normalFont">You are about to enter a session. Please select mode for this device</h2>
-        <a href="/controller">
-            <div class="bubbleButtonDark modeButton">
-                Controller
-            </div>
-        </a>
-        <a href="/presenter">
-            <div class="bubbleButtonDark modeButton">
-                Presenter
-            </div>
-        </a>
+        <div>
+            <h2 class="normalFont">You are about to enter a session. Please select mode for this device</h2>
+            <a href="/controller">
+                <div class="bubbleButton bubbleButtonDark modeButton">
+                    Controller
+                </div>
+            </a>
+            <a href="/presenter">
+                <div class="bubbleButton bubbleButtonDark modeButton">
+                    Presenter
+                </div>
+            </a>
+        </div>
 
     </div>
 {% endblock content %}
