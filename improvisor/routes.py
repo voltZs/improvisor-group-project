@@ -194,7 +194,7 @@ def previous_sessions_view():
 def asset_management_view():
     assets = []
     if current_user.is_authenticated:
-        user = UserModel.find_by_id(current_user.id)
+        user = UserModel.find_by_id(current_user.get_id())
         assets = user.assets
     return render_template('asset_management.html', assets=assets)
 
