@@ -118,7 +118,7 @@ def addAsset():
 
 def upload(asset, assetResource, assetThumbnail = None ):
     print ("saving upload")
-    directory = join ("uploadedFiles", "user_" + str(current_user.get_id()), asset.assetname)
+    directory = join ("improvisor/static/resources/uploadedFiles", "user_" + str(current_user.get_id()), asset.assetname)
     print (f'assetResource is {assetResource}')
     if assetResource:
         print("saving asset Resource")
@@ -192,8 +192,8 @@ def previous_sessions_view():
 def asset_management_view():
     assets = []
     if current_user.is_authenticated:
-        assets = AssetModel.query.filter_by(user_id=current_user.id).all()
-        print(assets)
+        user = UserModel.find_by_id(current_user.id)
+        assets = user.assets
     return render_template('asset_management.html', assets=assets)
 
 
@@ -271,7 +271,7 @@ def signup_view():
         return render_template('signup.html', form=form)
 
 def addDirectory(user_id):
-    directory = join("uploadedFiles", "user_" + str(user_id))
+    directory = join("improvisor/static/resources/uploadedFiles", "user_" + str(user_id))
     try:
         os.mkdir(directory)
     except:
