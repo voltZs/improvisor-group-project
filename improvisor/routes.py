@@ -32,10 +32,11 @@ def addTag():
     return render_template('tag_form.html', form=form)
 
 #API: extracts all of the current user's tags from the database returning a json
+@login_required
 @app.route('/api/user_tags_list', methods=['GET'])
 def getTags():
     if current_user.is_authenticated:
-        return jsonify({"tags":[tag.json() for tag in TagModel.query.filter_by(user_id = session["user_id"]).all()]})
+        return jsonify({"tags":[tag.json() for tag in TagModel.query.filter_by(user_id=current_user.get_id()).all()]})
     else:
         print("No user is logged in, can't get tags")
         return redirect('/')

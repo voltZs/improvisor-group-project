@@ -7,7 +7,9 @@
     {{ form.assetThumbnail.label}} {{ form.assetThumbnail()}}
     <input type="submit" value="Submit">
 </form>
-
+{% if error %}
+    <p class="danger">{{error}}</p>
+{% endif %}
 <div>
     {% include 'includes/_messages.html' %}
 </div>
