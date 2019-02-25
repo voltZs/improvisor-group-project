@@ -27,7 +27,7 @@ db.init_app(app)
 def initialisation():
     db.create_all()
     session["selected_asset"] = ""
-    if not os.path.exists("/improvisor/repo/improvisor/static/resources/uploadedFiles"): 
-        os.mkdir("/improvisor/repo/improvisor/static/resources/uploadedFiles")
+    if not os.path.exists("improvisor/static/resources/uploadedFiles"): 
+        os.mkdir("improvisor/static/resources/uploadedFiles")
 
 from improvisor import routes, sockets

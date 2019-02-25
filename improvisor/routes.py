@@ -193,6 +193,7 @@ def asset_management_view():
     assets = []
     if current_user.is_authenticated:
         assets = AssetModel.query.filter_by(user_id=current_user.id).all()
+        print(assets)
     return render_template('asset_management.html', assets=assets)
 
 
