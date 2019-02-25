@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-import os, json, copy, bcrypt, itertools
+import os, json, copy, bcrypt
 from os.path import join
 from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin
 from improvisor.models.tag_model import TagModel
@@ -187,6 +187,33 @@ def previous_sessions_view():
 
 
 @login_required
+@app.route('/assets/<id>', methods=['GET'])
+def asset(id=None):
+    asset = {}
+    if id is not None:
+        user = UserModel.find_by_id(current_user.get_id())
+        assets = user.assets
+        # Not implemented yet
+    return render_template('asset_page.html', asset=asset)
+
+
+@login_required
+@app.route('/assets/<id>/delete', methods=['POST'])
+def asset_delete(id=None):
+    if id is not None:
+        # Delete the asset with id from db
+        pass
+
+
+@login_required
+@app.route('/assets/<id>/update', methods=['POST'])
+def asset_update(id=None):
+    if id is not None:
+        # Update the asset with id from db
+        pass
+
+
+@login_required
 @app.route('/assets', methods=['GET', 'POST'])
 def asset_management_view():
     assets = []
@@ -197,7 +224,7 @@ def asset_management_view():
 
 
 @login_required
-@app.route('/assets/select', methods=['GET', 'POST'])
+@app.route('/assets/select', methods=['POST'])
 def assets_select(search_tags=None, sorting=None, max_count=None):
     all_assets = []
     filter_tags = []
