@@ -152,7 +152,7 @@ def fetch_tagset():
 
 @app.route('/fetch_asset', methods=['GET'])
 def fetch_asset():
-    id = int(request.args.get('id')) ;
+    id = int(request.args.get('id'))
     print(type(id))
     for asset in assets:
         if id == asset["id"]:
@@ -184,9 +184,12 @@ def previous_sessions_view():
     return render_template('previous_sessions.html')
 
 
+@login_required
 @app.route('/assets', methods=['GET', 'POST'])
 def asset_management_view():
-    return render_template('asset_management.html')
+    assets = AssetModel.query.filter_by(user_id=current_user.id).all()
+    #return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
+    return render_template('asset_management.html', assets=assets)
 
 
 @login_manager.user_loader
@@ -196,11 +199,9 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
-
     form = FormLogin(request.form)
 
     if request.method == "POST" and form.validate():
-
         user = UserModel.find_by_email(form.email.data)
 
         if user is not None and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password):
@@ -222,7 +223,9 @@ def logout():
 
 @app.route('/signup', methods=['GET','POST'])
 def signup_view():
-
+    if current_user.is_authenticated:
+        return redirect('/')
+    
     form = FormSignup(request.form)
     if request.method == "POST" and form.validate():
 
@@ -271,10 +274,8 @@ def addDirectory(user_id):
 
 @app.route('/compare_phrases', methods=['POST'])
 def compare_phrases():
-
     recognised_tags = json.loads(request.form.get('recognisedTags'))
     mentioned_tags = request.form.get('mentionedTags')
-
 
     if not mentioned_tags:
         mentioned_tags = {'recent' : {},
