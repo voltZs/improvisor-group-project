@@ -258,7 +258,7 @@ def signup_view():
             # Encrypt the password using bcrypt
             hashpass = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
             # Make the new user using the user model
-            user = UserModel(form.firstname.data, form.lastname.data, form.email.data, hashpass)
+            user = UserModel(first_name, last_name, form.email.data, hashpass)
             try:
                 user.save_to_db()
 
