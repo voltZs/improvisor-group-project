@@ -32,10 +32,11 @@ def addTag():
     return render_template('tag_form.html', form=form)
 
 #API: extracts all of the current user's tags from the database returning a json
+@login_required
 @app.route('/api/user_tags_list', methods=['GET'])
 def getTags():
     if current_user.is_authenticated:
-        return jsonify({"tags":[tag.json() for tag in TagModel.query.filter_by(user_id = session["user_id"]).all()]})
+        return jsonify({"tags":[tag.json() for tag in TagModel.query.filter_by(user_id=current_user.get_id()).all()]})
     else:
         print("No user is logged in, can't get tags")
         return redirect('/')
@@ -67,6 +68,7 @@ def allAssets():
 
 
 #API: inserts asset into database and allows tags to be added to asset
+@login_required
 @app.route('/api/asset', methods=["GET", "POST"])
 def addAsset():
     form = FormAsset()
@@ -89,7 +91,7 @@ def addAsset():
                 print("asset already exists") #if no tag is entered then there is nothing to update
                 return render_template("asset_form.html", form=form)
         else:
-             asset = AssetModel(form.assetname.data, session["user_id"]) #if there is no asset in database then create it and check for possible tag entry
+             asset = AssetModel(form.assetname.data, current_user.get_id()) #if there is no asset in database then create it and check for possible tag entry
              if form.tagname.data:
                 tag = TagModel.find_by_tagName(form.tagname.data)
                 print(f'tag is from db is {tag}')
@@ -192,7 +194,7 @@ def previous_sessions_view():
 def asset_management_view():
     assets = []
     if current_user.is_authenticated:
-        user = UserModel.find_by_id(current_user.id)
+        user = UserModel.find_by_id(current_user.get_id())
         assets = user.assets
     return render_template('asset_management.html', assets=assets)
 
