@@ -159,6 +159,7 @@ def fetch_asset():
     print(type(id))
     for asset in assets:
         if id == asset["id"]:
+            asset.pop("date-created", None)
             return json.dumps(asset)
     return None
 
@@ -402,6 +403,8 @@ def compare_phrases():
 
     # MANAGE ADDING asset_selection
     for asset in assets:
+        asset.pop('date-created', None)
+        print(asset)
         ###### FOR ALL -> FREQUENT
         mentioned_all = mentioned_tags['all'].keys()
         asset['weight'] = 0

@@ -263,7 +263,7 @@ function updateResults(assets) {
   frequentResults.innerHTML = "";
   for (asset in assets['frequent']) {
     var image = document.createElement("IMG");
-    image.src = "/static/resources/images/" + assets['frequent'][asset]['thumbnailLocation'];
+    image.src = assets['frequent'][asset]['thumbnailLocation'];
     image.setAttribute("data-id", assets['frequent'][asset]['id']);
     image.classList.add("assetThumbnail");
     image.classList.add("animated");
@@ -273,7 +273,7 @@ function updateResults(assets) {
   currentResults.innerHTML = "";
   for (asset in assets['current']) {
     var image = document.createElement("IMG");
-    image.src = "/static/resources/images/" + assets['current'][asset]['thumbnailLocation'];
+    image.src = assets['current'][asset]['thumbnailLocation'];
     image.setAttribute("data-id", assets['current'][asset]['id']);
     image.classList.add("assetThumbnail");
     image.classList.add("animated");
@@ -354,7 +354,7 @@ function populateActiveTab(){
     tabRow.innerHTML = "";
     for (asset in assets) {
       var image = document.createElement("IMG");
-      image.src = "/static/resources/images/" + assets[asset]['thumbnailLocation'];
+      image.src = assets[asset]['thumbnailLocation'];
       image.setAttribute("data-id", assets[asset]['id']);
       image.classList.add("assetThumbnail");
       image.classList.add("animated");

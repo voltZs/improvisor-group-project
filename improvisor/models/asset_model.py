@@ -14,21 +14,21 @@ class AssetModel(db.Model):
     dateCreated = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
-    
+
     user = db.relationship("UserModel")
     tags = db.relationship("TagModel",secondary=asset_tags, lazy="subquery", backref=db.backref("assets", lazy=True))
 
     def json(self):
-        return {"asset": self.assetname, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated}
+        return {"id": self.id, "asset": self.assetname, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated}
 
     def __init__(self, assetname, user_id, assetLocation = None, thumbnailLocation = None, dateCreated = datetime.now()):
-        self.assetname = assetname 
+        self.assetname = assetname
         self.user_id = user_id
         self.assetLocation = assetLocation
         self.thumbnailLocation = thumbnailLocation
         self.dateCreated = dateCreated
-        
-        
+
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
@@ -36,7 +36,7 @@ class AssetModel(db.Model):
     @classmethod
     def find_by_assetName(cls, assetname):
         return cls.query.filter_by(assetname = assetname, user_id = session["user_id"]).first()
-    
+
     @classmethod
     def find_by_assetId(cls, id):
         return cls.query.filter_by(id=id, user_id=current_user.get_id()).first()
