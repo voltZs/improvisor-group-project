@@ -19,7 +19,7 @@ class AssetModel(db.Model):
     tags = db.relationship("TagModel",secondary=asset_tags, lazy="subquery", backref=db.backref("assets", lazy=True))
 
     def json(self):
-        return {"asset": self.assetname, "tags" : [tag.json() for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated}
+        return {"asset": self.assetname, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated}
 
     def __init__(self, assetname, user_id, assetLocation = None, thumbnailLocation = None, dateCreated = datetime.now()):
         self.assetname = assetname 
