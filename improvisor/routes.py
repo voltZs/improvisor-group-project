@@ -70,7 +70,7 @@ def allAssets():
 
 #API: inserts asset into database and allows tags to be added to asset
 @login_required
-@app.route('/api/asset', methods=["GET", "POST"])
+@app.route('/asset/new', methods=["GET", "POST"])
 def addAsset():
     form = FormAsset()
     if request.method == "POST" and form.validate():
@@ -203,7 +203,7 @@ def asset_delete(id=None):
         # Delete the asset with id from db
         AssetModel.delete_by_assetId(id)
         return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
-    return json.dumps({'success':False}), 400, {'ContentType':'application/json'} 
+    return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
 
 @login_required
@@ -212,7 +212,7 @@ def asset_update(id=None):
     if id is not None:
         # Update the asset with id from db (not implemented yet)
         pass
-    return json.dumps({'success':False}), 400, {'ContentType':'application/json'} 
+    return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
 
 @login_required
@@ -242,9 +242,9 @@ def assets_select(search_tags=None, sorting=None, max_count=None):
                     asset.tag_match_count += 1
             filter_tags.append(asset)
             match_count += 1
-    
+
     sorted_assets = []
-    
+
     # Not actually sure if this works yet, no particularly good way to test it
     if sorting.lower() == "recent":
         sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'))
