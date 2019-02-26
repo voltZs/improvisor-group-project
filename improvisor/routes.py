@@ -114,7 +114,7 @@ def addAsset():
             error = "Error while saving asset to db"
             return render_template("asset_form.html", form=form, error=error)
         flash("Successfully added asset", "success")
-        return redirect('/api/asset')
+        return redirect('/assets/new')
     return render_template("asset_form.html", form=form)
 
 
