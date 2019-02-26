@@ -1,7 +1,7 @@
 from db import db
 from improvisor.models.associationTable_tag_asset import asset_tags
 from flask import session
-import datetime
+from datetime import datetime
 from flask_login import current_user
 
 class AssetModel(db.Model):
@@ -21,7 +21,7 @@ class AssetModel(db.Model):
     def json(self):
         return {"asset": self.assetname, "tags" : [tag.json() for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated}
 
-    def __init__(self, assetname, user_id, assetLocation = None, thumbnailLocation = None, dateCreated = datetime.datetime.utcnow()):
+    def __init__(self, assetname, user_id, assetLocation = None, thumbnailLocation = None, dateCreated = datetime.now()):
         self.assetname = assetname 
         self.user_id = user_id
         self.assetLocation = assetLocation
@@ -40,3 +40,9 @@ class AssetModel(db.Model):
     @classmethod
     def find_by_assetId(cls, id):
         return cls.query.filter_by(id=id, user_id=current_user.get_id()).first()
+
+    @classmethod
+    def delete_by_assetId(cls, id):
+        obj = cls.query.filter_by(id=id, user_id=current_user.get_id()).first()
+        db.session.delete(obj)
+        db.session.commit()

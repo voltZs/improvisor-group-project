@@ -1,18 +1,22 @@
 {% extends "with_sidebar.html" %}
 
-{% set page_title = 'Assets' %}
+{% set page_title = 'Asset' %}
 
 {% block page_content %}
     <h2 class="darkText">Asset Page</h2>
     <div class="assetpool-list">
         <div class="assetpool-asset">
-            {% if asset.thumbnailLocation != None %}
-                <img class="thumbnail" src="resources/{{asset.thumbnailLocation}}">
+            {% if asset is not none %}
+                {% if asset.thumbnailLocation != None %}
+                    <img class="thumbnail" src="{{asset.thumbnailLocation}}">
+                {% else %}
+                    <!-- Placeholder until we get a default asset thumbnail -->
+                    <div class="thumbnail-placeholder">Placeholder</div>
+                {% endif %}
+                <p>{{ asset.assetname }}</p>
             {% else %}
-            <!-- Placeholder until we get a default asset thumbnail -->
-            <div class="thumbnail-placeholder">Placeholder</div>
+                <p>Asset not found</p>
             {% endif %}
-            <p>{{ asset.assetname }}</p>
         </div>
     </div>
 {% endblock page_content %}

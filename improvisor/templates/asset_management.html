@@ -7,14 +7,17 @@
     <div class="assetpool-list">
         {% for asset in assets %}
             <div class="assetpool-asset">
-                {% if asset.thumbnailLocation != None %}
+                <a href="/assets/{{asset.id}}">
+                    {% if asset.thumbnailLocation != None %}
                     <img class="thumbnail" src="{{asset.thumbnailLocation}}">
-                {% else %}
-                <!-- Placeholder until we get a default asset thumbnail -->
-                <div class="thumbnail-placeholder">Placeholder</div>
-                {% endif %}
-                <p>{{ asset.assetname }}</p>
-            </div>    
+                    {% else %}
+                        <!-- Placeholder until we get a default asset thumbnail -->
+                        <div class="thumbnail-placeholder">Placeholder</div>
+                    {% endif %}
+                    <p>{{ asset.assetname }}</p>
+                </a>
+                
+            </div>
         
         {% endfor %}
     </div>

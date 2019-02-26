@@ -191,13 +191,10 @@ def previous_sessions_view():
 @login_required
 @app.route('/assets/<id>', methods=['GET'])
 def asset(id=None):
-    asset = {}
     if id is not None:
-        #user = UserModel.find_by_id(current_user.get_id())
-        #assets = user.assets
-        # Not implemented yet
         asset = AssetModel.find_by_assetId(id)
-    return render_template('asset_page.html', asset=asset)
+        return render_template('asset_page.html', asset=asset)
+    return render_template('asset_page.html', asset=None)
 
 
 @login_required
@@ -205,22 +202,25 @@ def asset(id=None):
 def asset_delete(id=None):
     if id is not None:
         # Delete the asset with id from db
-        pass
+        AssetModel.delete_by_assetId(id)
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    return json.dumps({'success':False}), 400, {'ContentType':'application/json'} 
 
 
 @login_required
 @app.route('/assets/<id>/update', methods=['POST'])
 def asset_update(id=None):
     if id is not None:
-        # Update the asset with id from db
+        # Update the asset with id from db (not implemented yet)
         pass
+    return json.dumps({'success':False}), 400, {'ContentType':'application/json'} 
 
 
 @login_required
 @app.route('/assets', methods=['GET', 'POST'])
 def asset_management_view():
     user = UserModel.find_by_id(current_user.get_id())
-    # Need to sort by most recent THEN get first 20
+    # Still need to sort by most recent THEN get first 20
     assets = user.assets[:20]
     return render_template('asset_management.html', assets=assets)
 
