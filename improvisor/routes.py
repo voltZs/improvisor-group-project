@@ -82,6 +82,8 @@ def addAsset():
                 tags = form.tagname.data.split(",")
                 print (tags)
                 for tag in tags:
+                    # Remove extra white space
+                    tag = " ".join(tag.split())
                     # If tag doesn't exist in tag list already then add it
                     tag_obj = TagModel.add_tag(tag)
                     asset.tags.append(tag_obj)
@@ -91,10 +93,11 @@ def addAsset():
                 return render_template("asset_form.html", form=form)
         else:
             asset = AssetModel(form.assetname.data, current_user.get_id())
-            # need to remove extra white space. for example ('tag1', ' tag2')
             tags = form.tagname.data.split(",")
             print (tags)
             for tag in tags:
+                # Remove extra white space
+                tag = " ".join(tag.split())
                 # If tag doesn't exist in tag list already then add it
                 tag_obj = TagModel.add_tag(tag)
                 asset.tags.append(tag_obj)
