@@ -44,5 +44,5 @@ class AssetModel(db.Model):
     @classmethod
     def delete_by_assetId(cls, id):
         obj = cls.query.filter_by(id=id, user_id=current_user.get_id()).first()
-        db.session.delete(obj)
+        db.session.add(obj)
         db.session.commit()

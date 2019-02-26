@@ -79,23 +79,25 @@ def addAsset():
         asset = AssetModel.find_by_assetName(form.assetname.data) #tries to retrieve asset from database
         if asset:
             if form.tagname.data: #if the asset already exists then try to add a tag to it
-                print (form.tagname.data)
-                tag = TagModel.find_by_tagName(form.tagname.data)
-                if tag:
-                    asset.tags.append(tag)
+                tags = form.tagname.data.split(",")
+                print (tags)
+                for tag in tags:
+                    # If tag doesn't exist in tag list already then add it
+                    tag_obj = TagModel.add_tag(tag)
+                    asset.tags.append(tag_obj)
             else:
                 print("asset already exists") #if no tag is entered then there is nothing to update
+                flash("Asset already exists", "warning")
                 return render_template("asset_form.html", form=form)
         else:
-             asset = AssetModel(form.assetname.data, current_user.get_id()) #if there is no asset in database then create it and check for possible tag entry
-             if form.tagname.data:
-                tag = TagModel.find_by_tagName(form.tagname.data)
-                print(f'tag is from db is {tag}')
-                if tag:
-                    asset.tags.append(tag)
-                else:
-                    flash("Tag does not exist", "danger")
-                    return render_template("asset_form.html", form = form)
+            asset = AssetModel(form.assetname.data, current_user.get_id())
+            # need to remove extra white space. for example ('tag1', ' tag2')
+            tags = form.tagname.data.split(",")
+            print (tags)
+            for tag in tags:
+                # If tag doesn't exist in tag list already then add it
+                tag_obj = TagModel.add_tag(tag)
+                asset.tags.append(tag_obj)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
             upload(asset, form.assetResource.data, form.assetThumbnail.data)
@@ -110,7 +112,6 @@ def addAsset():
             return render_template("asset_form.html", form=form, error=error)
         flash("Successfully added asset", "success")
         return redirect('/api/asset')
-    print("here")
     return render_template("asset_form.html", form=form)
 
 
