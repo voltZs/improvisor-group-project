@@ -216,10 +216,9 @@ def asset_update(id=None):
 @login_required
 @app.route('/assets', methods=['GET', 'POST'])
 def asset_management_view():
-    assets = []
-    if current_user.is_authenticated:
-        user = UserModel.find_by_id(current_user.get_id())
-        assets = user.assets
+    user = UserModel.find_by_id(current_user.get_id())
+    # Need to sort by most recent THEN get first 20
+    assets = user.assets[:20]
     return render_template('asset_management.html', assets=assets)
 
 
