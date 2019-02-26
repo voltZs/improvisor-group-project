@@ -2,6 +2,7 @@ from db import db
 from improvisor.models.associationTable_tag_asset import asset_tags
 from flask import session
 import datetime
+from flask_login import current_user
 
 class AssetModel(db.Model):
     __tablename__ = "assets"
@@ -35,3 +36,7 @@ class AssetModel(db.Model):
     @classmethod
     def find_by_assetName(cls, assetname):
         return cls.query.filter_by(assetname = assetname, user_id = session["user_id"]).first()
+    
+    @classmethod
+    def find_by_assetId(cls, id):
+        return cls.query.filter_by(id=id, user_id=current_user.get_id()).first()

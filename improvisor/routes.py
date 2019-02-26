@@ -6,7 +6,7 @@ from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
-from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash
+from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash, url_for
 from improvisor import app, socketio, sample_files, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -121,21 +121,23 @@ def addAsset():
 
 def upload(asset, assetResource, assetThumbnail = None ):
     print ("saving upload")
-    directory = join ("improvisor/static/resources/uploadedFiles", "user_" + str(current_user.get_id()), asset.assetname)
+    full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) +"/"+ asset.assetname
+    relative_path = url_for('static', filename='resources/uploadedFiles/')
+    relative_path = relative_path + "user_" + str(current_user.get_id()) + "/" + asset.assetname
     print (f'assetResource is {assetResource}')
     if assetResource:
         print("saving asset Resource")
-        save_location = join(directory, assetResource.filename)
+        save_location = full_path + "/" + assetResource.filename
         print (f'saving to {save_location}')
-        if not os.path.exists(directory):
-            os.mkdir(directory)
-        open(save_location, "w")
-        asset.assetLocation = save_location
-
+        if not os.path.exists(full_path):
+            print("Making directory: " + full_path)
+            os.makedirs(full_path)
+        assetResource.save(save_location)
+        asset.assetLocation = relative_path + "/" + assetResource.filename
     if assetThumbnail:
-        save_location = join(directory, assetThumbnail.filename)
-        open(save_location, "w")
-        asset.thumbnailLocation = save_location
+        save_location = full_path + "/" + assetThumbnail.filename
+        assetThumbnail.save(save_location)
+        asset.thumbnailLocation = relative_path + "/" + assetThumbnail.filename
 
 
 
@@ -191,9 +193,10 @@ def previous_sessions_view():
 def asset(id=None):
     asset = {}
     if id is not None:
-        user = UserModel.find_by_id(current_user.get_id())
-        assets = user.assets
+        #user = UserModel.find_by_id(current_user.get_id())
+        #assets = user.assets
         # Not implemented yet
+        asset = AssetModel.find_by_assetId(id)
     return render_template('asset_page.html', asset=asset)
 
 
@@ -244,18 +247,18 @@ def assets_select(search_tags=None, sorting=None, max_count=None):
     sorted_assets = []
     
     # Not actually sure if this works yet, no particularly good way to test it
-    if sorting == "recent":
+    if sorting.lower() == "recent":
         sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'))
-    elif sorting == "old":
+    elif sorting.lower() == "old":
         sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'), reverse=True)
-    elif sorting == "relevant":
+    elif sorting.lower() == "relevant":
         sorted_assets = sorted(filter_tags, key=itemgetter('tag_match_count'), reverse=True)
 
     output = []
     counter = 0
     for current in sorted_assets:
         if counter < max_count:
-            output.append(sorted_assets)
+            output.append(current)
             counter += 1
         else:
             break

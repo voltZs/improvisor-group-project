@@ -1,0 +1,24 @@
+{% extends "with_sidebar.html" %}
+
+{% set page_title = 'Assets' %}
+
+{% block page_content %}
+    <h2 class="darkText">Asset Page</h2>
+    <div class="assetpool-list">
+        <div class="assetpool-asset">
+            {% if asset.thumbnailLocation != None %}
+                <img class="thumbnail" src="resources/{{asset.thumbnailLocation}}">
+            {% else %}
+            <!-- Placeholder until we get a default asset thumbnail -->
+            <div class="thumbnail-placeholder">Placeholder</div>
+            {% endif %}
+            <p>{{ asset.assetname }}</p>
+        </div>
+    </div>
+{% endblock page_content %}
+
+{% block end_body %}
+    <script>
+        document.getElementById('assetPoolOption').classList.add('selected');
+    </script>
+{% endblock end_body %}
