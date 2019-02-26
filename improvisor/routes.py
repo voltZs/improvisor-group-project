@@ -70,7 +70,7 @@ def allAssets():
 
 #API: inserts asset into database and allows tags to be added to asset
 @login_required
-@app.route('/asset/new', methods=["GET", "POST"])
+@app.route('/assets/new', methods=["GET", "POST"])
 def addAsset():
     form = FormAsset()
     if request.method == "POST" and form.validate():
