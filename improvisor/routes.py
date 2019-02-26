@@ -73,12 +73,7 @@ def allAssets():
 @app.route('/api/asset', methods=["GET", "POST"])
 def addAsset():
     form = FormAsset()
-    print (f'form is {form.data}')
-    if (not current_user.is_authenticated): #A valid user must be logged in before an asset can be added to db
-        flash ("No user is logged in, log in to add an asset", "danger")
-        return render_template ("asset_form.html", form = form)
-
-    if (request.method=="POST" and form.validate()):
+    if request.method == "POST" and form.validate():
         print(f'Valid form submitted Asset-name is : {form.assetname.data}')
 
         asset = AssetModel.find_by_assetName(form.assetname.data) #tries to retrieve asset from database
@@ -113,10 +108,10 @@ def addAsset():
         except:
             error = "Error while saving asset to db"
             return render_template("asset_form.html", form=form, error=error)
-        return redirect('/')
-    elif (request.method=="POST"):
-        print("problem with form")
-    return render_template("asset_form.html", form=form )
+        flash("Successfully added asset", "success")
+        return redirect('/api/asset')
+    print("here")
+    return render_template("asset_form.html", form=form)
 
 
 def upload(asset, assetResource, assetThumbnail = None ):

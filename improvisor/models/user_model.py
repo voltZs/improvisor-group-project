@@ -1,5 +1,6 @@
 from db import db
 from flask_login import UserMixin
+from sqlalchemy import func
 
 class UserModel(UserMixin, db.Model):
     __tablename__="users"
@@ -27,7 +28,7 @@ class UserModel(UserMixin, db.Model):
 
     @classmethod
     def find_by_email(cls, email):
-        return cls.query.filter_by(email = email).first()
+        return cls.query.filter(func.lower(UserModel.email) == func.lower(email)).first()
 
     @classmethod
     def find_by_id(cls, id):
