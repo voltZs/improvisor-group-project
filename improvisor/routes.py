@@ -10,6 +10,8 @@ from flask import Flask, render_template, request, redirect, jsonify, session, a
 from improvisor import app, socketio, sample_files, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_socketio import SocketIO, send
+from improvisor import socketio
 
 #API: inserts tag into database
 @app.route('/api/tag', methods=['GET','POST'])
@@ -139,7 +141,14 @@ def upload(asset, assetResource, assetThumbnail = None ):
         asset.thumbnailLocation = relative_path + "/" + assetThumbnail.filename
 
 
-
+@socketio.on('event')
+def handleMessage(data):
+    id = data
+    asset = {}
+    if id is not None:
+        asset = AssetModel.find_by_assetId(id).json()
+        asset.pop('date-created')
+    socketio.emit('presenter', asset)
 
 
 @app.route('/', methods=['GET'])
@@ -154,13 +163,12 @@ def fetch_tagset():
 
 @app.route('/fetch_asset', methods=['GET'])
 def fetch_asset():
-    assets = [asset.json() for asset in current_user.assets.all()]
     id = int(request.args.get('id'))
-    print(type(id))
-    for asset in assets:
-        if id == asset["id"]:
-            asset.pop("date-created", None)
-            return json.dumps(asset)
+    asset = {}
+    if id is not None:
+        asset = AssetModel.find_by_assetId(id).json()
+        asset.pop("date-created", None)
+        return json.dumps(asset)
     return None
 
 @app.route('/join_session', methods=['GET'])
