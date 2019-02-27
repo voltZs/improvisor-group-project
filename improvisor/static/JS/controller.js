@@ -17,78 +17,6 @@ var microphoneIcon= document.getElementById("microphoneIcon");
 
 setupPage();
 
-// ############### ARTYOM ############################
-// const artyom = new Artyom();
-// var recognisedTags = []; // will store recognised tags so they can be removed from the next result
-// // the list is cleared when there is a gap in speech
-// // the tags will be pulled from the server
-// var recognisedTagsUsed = [];
-// var tagset = fetchTagset();
-//
-// var settings = {
-//   continuous: true, // Don't stop never because i have https connection
-//   onResult: function (text) {
-//     // converts the result to lower case to match the tags
-//     text = text.toLowerCase();
-//
-//     if(text == ""){
-//       recognisedTagsUsed = [];
-//     }
-//
-//     // checking if the list is not empty before iterating through it!
-//     if(recognisedTagsUsed.length != 0){
-//       recognisedTagsUsed.forEach(function(item){
-//         text = text.replace(item, "");
-//       });
-//     }
-//     // prints the result with recognised tags removed
-//     console.log("Recognized text: ", text);
-//     // goes through the tags and checks if they are in the text
-//     tagset.forEach(function(tag){
-//       if(text.toLowerCase().includes(tag)){
-//         // adds the new recognised tag into the recognisedTag list
-//         recognisedTags.push(tag);
-//         console.log(recognisedTags);
-//         text.replace(tag, "");
-//       }
-//     });
-//
-//     // this will also empty what's currently in the recognised tags
-//     if(recognisedTags){
-//       makeAjaxRequest();
-//       recognisedTagsUsed = recognisedTagsUsed.concat(recognisedTags);
-//       recognisedTags = [];
-//     }
-//   },
-//
-//
-//
-//
-//
-//   onStart: function () {
-//     console.log("Dictation started by the user");
-//   },
-//   onEnd: function () {
-//     console.log("Dictation stopped by the user");
-//   }
-// };
-//
-// var UserDictation = artyom.newDictation(settings);
-//
-// function startArtyom() {
-//   // Make sure artyom is deactvated before dictation..
-//   artyom.fatality()
-//   // Activate dictation object
-//   UserDictation.start();
-// };
-//
-// function stopArtyom() {
-//   console.log("Stopped Artyom");
-//   UserDictation.stop();
-// }
-
-
-
 //################# ANNYANG START ########################
 
 if (annyang) {
@@ -170,24 +98,6 @@ function stopListening(){
     microphoneIcon.classList.remove("fa-microphone");
     listening = false;
 }
-
-//################# ANNYANG END ########################
-
-// Start listening button
-// $("#start").click(function () {
-//   $(".control").toggleClass('hidden');
-//   //noSleep.enable();
-//   //startArtyom();
-//   console.log("Started listening");
-// });
-//
-// // Stop listening button
-// $("#stop").click(function () {
-//   $(".control").toggleClass('hidden');
-//   //noSleep.disable();
-//   //stopArtyom();
-//   console.log("Stopped listening");
-// });
 
 function setupPage(){
     startListening();
