@@ -117,6 +117,8 @@ def addAsset():
             return render_template("asset_form.html", form=form, error=error)
         flash("Successfully added asset", "success")
         return redirect('/assets/new')
+    else:
+        print("Not a form")
     return render_template("asset_form.html", form=form)
 
 

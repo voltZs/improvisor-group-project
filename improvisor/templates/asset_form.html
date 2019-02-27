@@ -3,48 +3,68 @@
 {% set page_title = 'Asset' %}
 
 {% block page_content %}
-    <h2 class="darkText">Asset Add</h2>
-    <div class="assetpool-list">
-        <div class="assetpool-add">
-            <div class="inputs">
-                {% from "includes/_formhelpers.html" import render_field %}
-                <form method='POST' action="" enctype="multipart/form-data">
-                    <div class="section">
-                        <p>Asset Name:</p>
-                        {{render_field(form.assetname, autocomplete="assetname")}}
+    <h2 class="darkText">
+        <a href="/assets">
+            <i class="fas fa-arrow-left darkText"></i>
+        </a>
+        Add Assets
+    </h2>
+    {% from "includes/_formhelpers.html" import render_field %}
+    <div class="assetFormsContainer" id="assetFormsContainer">
+        <form method='POST' action="" enctype="multipart/form-data" class="whiteContainer" id="form1">
+            <div class="inputSection">
+                <div class="labelDiv">Asset Name:</div>
+                {{render_field(form.assetname, autocomplete="assetname", placeholder="Example Name", class="bubbleButton growText", minlength="2", maxlength="50", required="true")}}
+            </div>
+            <br />
+            <div class="inputSection">
+                <div class="labelDiv">Asset Tags:</div>
+                {{render_field(form.tagname, autocomplete="tags", placeholder="tag1, tag2, tag3...", class="bubbleButton growText", minlength="2", maxlength="100", required="true")}}
+            </div>
+            <br />
+            <div class="">
+                <div class="fileInputDiv">
+                    {{form.assetResource(class="fileInputHidden", id="fileUploadHidden1", required="true")}}
+                    <div class="fileInputVisible bubbleButton bubbleButtonDark" id="fileUploadVisible1">
+                        Upload File
                     </div>
-                    <br />
-                    <div class="section">
-                        <p>Asset Tags:</p>
-                        {{render_field(form.tagname, autocomplete="tags", placeholder="tag1, tag2, tag3...")}}
-                    </div>
-                    <br />
-                    <div class="section">
-                        <p>File Upload:</p>
-                        {{form.assetResource(class="form-control-file")}}
-                    </div>
-                    <br />
-                    <div class="section">
-                        <p>Thumbnail Upload:</p>
-                        {{form.assetThumbnail(class="form-control-file")}}
-                    </div>
-                    <br />
-                    <div class="footer">
-                        <button type="submit">Submit</button>
-                    </div>
-                    {{ form.hidden_tag() }}
-                </form>
-                <br />
-                <div class="flashes">
-                    {% include 'includes/_messages.html' %}
                 </div>
             </div>
-        </div>
+            <br />
+            <div class="">
+                <div class="labelDiv">Thumbnail Upload:</div>
+                <div class="fileInputDiv">
+                    {{form.assetThumbnail(class="fileInputHidden", id="thumbUploadHidden1")}}
+                    <div class="fileInputVisible bubbleButton bubbleButtonDark" id="thumbUploadVisible1">
+                        Upload File
+                    </div>
+                </div>
+            </div>
+            <input type="submit" class="hiddenSubmit">
+            <br />
+            {{ form.hidden_tag() }}
+        </form>
     </div>
+    <div class="formFooter">
+        <div class="bubbleButton bubbleButtonDark rowsButton" id="addAssetBtn">
+            <i class="fas fa-plus"></i>
+            Add asset
+        </div>
+        <button type="submit" id="submitButton" class="bubbleButton bubbleButtonDark rowsButton">Submit</button>
+    </div>
+
+
+    <br />
+    <div class="flashes">
+        {% include 'includes/_messages.html' %}
+    </div>
+
 {% endblock page_content %}
 
 {% block end_body %}
     <script>
         document.getElementById('assetPoolOption').classList.add('selected');
     </script>
+    <script type="text/javascript" src="{{url_for('static', filename='JS/new_asset_form.js')}}"></script>
+
 {% endblock end_body %}

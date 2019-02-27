@@ -160,6 +160,22 @@ body {
     background-color: #2664c9;
 }
 
+.whiteContainer{
+    padding: 20px;
+    border-radius: 12px;
+    background-color: rgba(28, 80, 165, 0.1);;
+    margin: 0 auto 20px auto;
+}
+input.hiddenSubmit{
+    width: 0;
+    padding: 0;
+    border: 0;
+    height: 0;
+    opacity: 0;
+    position: absolute;
+    top:0;
+}
+
 .rowsButton{
     font-size: 19px;
     font-weight: bold;
@@ -282,7 +298,84 @@ a {
     margin-top: 10px;
     display: inline-block;
 }
+.assetFormsContainer{
+    display: flex;
+    flex-direction: column;
+}
+.inputSection{
+    display: flex;
+}
 
+input.growText{
+    flex-grow: 1;
+}
+.labelDiv{
+    display: inline-block;
+    min-width: 100px;
+    font-size: 16px;
+}
+
+input[type="text"]{
+    /* background-color: rgba(38, 100, 201, 1); */
+}
+
+input.bubbleButton{
+    border: none;
+    cursor: text !important;
+}
+
+input:focus{
+    outline: none !important;
+}
+
+button{
+    font-size: 19px;
+    border: none;
+}
+
+button:focus{
+    outline: none !important;
+}
+
+input{
+    cursor: pointer ;
+}
+
+input:active{
+    outline: none;
+}
+
+div.fileInputDiv{
+    position: relative;
+}
+
+div.fileInputVisible{
+    font-size: 16px;
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+    cursor: pointer;
+}
+
+input.fileInputHidden{
+    position: absolute;
+    top: 5px;
+    left: 0;
+    font-size: 16px;
+    padding-left: 16px;
+    /* opacity: 0; */
+    cursor: pointer;
+    z-index: 1;
+}
+
+.formFooter{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* ===================== */
 .element-increase {
     z-index: 1;
     transition: all .2s ease-in-out;
