@@ -156,6 +156,10 @@ body {
     color: rgb(28, 80, 165);
 }
 
+.boldText {
+    font-weight: bold;
+}
+
 .darkBack{
     background-color: #2664c9;
 }
@@ -304,6 +308,7 @@ a {
 }
 .inputSection{
     display: flex;
+    align-items: center;
 }
 
 input.growText{
@@ -499,36 +504,39 @@ p.error {
     color: black;
 }
 
+/* ============= */
+
 .assetpool-list {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: left;
+    justify-content: space-around;
 }
 
 .assetpool-asset {
-    width: 160px;
     height: auto;
-    margin: 5px !important;
+    padding: 5px !important;
     text-align: center;
+    border-radius: 9px;
+
 }
 
-.assetpool-asset .thumbnail-placeholder {
-    width: 160px;
+.assetpool-asset .assetThumbnail {
+    width: 150px;
     height: 90px;
-    border:1px solid #000;
-    background-color: aquamarine;
-    padding-top: 30px;
+    margin: 5px;
+    border: 1px rgb(0,0,0, 0.1) solid;
+    border-radius: 5px;
     font-size: 20px;
     font-weight: bold;
 }
 
+.assetpool-asset:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
 
 
 .assetpool-asset img {
-    width: 160px;
-    height: 90px;
     object-fit: cover;
     padding: 0;
-    margin: 0;
 }

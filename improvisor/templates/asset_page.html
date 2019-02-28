@@ -7,13 +7,13 @@
         <a href="/assets">
             <i class="fas fa-arrow-left darkText"></i>
         </a>
-        Asset Page
+        {{ asset.assetname }}
     </h2>
     <div class="assetpool-list">
         <div class="assetpool-asset">
             {% if asset is not none %}
                 {% if asset.thumbnailLocation != None %}
-                    <img class="thumbnail" src="{{asset.thumbnailLocation}}">
+                    <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
                 {% else %}
                     <!-- Placeholder until we get a default asset thumbnail -->
                     <div class="thumbnail-placeholder">Placeholder</div>

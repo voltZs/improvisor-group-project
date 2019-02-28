@@ -4,20 +4,30 @@
 
 {% block page_content %}
     <h2 class="darkText">Asset Pool</h2>
-    <div class="assetpool-list">
+    <div class="whiteContainer">
+        <div class="inputSection">
+            <div class="labelDiv boldText">Asset Tags:</div>
+            <input type="text" autocomplete="tags" placeholder="tag1, tag2, tag3..." class="bubbleButton growText">
+        </div>
+    </div>
+    <h4 class="darkText boldText">Sort by: Most Recent</h4>
+    <div class="assetpool-list whiteContainer">
         {% for asset in assets %}
-            <div class="assetpool-asset">
-                <a href="/assets/{{asset.id}}">
-                    {% if asset.thumbnailLocation != None %}
-                    <img class="thumbnail" src="{{asset.thumbnailLocation}}">
-                    {% else %}
-                        <!-- Placeholder until we get a default asset thumbnail -->
-                        <div class="thumbnail-placeholder">Placeholder</div>
-                    {% endif %}
-                    <p>{{ asset.assetname }}</p>
-                </a>
 
-            </div>
+            <a href="/assets/{{asset.id}}">
+                <div class="assetpool-asset">
+                        {% if asset.thumbnailLocation != None %}
+                        <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
+                        {% else %}
+                            <!-- Placeholder until we get a default asset thumbnail -->
+                            <div class="assetThumbnail darkText">
+                                <br>
+                                Placeholder
+                            </div>
+                        {% endif %}
+                        <p class="darkText boldText">{{ asset.assetname }}</p>
+                </div>
+            </a>
 
         {% endfor %}
     </div>
