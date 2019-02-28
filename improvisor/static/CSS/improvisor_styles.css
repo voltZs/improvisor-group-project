@@ -172,6 +172,12 @@ body {
     background-color: #2664c9;
 }
 
+.centerFlex{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
 .whiteContainer{
     padding: 20px;
     border-radius: 12px;

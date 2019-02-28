@@ -86,7 +86,7 @@ function getAssets(tags, sorting, limit){
         assetPool.innerHTML = "";
         for(var i=0; i<data.length; i++){
             console.log(data[i]);
-            if(!data[i]){
+            if(!data[i] || i==limit){
                 break;
             }
             var link = document.createElement("A");
@@ -113,9 +113,9 @@ function getAssets(tags, sorting, limit){
 
 function checkLoadMoreBtn(){
     if(assetPool.children.length == limit){
-        moreAssetsButton.hidden = false;
+        moreAssetsButton.style.display = "inline-block"
     } else {
-        moreAssetsButton.hidden = true;
+        moreAssetsButton.style.display = "none"
     }
 }
 
