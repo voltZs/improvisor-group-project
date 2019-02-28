@@ -203,7 +203,7 @@ def previous_sessions_view():
 def asset_management_view():
     user = UserModel.find_by_id(current_user.get_id())
     # desc => from most recent to oldest
-    assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(30).all()
+    assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(10).all()
     return render_template('asset_management.html', assets=assets)
 
 @login_required
@@ -226,11 +226,7 @@ def assets_select():
     if limit:
         limit = int(limit)
     else:
-        limit = 20
-
-    print(filter_tags)
-    print(sorting)
-    print(limit)
+        limit = 10
 
     # filtering
     unfiltered = [asset.json() for asset in UserModel.find_by_id(current_user.get_id()).assets.all()]
@@ -250,8 +246,10 @@ def assets_select():
     # sorting
     if sorting.lower() == "recent":
         sorted_assets = sorted(filtered, key=itemgetter('date-created'), reverse=True)
+        sorted_assets = sorted_assets[0:limit]
     elif sorting.lower() == "old":
         sorted_assets = sorted(filtered, key=itemgetter('date-created'), reverse=False)
+        sorted_assets = sorted_assets[0:limit]
     elif sorting.lower() == "relevant":
         assets_match_count =[]
         match_count = 0;
@@ -267,10 +265,7 @@ def assets_select():
             else:
                 break
         sorted_assets = sorted(assets_match_count, key=itemgetter('tag_match_count'), reverse=True)
-    print(sorted_assets)
-
     [asset.pop('date-created', None) for asset in sorted_assets]
-    print(sorted_assets)
     return json.dumps(sorted_assets)
 
 #anything that has /asset/blalbalbla needs to be before /asset/<id>...
