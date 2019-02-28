@@ -232,88 +232,46 @@ def assets_select():
     print(sorting)
     print(limit)
 
-    user = UserModel.find_by_id(current_user.get_id())
+    # filtering
+    unfiltered = [asset.json() for asset in UserModel.find_by_id(current_user.get_id()).assets.all()]
+    filtered = []
+    if not (filter_tags is None or filter_tags == []):
+        for asset in unfiltered:
+            for filter_tag in filter_tags:
+                if filter_tag in asset['tags']:
+                    filtered.append(asset)
+                    # move on to next asset
+                    break
+    else:
+        filtered = unfiltered
+
     sorted_assets = []
 
     # sorting
     if sorting.lower() == "recent":
-        sorted_assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(limit).all()
+        sorted_assets = sorted(filtered, key=itemgetter('date-created'), reverse=True)
     elif sorting.lower() == "old":
-        sorted_assets = user.assets.order_by(asc(AssetModel.dateCreated)).limit(limit).all()
+        sorted_assets = sorted(filtered, key=itemgetter('date-created'), reverse=False)
     elif sorting.lower() == "relevant":
-        non_sorted = user.assets.all()
         assets_match_count =[]
         match_count = 0;
-        for asset in non_sorted:
+        for asset in filtered:
             if match_count < limit:
                 setattr(asset, 'tag_match_count', 0)
                 if not (filter_tags is None or filter_tags == []):
                     for filter_tag in filter_tags:
-                        if filter_tag in asset.tags:
-                            asset.tag_match_count += 1
+                        if filter_tag in asset['tags']:
+                            asset['tag_match_count'] += 1
                     assets_match_count.append(asset)
                     match_count += 1
             else:
                 break
         sorted_assets = sorted(assets_match_count, key=itemgetter('tag_match_count'), reverse=True)
     print(sorted_assets)
-    # filtering
-    output = []
-    filtered = []
-    if not (filter_tags is None or filter_tags == []):
-        for asset in sorted_assets:
-            for filter_tag in filter_tags:
-                if filter_tag in asset.tags:
-                    filtered.append(asset)
-                    # move on to next asset
-                    break
-        output = [asset.json() for asset in filtered]
-    else:
-        output = [asset.json() for asset in sorted_assets]
 
-    [asset.pop('date-created', None) for asset in output]
-    print(output)
-    return json.dumps(output)
-
-# @login_required
-# @app.route('/assets/select', methods=['POST'])
-# def assets_select(search_tags=None, sorting=None, max_count=None):
-#     all_assets = []
-#     filter_tags = []
-#     match_count = 0
-#
-#     user = UserModel.find_by_id(current_user.get_id())
-#     all_assets = user.assets
-#
-#     for asset in all_assets:
-#         setattr(asset, 'tag_match_count', 0)
-#         if search_tags is not None:
-#             for search_tag in search_tags:
-#                 if search_tag in asset.tags:
-#                     asset.tag_match_count += 1
-#             filter_tags.append(asset)
-#             match_count += 1
-#
-#     sorted_assets = []
-#
-#     # Not actually sure if this works yet, no particularly good way to test it
-#     if sorting.lower() == "recent":
-#         sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'))
-#     elif sorting.lower() == "old":
-#         sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'), reverse=True)
-#     elif sorting.lower() == "relevant":
-#         sorted_assets = sorted(filter_tags, key=itemgetter('tag_match_count'), reverse=True)
-#
-#     output = []
-#     counter = 0
-#     for current in sorted_assets:
-#         if counter < max_count:
-#             output.append(current)
-#             counter += 1
-#         else:
-#             break
-#
-#     return json.dumps(output)
+    [asset.pop('date-created', None) for asset in sorted_assets]
+    print(sorted_assets)
+    return json.dumps(sorted_assets)
 
 #anything that has /asset/blalbalbla needs to be before /asset/<id>...
 @login_required

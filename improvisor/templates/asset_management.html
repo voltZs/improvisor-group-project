@@ -6,11 +6,20 @@
     <h2 class="darkText">Asset Pool</h2>
     <div class="whiteContainer">
         <div class="inputSection">
-            <div class="labelDiv boldText">Asset Tags:</div>
-            <input type="text" autocomplete="tags" placeholder="tag1, tag2, tag3..." class="bubbleButton growText">
+            <div class="labelDiv boldText">Filter Tags:</div>
+            <input id="tagTextInput" list="suggestions" placeholder="tag1, tag2, tag3..." class="bubbleButton growText">
+            <datalist id="suggestions"></datalist>
+        </div>
+        <div id="filterTagsContainter">
+            <!-- <div class="filterTagButton">
+                <span>Wind Turbine</span>
+                <span class="removeToggle">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div> -->
         </div>
     </div>
-    <h4 class="darkText boldText">Sort by: Most Recent</h4>
+    <h3 class="darkText boldText">Sort by: Most Recent</h3>
     <div class="assetpool-list whiteContainer">
         {% for asset in assets %}
 
@@ -25,7 +34,7 @@
                                 Placeholder
                             </div>
                         {% endif %}
-                        <p class="darkText boldText">{{ asset.assetname }}</p>
+                        <p class="blackText boldText labelText">{{ asset.assetname }}</p>
                 </div>
             </a>
 
