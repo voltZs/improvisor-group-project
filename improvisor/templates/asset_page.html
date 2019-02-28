@@ -3,7 +3,12 @@
 {% set page_title = 'Asset' %}
 
 {% block page_content %}
-    <h2 class="darkText">Asset Page</h2>
+    <h2 class="darkText">
+        <a href="/assets">
+            <i class="fas fa-arrow-left darkText"></i>
+        </a>
+        Asset Page
+    </h2>
     <div class="assetpool-list">
         <div class="assetpool-asset">
             {% if asset is not none %}

@@ -6,6 +6,7 @@ from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
+from sqlalchemy import desc, asc
 from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash, url_for
 from improvisor import app, socketio, sample_files, login_manager
 from operator import itemgetter
@@ -197,7 +198,124 @@ def user_settings_view():
 def previous_sessions_view():
     return render_template('previous_sessions.html')
 
+@login_required
+@app.route('/assets', methods=['GET', 'POST'])
+def asset_management_view():
+    user = UserModel.find_by_id(current_user.get_id())
+    # desc => from most recent to oldest
+    assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(30).all()
+    return render_template('asset_management.html', assets=assets)
 
+@login_required
+@app.route('/assets/select', methods=['POST'])
+def assets_select():
+    filter_tags = request.form.get('filterTags')
+    # possible values: RECENT, OLD, RELEVANT
+    sorting = request.form.get('sorting')
+    limit = request.form.get('limit')
+
+    if filter_tags:
+        filter_tags = json.loads(filter_tags)
+
+    if sorting:
+        if not (sorting.lower() == "recent" or sorting.lower() == "old" or sorting.lower() == "relevant"):
+            sorting = "recent"
+    else:
+        sorting = "recent"
+
+    if limit:
+        limit = int(limit)
+    else:
+        limit = 20
+
+    print(filter_tags)
+    print(sorting)
+    print(limit)
+
+    user = UserModel.find_by_id(current_user.get_id())
+    sorted_assets = []
+
+    # sorting
+    if sorting.lower() == "recent":
+        sorted_assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(limit).all()
+    elif sorting.lower() == "old":
+        sorted_assets = user.assets.order_by(asc(AssetModel.dateCreated)).limit(limit).all()
+    elif sorting.lower() == "relevant":
+        non_sorted = user.assets.all()
+        assets_match_count =[]
+        match_count = 0;
+        for asset in non_sorted:
+            if match_count < limit:
+                setattr(asset, 'tag_match_count', 0)
+                if not (filter_tags is None or filter_tags == []):
+                    for filter_tag in filter_tags:
+                        if filter_tag in asset.tags:
+                            asset.tag_match_count += 1
+                    assets_match_count.append(asset)
+                    match_count += 1
+            else:
+                break
+        sorted_assets = sorted(assets_match_count, key=itemgetter('tag_match_count'), reverse=True)
+    print(sorted_assets)
+    # filtering
+    output = []
+    filtered = []
+    if not (filter_tags is None or filter_tags == []):
+        for asset in sorted_assets:
+            for filter_tag in filter_tags:
+                if filter_tag in asset.tags:
+                    filtered.append(asset)
+                    # move on to next asset
+                    break
+        output = [asset.json() for asset in filtered]
+    else:
+        output = [asset.json() for asset in sorted_assets]
+
+    [asset.pop('date-created', None) for asset in output]
+    print(output)
+    return json.dumps(output)
+
+# @login_required
+# @app.route('/assets/select', methods=['POST'])
+# def assets_select(search_tags=None, sorting=None, max_count=None):
+#     all_assets = []
+#     filter_tags = []
+#     match_count = 0
+#
+#     user = UserModel.find_by_id(current_user.get_id())
+#     all_assets = user.assets
+#
+#     for asset in all_assets:
+#         setattr(asset, 'tag_match_count', 0)
+#         if search_tags is not None:
+#             for search_tag in search_tags:
+#                 if search_tag in asset.tags:
+#                     asset.tag_match_count += 1
+#             filter_tags.append(asset)
+#             match_count += 1
+#
+#     sorted_assets = []
+#
+#     # Not actually sure if this works yet, no particularly good way to test it
+#     if sorting.lower() == "recent":
+#         sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'))
+#     elif sorting.lower() == "old":
+#         sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'), reverse=True)
+#     elif sorting.lower() == "relevant":
+#         sorted_assets = sorted(filter_tags, key=itemgetter('tag_match_count'), reverse=True)
+#
+#     output = []
+#     counter = 0
+#     for current in sorted_assets:
+#         if counter < max_count:
+#             output.append(current)
+#             counter += 1
+#         else:
+#             break
+#
+#     return json.dumps(output)
+
+#anything that has /asset/blalbalbla needs to be before /asset/<id>...
 @login_required
 @app.route('/assets/<id>', methods=['GET'])
 def asset(id=None):
@@ -224,58 +342,6 @@ def asset_update(id=None):
         # Update the asset with id from db (not implemented yet)
         pass
     return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
-
-
-@login_required
-@app.route('/assets', methods=['GET', 'POST'])
-def asset_management_view():
-    user = UserModel.find_by_id(current_user.get_id())
-    # Still need to sort by most recent THEN get first 20
-    assets = user.assets[:20]
-    return render_template('asset_management.html', assets=assets)
-
-
-@login_required
-@app.route('/assets/select', methods=['POST'])
-def assets_select(search_tags=None, sorting=None, max_count=None):
-    all_assets = []
-    filter_tags = []
-    match_count = 0
-
-    user = UserModel.find_by_id(current_user.get_id())
-    all_assets = user.assets
-
-    for asset in all_assets:
-        setattr(asset, 'tag_match_count', 0)
-        if search_tags is not None:
-            for search_tag in search_tags:
-                if search_tag in asset.tags:
-                    asset.tag_match_count += 1
-            filter_tags.append(asset)
-            match_count += 1
-
-    sorted_assets = []
-
-    # Not actually sure if this works yet, no particularly good way to test it
-    if sorting.lower() == "recent":
-        sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'))
-    elif sorting.lower() == "old":
-        sorted_assets = sorted(filter_tags, key=itemgetter('dateCreated'), reverse=True)
-    elif sorting.lower() == "relevant":
-        sorted_assets = sorted(filter_tags, key=itemgetter('tag_match_count'), reverse=True)
-
-    output = []
-    counter = 0
-    for current in sorted_assets:
-        if counter < max_count:
-            output.append(current)
-            counter += 1
-        else:
-            break
-
-    return json.dumps(output)
-
-
 
 @login_manager.user_loader
 def load_user(user_id):

@@ -16,9 +16,9 @@
                     {% endif %}
                     <p>{{ asset.assetname }}</p>
                 </a>
-                
+
             </div>
-        
+
         {% endfor %}
     </div>
 {% endblock page_content %}
@@ -27,4 +27,5 @@
     <script>
         document.getElementById('assetPoolOption').classList.add('selected');
     </script>
+    <script type="text/javascript" src="{{url_for('static', filename='JS/asset_pool.js')}}"></script>
 {% endblock end_body %}
