@@ -33,12 +33,12 @@ body {
 }
 
 .midScreen {
-    width:100%;
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding:0 30px;
+    padding: 0 30px;
     /* transform: translate(-50%, -100%); */
     margin: 0 auto;
     text-align: center;
@@ -64,19 +64,21 @@ body {
     /* min-width: 670px; */
     margin: 0 auto;
 }
-@media screen and (min-width: 701px) and  (max-width: 970px){
-    .mainContainer{
+
+@media screen and (min-width: 701px) and (max-width: 970px) {
+    .mainContainer {
         width: 100%;
         padding-left: 30px;
         padding-right: 30px;
     }
 }
 
-@media screen and (max-width: 700px){
-    .mainContainer{
+@media screen and (max-width: 700px) {
+    .mainContainer {
         width: 100%;
     }
-    .topSpace{
+
+    .topSpace {
         height: 50px;
     }
 }
@@ -112,6 +114,7 @@ body {
     margin: 8px auto;
     text-align: center;
 }
+
 #user_field {
     font-size: 27px;
 }
@@ -120,26 +123,30 @@ body {
     cursor: pointer;
 }
 
-@media screen and (max-width: 700px){
-    .mainContainer{
+@media screen and (max-width: 700px) {
+    .mainContainer {
         padding-left: 5px;
         padding-right: 5px;
     }
-    .pageContainer{
-        width:100%;
+
+    .pageContainer {
+        width: 100%;
     }
-    .rightContainer{
+
+    .rightContainer {
         padding: 0 25px 0 25px;
         display: flex;
         width: 100%;
         justify-content: space-around;
         align-items: center;
     }
-    #user_field{
+
+    #user_field {
         display: inline-block;
         font-size: 20px;
     }
-    .sideBarButtonsDiv{
+
+    .sideBarButtonsDiv {
         margin-left: 20px;
         height: 100%;
         display: inline-block;
@@ -156,56 +163,58 @@ body {
     color: rgb(28, 80, 165);
 }
 
-.blackText{
-    color: rgb(51,51,51);
+.blackText {
+    color: rgb(51, 51, 51);
 }
 
 .boldText {
     font-weight: bold;
 }
 
-.labelText{
+.labelText {
     font-size: 16px;
 }
 
-.text20{
+.text20 {
     font-size: 20px;
 }
 
-.darkBack{
+.darkBack {
     background-color: #2664c9;
 }
 
-.centerFlex{
+.centerFlex {
     display: flex;
     width: 100%;
     justify-content: center;
 }
 
-.whiteContainer{
+.whiteContainer {
     padding: 20px;
     border-radius: 12px;
-    background-color: rgba(28, 80, 165, 0.1);;
+    background-color: rgba(28, 80, 165, 0.1);
+    ;
     margin: 0 auto 20px auto;
 }
-input.hiddenSubmit{
+
+input.hiddenSubmit {
     width: 0;
     padding: 0;
     border: 0;
     height: 0;
     opacity: 0;
     position: absolute;
-    top:0;
+    top: 0;
 }
 
-.rowsButton{
+.rowsButton {
     font-size: 19px;
     font-weight: bold;
     margin: 8px 6px;
     display: inline-block;
 }
 
-.bubbleButton{
+.bubbleButton {
     border-radius: 5px;
     line-height: 30px;
     padding: 0 10px;
@@ -221,6 +230,7 @@ input.hiddenSubmit{
     color: rgb(28, 80, 165);
     background-color: rgba(255, 255, 255, 0.9);
 }
+
 .bubbleButtonRedHover:hover {
     cursor: pointer;
     color: rgba(255, 255, 255, 0.9);
@@ -238,7 +248,7 @@ a {
     text-decoration: none !important;
 }
 
-h3{
+h3 {
     font-size: 20px;
 }
 
@@ -285,12 +295,12 @@ h3{
     float: right;
 }
 
-#microphoneToggle{
+#microphoneToggle {
     position: absolute;
     right: 0;
 }
 
-#backNavigButton{
+#backNavigButton {
     position: absolute;
     left: 0;
 }
@@ -320,63 +330,66 @@ h3{
     max-height: 150px;
 }
 
-.tabPanel{
+.tabPanel {
     margin-top: 10px;
     display: inline-block;
 }
-.assetFormsContainer{
+
+.assetFormsContainer {
     display: flex;
     flex-direction: column;
 }
-.inputSection{
+
+.inputSection {
     display: flex;
     align-items: center;
 }
 
-input.growText{
+input.growText {
     flex-grow: 1;
 }
-.labelDiv{
+
+.labelDiv {
     display: inline-block;
     min-width: 100px;
     font-size: 16px;
 }
 
-input[type="text"]{
+input[type="text"] {
     /* background-color: rgba(38, 100, 201, 1); */
 }
 
-input.bubbleButton{
+input.bubbleButton {
     border: none;
     cursor: text !important;
 }
 
-input:focus{
+input:focus {
     outline: none !important;
 }
 
-button{
+button {
     font-size: 19px;
     border: none;
 }
 
-button:focus{
+button:focus {
     outline: none !important;
 }
 
-input{
-    cursor: pointer ;
+input {
+    cursor: pointer;
 }
 
-input:active{
+input:active {
     outline: none;
 }
 
-div.fileInputDiv{
+div.fileInputDiv {
     position: relative;
 }
 
-div.fileInputVisible{
+div.fileInputVisible {
     font-size: 16px;
     position: relative;
     display: inline-block;
@@ -384,7 +397,7 @@ div.fileInputVisible{
     cursor: pointer;
 }
 
-input.fileInputHidden{
+input.fileInputHidden {
     position: absolute;
     top: 5px;
     left: 0;
@@ -395,7 +408,7 @@ input.fileInputHidden{
     z-index: 1;
 }
 
-.formFooter{
+.formFooter {
     display: flex;
     width: 100%;
     justify-content: center;
@@ -529,32 +542,32 @@ p.error {
 /* ============= */
 
 
-#sortingDiv{
+#sortingDiv {
     margin-left: 10px;
     display: inline-flex;
     justify-content: flex-start;
     font-weight: normal;
 }
 
-#sortBtnContainer{
+#sortBtnContainer {
     margin-left: 20px;
     display: flex !important;
     flex-direction: column;
 }
 
-#sortBtnContainer div:hover{
+#sortBtnContainer div:hover {
     font-weight: bold;
     cursor: pointer;
 }
 
-#filterTagsContainter{
+#filterTagsContainter {
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.filterTagButton{
+.filterTagButton {
     border-radius: 8px;
     line-height: 30px;
     font-size: 18px;
@@ -563,13 +576,16 @@ p.error {
     background-color: #2664c9;
     margin: 2px 5px;
 }
-.removeToggle{
+
+.removeToggle {
     margin-left: 5px;
     line-height: 30px;
 }
-.removeToggle:hover{
+
+.removeToggle:hover {
     cursor: pointer;
 }
+
 /* .rowsButton{
     font-size: 19px;
     font-weight: bold;
@@ -609,7 +625,7 @@ p.error {
     width: 150px;
     height: 90px;
     margin: 5px;
-    border: 1px rgb(0,0,0, 0.1) solid;
+    border: 1px rgb(0, 0, 0, 0.1) solid;
     border-radius: 5px;
     font-size: 20px;
     font-weight: bold;
@@ -624,3 +640,105 @@ p.error {
     object-fit: cover;
     padding: 0;
 }
+
+
+/* MODAL STARTS HERE */
+
+/* Style the Image Used to Trigger the Modal */
+#myImg {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#myImg:hover {
+    opacity: 0.7;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+/* Caption of Modal Image (Image Text) - Same Width as the Image */
+#caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+}
+
+/* Add Animation - Zoom in the Modal */
+.modal-content,
+#caption {
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px) {
+    .modal-content {
+        width: 100%;
+    }
+}
+
+/* MODAL STOPS HERE */

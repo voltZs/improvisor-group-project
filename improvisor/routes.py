@@ -164,6 +164,7 @@ def fetch_tagset():
     tag_pool = [tag.tagname for tag in current_user.tags]
     return json.dumps(tag_pool)
 
+
 @app.route('/fetch_asset', methods=['GET'])
 def fetch_asset():
     id = int(request.args.get('id'))
@@ -179,16 +180,25 @@ def enter_session():
     return render_template('enter_session.html')
 
 
+@login_required
 @app.route('/presenter', methods=['GET'])
 def presenter_view():
     return render_template('presenter.html')
 
 
+@login_required
 @app.route('/controller', methods=['GET'])
 def controller_view():
     return render_template('controller.html')
 
 
+@login_required
+@app.route('/testing', methods=['GET'])
+def testing():
+    return render_template('controller_testing.html')
+
+
+@login_required
 @app.route('/user_settings', methods=['GET', 'POST'])
 def user_settings_view():
     return render_template('user_settings.html')
@@ -198,6 +208,7 @@ def user_settings_view():
 def previous_sessions_view():
     return render_template('previous_sessions.html')
 
+
 @login_required
 @app.route('/assets', methods=['GET', 'POST'])
 def asset_management_view():
@@ -205,6 +216,7 @@ def asset_management_view():
     # desc => from most recent to oldest
     assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(10).all()
     return render_template('asset_management.html', assets=assets)
+
 
 @login_required
 @app.route('/assets/select', methods=['POST'])
@@ -267,6 +279,7 @@ def assets_select():
         sorted_assets = sorted(assets_match_count, key=itemgetter('tag_match_count'), reverse=True)
     [asset.pop('date-created', None) for asset in sorted_assets]
     return json.dumps(sorted_assets)
+
 
 #anything that has /asset/blalbalbla needs to be before /asset/<id>...
 @login_required
