@@ -17,6 +17,55 @@ for(tag in tagset){
     suggestions.appendChild(option);
 }
 
+var sortingDiv = document.getElementById("sortingDiv");
+var sortBtnRecent = document.getElementById("sortBtnRecent");
+var sortBtnOld = document.getElementById("sortBtnOld");
+var sortBtnRelevant = document.getElementById("sortBtnRelevant");
+
+checkSorting();
+
+sortBtnRecent.addEventListener("click", function(){
+    sorting = "recent";
+    checkSorting();
+    getAssets(filterTags, sorting, limit);
+})
+sortBtnOld.addEventListener("click", function(){
+    sorting = "old";
+    checkSorting();
+    getAssets(filterTags, sorting, limit);
+})
+sortBtnRelevant.addEventListener("click", function(){
+    sorting = "relevant";
+    checkSorting();
+    getAssets(filterTags, sorting, limit);
+})
+
+sortingDiv.addEventListener("mouseover", function(){
+    sortBtnRecent.hidden = false;
+    sortBtnOld.hidden = false;
+    sortBtnRelevant.hidden = false;
+})
+
+sortingDiv.addEventListener("mouseout", function(){
+    checkSorting()
+})
+
+function checkSorting(){
+    sortBtnRecent.hidden = true;
+    sortBtnOld.hidden = true;
+    sortBtnRelevant.hidden = true;
+
+    if(sorting == "recent"){
+        sortBtnRecent.hidden = false;
+    } else if(sorting == "old"){
+        sortBtnOld.hidden = false;
+    } else if (sorting == "relevant"){
+        sortBtnRelevant.hidden = false;
+    }
+}
+
+
+
 textInputFilter.addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
         getTagFromInput();
@@ -61,7 +110,12 @@ function addTagElement(newTag){
         tagButton.parentNode.removeChild(tagButton);
         getAssets(filterTags, sorting, limit);
         if(assetPool.children.length < limit){
-            limit = assetPool.children.length;
+            var newLimit = assetPool.children.length;
+            if (newLimit >10){
+                limit = newLimit;
+            } else {
+                limit = 10;
+            }
         }
     })
 

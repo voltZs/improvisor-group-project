@@ -19,7 +19,17 @@
             </div> -->
         </div>
     </div>
-    <h3 class="darkText boldText">Sort by: Most Recent</h3>
+    <div class="darkText boldText text20">
+        <div id="sortingDiv">
+            <div>Sort by:</div>
+            <div id="sortBtnContainer">
+                <div id="sortBtnRecent">Most Recent</div>
+                <div id="sortBtnOld">Oldest First</div>
+                <div id="sortBtnRelevant">Most Relevant</div>
+            </div>
+        </div>
+
+    </div>
     <div class="assetpool-list whiteContainer" id="assetPool">
         {% for asset in assets %}
 

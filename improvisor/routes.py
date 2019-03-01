@@ -255,7 +255,7 @@ def assets_select():
         match_count = 0;
         for asset in filtered:
             if match_count < limit:
-                setattr(asset, 'tag_match_count', 0)
+                asset['tag_match_count']= 0
                 if not (filter_tags is None or filter_tags == []):
                     for filter_tag in filter_tags:
                         if filter_tag in asset['tags']:
