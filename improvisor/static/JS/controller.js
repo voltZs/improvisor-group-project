@@ -76,7 +76,7 @@ if (annyang) {
 }
 
 function startListening(){
-    //noSleep.enable();
+    noSleep.enable();
     //startArtyom();
     annyang.start({ autoRestart: true, continuous: false});
     var  recognition = annyang.getSpeechRecognizer();
@@ -89,7 +89,7 @@ function startListening(){
 }
 
 function stopListening(){
-    //noSleep.disable();
+    noSleep.disable();
     //stopArtyom();
     annyang.pause();
     console.log("Stopped listening");
