@@ -4,6 +4,7 @@ var storageBool = storageAvailable('localStorage');
 //annyang.start({
 //    autoRestart: true
 //});
+var noSleep = new NoSleep();
 var socket;
 $(document).ready(function () {
   socket = io();
