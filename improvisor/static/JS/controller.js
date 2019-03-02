@@ -292,6 +292,7 @@ function populateActiveTab() {
     image.classList.add("faster");
     tabRow.appendChild(image);
   }
+  applyGestureControls();
 }
 // END OF TABS LOGIC
 
@@ -334,6 +335,14 @@ function fetchTagset() {
 
 function applyGestureControls() {
   $('.assetThumbnail').each(function () {
+    var element = $(this);
+    // Make sure this method not applied to a thumbnail more than once
+    if (element.hasClass("gestures-added")) {
+      return true;
+    } else {
+      element.addClass("gestures-added");
+    }
+
     var gestures = new Hammer(this);
     // enable swipe detection for all directions
     gestures.get('swipe').set({
@@ -341,7 +350,7 @@ function applyGestureControls() {
       threshold: 1,
       velocity: 0.1
     });
-    var element = $(this);
+
     // listen to events...
     gestures.on("swipeup tap", function (ev) {
       // Swipe up gesture
