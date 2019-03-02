@@ -342,6 +342,9 @@ function applyGestureControls() {
     } else {
       element.addClass("gestures-added");
     }
+    // Add animation class if not already added (addClass checks first)
+    element.addClass("animated");
+    element.addClass("faster");
 
     var gestures = new Hammer(this);
     // enable swipe detection for all directions
@@ -383,6 +386,15 @@ function applyGestureControls() {
           callbacks: {
             open: function () {
               $('.mfp-img').each(function () {
+                var popupImage = $(this);
+                // Make sure this method not applied to a thumbnail more than once
+                if (popupImage.hasClass("gestures-added")) {
+                  return true;
+                } else {
+                  popupImage.addClass("gestures-added");
+                  popupImage.addClass("animated");
+                  popupImage.addClass("faster");
+                }
                 var popupGestures = new Hammer(this);
                 // enable swipe detection for all directions
                 popupGestures.get('swipe').set({
@@ -390,13 +402,11 @@ function applyGestureControls() {
                   threshold: 1,
                   velocity: 0.1
                 });
-                var popupImage = $(this);
+
                 // listen to events...
                 popupGestures.on("swipeup", function (ev) {
                   // Swipe up gesture
                   if (ev.type == "swipeup") {
-                    popupImage.addClass("animated");
-                    popupImage.addClass("faster");
                     popupImage.addClass("slideOutUp");
                     var assetID = element.attr('data-id');
                     socket.emit('event', assetID);
