@@ -21,7 +21,6 @@ setupPage();
 //################# ANNYANG START ########################
 
 if (annyang) {
-  console.log('Annyang ...');
   var recognisedTags = []; // will store recognised tags so they can be removed from the next result
   // the list is cleared when there is a gap in speech
   // the tags will be pulled from the server
@@ -78,7 +77,6 @@ if (annyang) {
 
 function startListening() {
   noSleep.enable();
-  //startArtyom();
   annyang.start({
     autoRestart: true,
     continuous: false
@@ -93,11 +91,11 @@ function startListening() {
 }
 
 function stopListening() {
+  if (listening) {
+    console.log("Stopped listening");
+  }
   noSleep.disable();
-  //stopArtyom();
-  annyang.pause();
-  console.log("Stopped listening");
-
+  annyang.abort()
   microphoneIcon.classList.add("fa-microphone-slash");
   microphoneIcon.classList.remove("fa-microphone");
   listening = false;
