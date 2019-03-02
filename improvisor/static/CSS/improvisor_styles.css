@@ -640,3 +640,7 @@ p.error {
     object-fit: cover;
     padding: 0;
 }
+
+.mfp-figure:after {
+    visibility: hidden;
+}

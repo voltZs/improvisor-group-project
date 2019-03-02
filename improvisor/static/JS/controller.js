@@ -279,14 +279,14 @@ function populateActiveTab() {
   tabRow.innerHTML = "";
   for (asset in assets) {
     var image = document.createElement("IMG");
-    var thumbnail = assets[asset]['thumbnailLocation'];
+    var thumbnail = asset['thumbnailLocation'];
     if (thumbnail != null) {
       image.src = thumbnail;
     } else {
       image.src = "https://i.imgur.com/5NqcCVN.png";
     }
-    image.setAttribute("data-id", assets[asset]['id']);
-    image.setAttribute("title", assets[asset]['asset']);
+    image.setAttribute("data-id", asset['id']);
+    image.setAttribute("title", asset['asset']);
     image.classList.add("assetThumbnail");
     image.classList.add("animated");
     image.classList.add("faster");
@@ -343,7 +343,6 @@ function applyGestureControls() {
     });
     var element = $(this);
     // listen to events...
-    // listen to events...
     gestures.on("swipeup tap", function (ev) {
       // Swipe up gesture
       if (ev.type == "swipeup") {
@@ -363,13 +362,46 @@ function applyGestureControls() {
           element.addClass("fadeIn");
         }, 500);
       }
-      // Tap gesture
+      // Hold (press) gesture
       if (ev.type == "tap") {
+        // Load the image popup
         element.magnificPopup({
           items: {
             src: element.attr('src'),
             title: element.attr('title'),
             type: 'image'
+          },
+          callbacks: {
+            open: function () {
+              $('.mfp-img').each(function () {
+                var popupGestures = new Hammer(this);
+                // enable swipe detection for all directions
+                popupGestures.get('swipe').set({
+                  direction: Hammer.DIRECTION_ALL,
+                  threshold: 1,
+                  velocity: 0.1
+                });
+                var popupImage = $(this);
+                // listen to events...
+                popupGestures.on("swipeup", function (ev) {
+                  // Swipe up gesture
+                  if (ev.type == "swipeup") {
+                    popupImage.addClass("animated");
+                    popupImage.addClass("faster");
+                    popupImage.addClass("slideOutUp");
+                    var assetID = element.attr('data-id');
+                    socket.emit('event', assetID);
+                    addToCurrentTab(assetID);
+                    flushRecentTags();
+                    console.log("sent ID " + assetID + " to socketIO");
+                    setTimeout(function () {
+                      var magnificPopup = $.magnificPopup.instance;
+                      magnificPopup.close();
+                    }, 500);
+                  }
+                });
+              });
+            },
           }
         });
       }
