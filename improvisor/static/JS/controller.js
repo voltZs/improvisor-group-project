@@ -183,6 +183,7 @@ function updateResults(assets) {
       image.src = "https://i.imgur.com/5NqcCVN.png";
     }
     image.setAttribute("data-id", assets['frequent'][asset]['id']);
+    image.setAttribute("title", assets['frequent'][asset]['asset']);
     image.classList.add("assetThumbnail");
     image.classList.add("animated");
     image.classList.add("faster");
@@ -198,6 +199,7 @@ function updateResults(assets) {
       image.src = "https://i.imgur.com/5NqcCVN.png";
     }
     image.setAttribute("data-id", assets['current'][asset]['id']);
+    image.setAttribute("title", assets['current'][asset]['asset']);
     image.classList.add("assetThumbnail");
     image.classList.add("animated");
     image.classList.add("faster");
@@ -284,6 +286,7 @@ function populateActiveTab() {
       image.src = "https://i.imgur.com/5NqcCVN.png";
     }
     image.setAttribute("data-id", assets[asset]['id']);
+    image.setAttribute("title", assets[asset]['asset']);
     image.classList.add("assetThumbnail");
     image.classList.add("animated");
     image.classList.add("faster");
@@ -365,6 +368,7 @@ function applyGestureControls() {
         element.magnificPopup({
           items: {
             src: element.attr('src'),
+            title: element.attr('title'),
             type: 'image'
           }
         });
