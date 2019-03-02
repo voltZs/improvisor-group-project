@@ -175,6 +175,7 @@ def fetch_asset():
         return json.dumps(asset)
     return None
 
+
 @app.route('/join_session', methods=['GET'])
 def enter_session():
     return render_template('enter_session.html')
@@ -190,12 +191,6 @@ def presenter_view():
 @app.route('/controller', methods=['GET'])
 def controller_view():
     return render_template('controller.html')
-
-
-@login_required
-@app.route('/testing', methods=['GET'])
-def testing():
-    return render_template('controller_testing.html')
 
 
 @login_required
