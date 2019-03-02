@@ -277,7 +277,12 @@ function populateActiveTab() {
   tabRow.innerHTML = "";
   for (asset in assets) {
     var image = document.createElement("IMG");
-    image.src = assets[asset]['thumbnailLocation'];
+    var thumbnail = assets[asset]['thumbnailLocation'];
+    if (thumbnail != null) {
+      image.src = thumbnail;
+    } else {
+      image.src = "https://i.imgur.com/5NqcCVN.png";
+    }
     image.setAttribute("data-id", assets[asset]['id']);
     image.classList.add("assetThumbnail");
     image.classList.add("animated");
