@@ -1,0 +1,6 @@
+<h1>Asset form</h1>
+<form method="POST" action="/api/profile_picture" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    {{ form.userPicture.label }} {{form.userPicture()}}
+    <input type="submit" value="Submit">
+</form>

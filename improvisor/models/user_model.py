@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy import func
 
 class UserModel(UserMixin, db.Model):
+    defaultImage = "https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="
     __tablename__="users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -10,18 +11,20 @@ class UserModel(UserMixin, db.Model):
     lastname = db.Column(db.String(80))
     email = db.Column(db.String(80))
     password = db.Column(db.String(80))
-
+    profileImageLocation = db.Column(db.String(500))
+    
     tags = db.relationship("TagModel", lazy="dynamic")
     assets = db.relationship("AssetModel", lazy = "dynamic")
     def json(self):
-        return {"email":self.email, "tags" : [tag.json() for tag in self.tags.all()], "assets" : [asset.json() for asset in self.assets.all()], "id" : self.id}
+        return {"email":self.email, "tags" : [tag.json() for tag in self.tags.all()], "assets" : [asset.json() for asset in self.assets.all()], "id" : self.id, "imageLocation" : self.profileImageLocation}
 
-    def __init__(self, firstname, lastname, email, password):
+    def __init__(self, firstname, lastname, email, password , profileImageLocation = defaultImage):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.password = password
-    
+        self.profileImageLocation = profileImageLocation
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

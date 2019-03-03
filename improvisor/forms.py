@@ -47,3 +47,9 @@ class FormLogin(FlaskForm):
 	    validators.DataRequired(),
 		validators.Length(min=8, max=50)
 	])
+
+class FormProfilePicture(FlaskForm):
+    userPicture = FileField("UPLOAD PROFILE IMAGE:", validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'])
+    ])

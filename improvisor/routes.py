@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
+from db import db
 import os, json, copy, bcrypt
 from os.path import join
-from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin
+from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin, FormProfilePicture
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
@@ -13,6 +14,7 @@ from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_socketio import SocketIO, send
 from improvisor import socketio
+
 
 #API: inserts tag into database
 @app.route('/api/tag', methods=['GET','POST'])
@@ -70,6 +72,17 @@ def allAssets():
     print("all_assets")
     return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
 
+#API: adds user profile picture to database
+@app.route ('/api/profile_picture', methods =["GET", "POST"])
+def addPicture():
+    form = FormProfilePicture()
+    if request.method == "POST" and form.validate() and current_user.is_authenticated:
+        full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) 
+        save_location = full_path + "/" + form.userPicture.data.filename
+        form.userPicture.data.save(save_location)
+        current_user.profileImageLocation = save_location
+        db.session.commit()
+    return render_template("user_profile.html", form = form)
 
 #API: inserts asset into database and allows tags to be added to asset
 @login_required

@@ -1,13 +1,21 @@
 {% extends "base.html" %}
 
+
 {% block main_content%}
 
     <div class="rightContainer">
         <a href="/user_settings">
             <div class="rightContItem whiteText" id="user_field">
                 <div class="rightContItem">
-                    <img src="https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="
-                    class="avatarImg" alt="" width="120px" height="120px">
+                    {% if current_user.is_authenticated %}
+                        <img class="avatarImg" src='{{current_user.profileImageLocation}}' width=120px height=120px/>
+                        <script>
+                            console.log('{{current_user.profileImageLocation}}') //the address it is trying is valid 
+                        </script>
+                    {% else %}
+                        <img src="https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="
+                        class="avatarImg" alt="" width="120px" height="120px">
+                    {% endif %}
                 </div>
                 {% if current_user.is_authenticated %}
                     {{current_user.firstname}} {{current_user.lastname}}
@@ -15,6 +23,7 @@
                     Guest User
                 {% endif %}
             </div>
+            
         </a>
         <div class="sideBarButtonsDiv">
             <a href="/join_session">
