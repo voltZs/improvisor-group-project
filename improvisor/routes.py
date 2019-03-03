@@ -12,7 +12,7 @@ from flask import Flask, render_template, request, redirect, jsonify, session, a
 from improvisor import app, socketio, sample_files, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send, join_room, leave_room
 from improvisor import socketio
 
 
@@ -160,6 +160,18 @@ def upload(asset, assetResource, assetThumbnail = None ):
         asset.thumbnailLocation = relative_path + "/" + assetThumbnail.filename
 
 
+@socketio.on('join')
+def on_join():
+    room = str(current_user.get_id())
+    join_room(room)
+
+
+@socketio.on('leave')
+def on_leave():
+    room = str(current_user.get_id())
+    leave_room(room)
+
+
 @socketio.on('event')
 def handleMessage(data):
     id = data
@@ -167,7 +179,7 @@ def handleMessage(data):
     if id is not None:
         asset = AssetModel.find_by_assetId(id).json()
         asset.pop('date-created')
-    socketio.emit('presenter', asset)
+    socketio.emit('presenter', asset, room=str(current_user.get_id()))
 
 
 @app.route('/', methods=['GET'])
