@@ -75,12 +75,15 @@ def allAssets():
 #API: adds user profile picture to database
 @app.route ('/api/profile_picture', methods =["GET", "POST"])
 def addPicture():
+    print (os.getcwd())
     form = FormProfilePicture()
     if request.method == "POST" and form.validate() and current_user.is_authenticated:
+        relative_path = url_for('static', filename='resources/uploadedFiles/')
+        relative_path = relative_path + "user_" + str(current_user.get_id())
         full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) 
         save_location = full_path + "/" + form.userPicture.data.filename
         form.userPicture.data.save(save_location)
-        current_user.profileImageLocation = save_location
+        current_user.profileImageLocation = relative_path + "/" + form.userPicture.data.filename
         db.session.commit()
     return render_template("user_profile.html", form = form)
 
