@@ -394,18 +394,27 @@ div.fileInputVisible {
     position: relative;
     display: inline-block;
     z-index: 2;
-    cursor: pointer;
+}
+
+div.fileInputVisible:hover{
+    cursor: pointer !important;
 }
 
 input.fileInputHidden {
+    height: 30px;
     position: absolute;
-    top: 5px;
-    left: 0;
+    opacity: 0;
+}
+
+input.fileInputHidden:hover{
+    cursor: pointer !important;
+}
+
+.fileNameLabelVisible{
+    margin-left: 10px;
+    display: inline-block;
     font-size: 16px;
-    padding-left: 16px;
-    /* opacity: 0; */
-    cursor: pointer;
-    z-index: 1;
+    font-weight: bold;
 }
 
 .formFooter {

@@ -13,7 +13,7 @@ addAssetBtn.addEventListener("click", function(){
     $(firstFormClones[numOfForms-1]).find("#fileUploadHidden1").attr("id", "fileUploadHidden"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#fileUploadVisible1").attr("id", "fileUploadVisible"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#thumbUploadHidden1").attr("id", "thumbUploadHidden"+(numOfForms+1));
-    $(firstFormClones[numOfForms-1]).find("#thumbUploadVisible1").attr("id", "thumbUploadVisible"+(numOfForms+1));
+    // $(firstFormClones[numOfForms-1]).find("#thumbUploadVisible1").attr("id", "thumbUploadVisible"+(numOfForms+1));
 
     formsContainer.appendChild(firstFormClones[numOfForms-1]);
     numOfForms++;
@@ -44,13 +44,21 @@ submitButton.addEventListener("click", function(){
 
 function setEvents(number){
     var fileVisibleButton = document.getElementById("fileUploadVisible"+(number));
+    var fileHiddenButton = document.getElementById("fileUploadHidden"+(number));
     fileVisibleButton.addEventListener("click", function(event){
-        document.getElementById("fileUploadHidden"+(number)).click();
+        fileHiddenButton.click();
         event.stopPropagation();
     });
 
-    var thumbVisibleButton = document.getElementById("thumbUploadVisible"+(number));
-    thumbVisibleButton.addEventListener("click", function(){
-        document.getElementById("thumbUploadHidden"+(number)).click();
+    $(fileHiddenButton).change(function(){
+        var valueArray = fileHiddenButton.value.split("\\");
+        var value = valueArray[valueArray.length-1];
+        fileVisibleButton.children[1].innerHTML = value;
     });
+
+    // var thumbVisibleButton = document.getElementById("thumbUploadVisible"+(number));
+    // var thumbHiddenButton = document.getElementById("thumbUploadHidden"+(number));
+    // thumbVisibleButton.addEventListener("click", function(){
+    //     thumbHiddenButton.click();
+    // });
 }

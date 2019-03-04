@@ -25,20 +25,25 @@
             <div class="">
                 <div class="fileInputDiv">
                     {{form.assetResource(class="fileInputHidden", id="fileUploadHidden1", required="true")}}
-                    <div class="fileInputVisible bubbleButton bubbleButtonDark" id="fileUploadVisible1">
-                        Upload File
+                    <div id="fileUploadVisible1">
+                        <div class="fileInputVisible bubbleButton bubbleButtonDark">
+                            Upload File
+                        </div>
+                        <div class="fileNameLabelVisible">
+                            No file chosen
+                        </div>
                     </div>
                 </div>
             </div>
             <br />
             <div class="">
-                <div class="labelDiv">Thumbnail Upload:</div>
-                <div class="fileInputDiv">
-                    {{form.assetThumbnail(class="fileInputHidden", id="thumbUploadHidden1")}}
-                    <div class="fileInputVisible bubbleButton bubbleButtonDark" id="thumbUploadVisible1">
+                <div class="labelDiv">Thumbnail upload - will be replaced</div>
+                <!-- <div class="fileInputDiv"> -->
+                    {{form.assetThumbnail(id="thumbUploadHidden1")}}
+                    <!-- <div class="fileInputVisible bubbleButton bubbleButtonDark" id="thumbUploadVisible1">
                         Upload File
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
             </div>
             <input type="submit" class="hiddenSubmit">
             <br />
