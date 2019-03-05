@@ -18,6 +18,7 @@ for(tag in tagset){
 }
 
 var sortingDiv = document.getElementById("sortingDiv");
+var sortingBtnsCont = document.getElementById("sortBtnContainer");
 var sortBtnRecent = document.getElementById("sortBtnRecent");
 var sortBtnOld = document.getElementById("sortBtnOld");
 var sortBtnRelevant = document.getElementById("sortBtnRelevant");
@@ -57,10 +58,13 @@ function checkSorting(){
 
     if(sorting == "recent"){
         sortBtnRecent.hidden = false;
+        sortingBtnsCont.insertBefore(sortBtnRecent, sortingBtnsCont.children[0]);
     } else if(sorting == "old"){
         sortBtnOld.hidden = false;
+        sortingBtnsCont.insertBefore(sortBtnOld, sortingBtnsCont.children[0]);
     } else if (sorting == "relevant"){
         sortBtnRelevant.hidden = false;
+        sortingBtnsCont.insertBefore(sortBtnRelevant, sortingBtnsCont.children[0]);
     }
 }
 
@@ -136,13 +140,9 @@ function getAssets(tags, sorting, limit){
 
         data = JSON.parse(data);
         console.log(data);
-        if(!data.length){
-            console.log("tis falsy");
-        }
 
         assetPool.innerHTML = "";
         for(var i=0; i<data.length; i++){
-            console.log(data[i]);
             if(!data[i] || i==limit){
                 break;
             }
@@ -164,7 +164,7 @@ function getAssets(tags, sorting, limit){
             assetPool.appendChild(link);
         }
         if(!data.length){
-            assetPool.innerHTML = "<br><h3 class='darkText'>No assets matching your criteria</h3><br>";
+            assetPool.innerHTML = "<br><h3>No assets matching your criteria</h3><br>";
         }
         checkLoadMoreBtn();
       }
