@@ -12,6 +12,7 @@ from flask import Flask, render_template, request, redirect, jsonify, session, a
 from improvisor import app, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from PIL import Image
 
 
 #API: inserts tag into database
@@ -80,9 +81,17 @@ def addPicture():
         relative_path = relative_path + "user_" + str(current_user.get_id())
         full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) 
         save_location = full_path + "/" + form.userPicture.data.filename
+
+
         form.userPicture.data.save(save_location)
+        
         current_user.profileImageLocation = relative_path + "/" + form.userPicture.data.filename
         db.session.commit()
+        image_user = Image.open(save_location)
+        image_user = image_user.resize((120,120), Image.ANTIALIAS )
+        image_user.save(save_location, optimize =True, quality=95)
+
+
     return render_template("user_profile.html", form = form)
 
 #API: inserts asset into database and allows tags to be added to asset
