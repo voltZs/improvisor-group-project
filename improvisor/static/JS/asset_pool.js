@@ -135,7 +135,10 @@ function getAssets(tags, sorting, limit){
       success: function (data) {
 
         data = JSON.parse(data);
-        console.log(data)
+        console.log(data);
+        if(!data.length){
+            console.log("tis falsy");
+        }
 
         assetPool.innerHTML = "";
         for(var i=0; i<data.length; i++){
@@ -159,6 +162,9 @@ function getAssets(tags, sorting, limit){
             div.appendChild(p);
             link.appendChild(div);
             assetPool.appendChild(link);
+        }
+        if(!data.length){
+            assetPool.innerHTML = "<br><h3 class='darkText'>No assets matching your criteria</h3><br>";
         }
         checkLoadMoreBtn();
       }

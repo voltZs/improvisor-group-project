@@ -229,10 +229,27 @@ input.hiddenSubmit {
     background-color: #2664c9;
 }
 
-.bubbleButton:hover {
-    cursor: pointer;
+.bubbleButtonDark:hover{
     color: rgb(28, 80, 165);
     background-color: rgba(255, 255, 255, 0.9);
+}
+
+.bubbleButtonTransp {
+    color: rgb(28, 80, 165);
+}
+
+.bubbleButtonTransp:hover{
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #2664c9;
+}
+
+.bubbleButtonTransp.selected{
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #2664c9;
+}
+
+.bubbleButton:hover {
+    cursor: pointer;
 }
 
 .bubbleButtonRedHover:hover {
@@ -562,6 +579,10 @@ p.error {
     font-weight: normal;
 }
 
+#sortingDiv:hover{
+    cursor: pointer;
+}
+
 #sortBtnContainer {
     margin-left: 20px;
     display: flex !important;
@@ -570,7 +591,6 @@ p.error {
 
 #sortBtnContainer div:hover {
     font-weight: bold;
-    cursor: pointer;
 }
 
 #filterTagsContainter {
@@ -620,6 +640,7 @@ p.error {
 } */
 
 .assetpool-list {
+    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
