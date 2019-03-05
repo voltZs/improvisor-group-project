@@ -122,7 +122,25 @@ function setupPage() {
   if (items) {
     updateResults(items);
   }
+}
 
+function applyImageScrolling() {
+  $('.imageRow').each(function () {
+    if (!$(this).hasClass('transitions-added')) {
+      $(this).slick({
+        dots: false,
+        infinite: false,
+        lazyLoad: 'ondemand',
+        variableWidth: true,
+        mobileFirst: true,
+        centerMode: false,
+        speed: 800,
+        arrows: false,
+        swipe: 'direction'
+      });
+      $(this).addClass("transitions-added");
+    }
+  });
 }
 
 function makeAjaxRequest() {
@@ -206,6 +224,7 @@ function updateResults(assets) {
     currentResults.appendChild(image);
   }
   applyGestureControls();
+  //applyImageScrolling();
 }
 
 // TABS LOGIC
@@ -293,6 +312,7 @@ function populateActiveTab() {
     tabRow.appendChild(image);
   }
   applyGestureControls();
+  //applyImageScrolling();
 }
 // END OF TABS LOGIC
 
