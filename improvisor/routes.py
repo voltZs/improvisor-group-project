@@ -218,6 +218,19 @@ def asset_management_view():
 
 
 @login_required
+@app.route('/assets/bulk_delete', methods=['GET'])
+def assets_bulk_delete():
+    idList = request.form.get('idList')
+    deleted = []
+    if idList is not None:
+        for id in idList:
+            # Delete the asset with id from db
+            AssetModel.delete_by_assetId(id)
+            deleted.append(id)
+    return json.dumps(deleted)
+
+
+@login_required
 @app.route('/assets/select', methods=['POST'])
 def assets_select():
     filter_tags = request.form.get('filterTags')
@@ -263,7 +276,7 @@ def assets_select():
         sorted_assets = sorted_assets[0:limit]
     elif sorting.lower() == "relevant":
         assets_match_count =[]
-        match_count = 0;
+        match_count = 0
         for asset in filtered:
             if match_count < limit:
                 asset['tag_match_count']= 0
@@ -280,7 +293,7 @@ def assets_select():
     return json.dumps(sorted_assets)
 
 
-#anything that has /asset/blalbalbla needs to be before /asset/<id>...
+#anything that has /asset/... needs to be before /asset/<id>
 @login_required
 @app.route('/assets/<id>', methods=['GET'])
 def asset(id=None):
