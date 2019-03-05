@@ -9,11 +9,9 @@ from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
 from sqlalchemy import desc, asc
 from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash, url_for
-from improvisor import app, socketio, sample_files, login_manager
+from improvisor import app, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask_socketio import SocketIO, send, join_room, leave_room
-from improvisor import socketio
 
 
 #API: inserts tag into database
@@ -158,28 +156,6 @@ def upload(asset, assetResource, assetThumbnail = None ):
         save_location = full_path + "/" + assetThumbnail.filename
         assetThumbnail.save(save_location)
         asset.thumbnailLocation = relative_path + "/" + assetThumbnail.filename
-
-
-@socketio.on('join')
-def on_join():
-    room = str(current_user.get_id())
-    join_room(room)
-
-
-@socketio.on('leave')
-def on_leave():
-    room = str(current_user.get_id())
-    leave_room(room)
-
-
-@socketio.on('event')
-def handleMessage(data):
-    id = data
-    asset = {}
-    if id is not None:
-        asset = AssetModel.find_by_assetId(id).json()
-        asset.pop('date-created')
-    socketio.emit('presenter', asset, room=str(current_user.get_id()))
 
 
 @app.route('/', methods=['GET'])
@@ -412,9 +388,6 @@ def addDirectory(user_id):
     except:
         print("error making directory")
 
-
-# Retrieve the sample assets from sample_files.py
-#assets = sample_files.assets
 
 @app.route('/compare_phrases', methods=['POST', "GET"])
 def compare_phrases():
