@@ -309,7 +309,8 @@ function populateActiveTab() {
     image.classList.add("assetThumbnail");
     image.classList.add("animated");
     image.classList.add("faster");
-    tabRow.appendChild(image);
+    // this adds the new thing to the start of tab as opposed to append at end
+    tabRow.insertBefore(image, tabRow.children[0]);
   }
   applyGestureControls();
   //applyImageScrolling();
