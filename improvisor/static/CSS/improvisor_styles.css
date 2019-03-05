@@ -154,6 +154,10 @@ body {
     }
 }
 
+.rightSpan{
+    float: right;
+    margin-right: 10px;
+}
 
 .whiteText {
     color: rgba(255, 255, 255, 0.9);
