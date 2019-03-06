@@ -126,20 +126,27 @@ function setupPage() {
 
 function applyImageScrolling() {
   $('.imageRow').each(function () {
-    if (!$(this).hasClass('transitions-added')) {
-      $(this).slick({
-        dots: false,
-        infinite: false,
-        lazyLoad: 'ondemand',
-        variableWidth: true,
-        mobileFirst: true,
-        centerMode: false,
-        speed: 800,
-        arrows: false,
-        swipe: 'direction'
-      });
-      $(this).addClass("transitions-added");
+    if ($(this).hasClass('slick-initialized')) {
+      $(this).slick('unslick');
+      $(this).slick('destroy');
     }
+    // Add responsive setting to make sure slidesToShow is correct for different screen sizes
+    var settings = {
+      mobileFirst: true,
+      accessibility: true,
+      swipe: true,
+      dots: false,
+      infinite: false,
+      speed: 500,
+      slidesToShow: 2,
+      slidesToScroll: 2,
+      variableWidth: true,
+      edgeFriction: 0.5,
+      arrows: true,
+      nextArrow: '<i class="fas fa-arrow-alt-circle-right arrowBtn nextArrowBtn"></i>',
+      prevArrow: '<i class="fas fa-arrow-alt-circle-left arrowBtn prevArrowBtn"></i>'
+    }
+    $(this).slick(settings);
   });
 }
 
@@ -224,7 +231,7 @@ function updateResults(assets) {
     currentResults.appendChild(image);
   }
   applyGestureControls();
-  //applyImageScrolling();
+  applyImageScrolling();
 }
 
 // TABS LOGIC
@@ -313,7 +320,9 @@ function populateActiveTab() {
     tabRow.insertBefore(image, tabRow.children[0]);
   }
   applyGestureControls();
+  // when this function runs here, new tabs retain other assets?
   //applyImageScrolling();
+
 }
 // END OF TABS LOGIC
 

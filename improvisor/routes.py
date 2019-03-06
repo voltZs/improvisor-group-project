@@ -14,6 +14,9 @@ from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from PIL import Image, ExifTags
 
+#@app.route('/test')
+#def test():
+#    return render_template('test.html')
 
 #API: inserts tag into database
 @app.route('/api/tag', methods=['GET','POST'])

@@ -680,3 +680,24 @@ p.error {
 .mfp-figure:after {
     visibility: hidden;
 }
+
+.arrowBtn {
+    position: absolute;
+    z-index: 1000;
+    color: rgb(0, 0, 0);
+    color: white;
+    opacity: .75;
+    font-size: 22px;
+    top: 50%;
+}
+
+.arrowBtn:hover, .arrowBtn:active, .arrowBtn:focus {
+    opacity: 1;
+}
+
+.nextArrowBtn{
+    right: 5px;
+}
+.prevArrowBtn{
+    left: 5px;
+}
