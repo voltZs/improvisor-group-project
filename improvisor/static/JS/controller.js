@@ -164,8 +164,11 @@ function applyImageScrolling() {
         {
           breakpoint: 100,
           settings: {
+            speed: 400,
             slidesToShow: 1,
-            slidesToScroll: 1
+            slidesToScroll: 1,
+            infinite: false,
+            variableWidth: true
           }
         }
         // You can unslick at a given breakpoint now by adding:

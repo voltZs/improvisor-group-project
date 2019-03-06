@@ -689,6 +689,7 @@ p.error {
     opacity: .75;
     font-size: 22px;
     top: 50%;
+    transform: translateY(-50%);
 }
 
 .arrowBtn:hover, .arrowBtn:active, .arrowBtn:focus {
