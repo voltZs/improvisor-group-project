@@ -53,3 +53,11 @@ class FormProfilePicture(FlaskForm):
         FileRequired(),
         FileAllowed(['jpg', 'png'])
     ])
+    password = PasswordField('password', [
+		validators.Length(min=8, max=50),
+        validators.Optional(True)
+	])
+    email = StringField('email', [
+        validators.Email(),
+        validators.Optional(True)
+    ])

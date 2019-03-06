@@ -12,7 +12,7 @@ from flask import Flask, render_template, request, redirect, jsonify, session, a
 from improvisor import app, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from PIL import Image
+from PIL import Image, ExifTags
 
 
 #API: inserts tag into database
@@ -78,18 +78,41 @@ def addPicture():
     form = FormProfilePicture()
     if request.method == "POST" and form.validate() and current_user.is_authenticated:
         relative_path = url_for('static', filename='resources/uploadedFiles/')
-        relative_path = relative_path + "user_" + str(current_user.get_id())
+        relative_path = relative_path + "user_" + str(current_user.get_id()) 
         full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) 
         save_location = full_path + "/" + form.userPicture.data.filename
 
 
-        form.userPicture.data.save(save_location)
+        #form.userPicture.data.save(save_location)
         
-        current_user.profileImageLocation = relative_path + "/" + form.userPicture.data.filename
+        filename = form.userPicture.data.filename
+        print(type(filename))
+        image_user = Image.open(form.userPicture.data)
+       
+        try:
+            for orientation in ExifTags.TAGS.keys():
+                if ExifTags.TAGS[orientation]=='Orientation': 
+                    break
+            exif=dict(image_user._getexif().items())
+            print(exif[orientation])
+            if exif[orientation] == 3 : 
+                image_user2=image_user.rotate(180, expand=True)
+            elif exif[orientation] == 6 : 
+                image_user2=image_user.rotate(270, expand=True)
+            elif exif[orientation] == 8 : 
+                print("rotating")
+                image_user2=image_user2.rotate(90, expand=True)
+                
+        except Exception as e:
+            print(e)
+        
+            
+        image_user2 = image_user.resize((120,120), Image.ANTIALIAS )
+        image_user2.save(save_location)
+        current_user.profileImageLocation = relative_path + "/" + filename
         db.session.commit()
-        image_user = Image.open(save_location)
-        image_user = image_user.resize((120,120), Image.ANTIALIAS )
-        image_user.save(save_location, optimize =True, quality=95)
+
+        
 
 
     return render_template("user_profile.html", form = form)
