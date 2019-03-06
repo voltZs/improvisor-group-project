@@ -133,20 +133,51 @@ function applyImageScrolling() {
     // Add responsive setting to make sure slidesToShow is correct for different screen sizes
     var settings = {
       mobileFirst: true,
+      useTransform: false,
       accessibility: true,
       swipe: true,
       dots: false,
       infinite: false,
       speed: 500,
-      slidesToShow: 2,
-      slidesToScroll: 2,
+      slidesToShow: 5,
+      slidesToScroll: 5,
       variableWidth: true,
       edgeFriction: 0.5,
       arrows: true,
       nextArrow: '<i class="fas fa-arrow-alt-circle-right arrowBtn nextArrowBtn"></i>',
-      prevArrow: '<i class="fas fa-arrow-alt-circle-left arrowBtn prevArrowBtn"></i>'
+      prevArrow: '<i class="fas fa-arrow-alt-circle-left arrowBtn prevArrowBtn"></i>',
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3,
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2
+          }
+        },
+        {
+          breakpoint: 100,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+        // You can unslick at a given breakpoint now by adding:
+        // settings: "unslick"
+        // instead of a settings object
+      ]
     }
-    $(this).slick(settings);
+    if ($(this).attr('id') != "currentTabRow")
+    {
+      console.log("adding slick");
+      $(this).slick(settings);
+    }
   });
 }
 
