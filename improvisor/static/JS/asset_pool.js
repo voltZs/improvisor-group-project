@@ -17,50 +17,87 @@ for(tag in tagset){
     suggestions.appendChild(option);
 }
 
+var on_touchscreen = false;
+var isExpanded = false;
 var sortingDiv = document.getElementById("sortingDiv");
+var sortingBtnsCont = document.getElementById("sortBtnContainer");
 var sortBtnRecent = document.getElementById("sortBtnRecent");
 var sortBtnOld = document.getElementById("sortBtnOld");
 var sortBtnRelevant = document.getElementById("sortBtnRelevant");
 
 checkSorting();
 
-sortBtnRecent.addEventListener("click", function(){
+sortBtnRecent.addEventListener("click", function(event){
+    if(!isExpanded){
+        return;
+    }
+    isExpanded = false;
     sorting = "recent";
     checkSorting();
     getAssets(filterTags, sorting, limit);
+    event.stopPropagation();
 })
 sortBtnOld.addEventListener("click", function(){
+    if(!isExpanded){
+        return;
+    }
+    isExpanded = false;
     sorting = "old";
     checkSorting();
     getAssets(filterTags, sorting, limit);
+    event.stopPropagation();
 })
 sortBtnRelevant.addEventListener("click", function(){
+    if(!isExpanded){
+        return;
+    }
+    isExpanded = false;
     sorting = "relevant";
     checkSorting();
     getAssets(filterTags, sorting, limit);
+    event.stopPropagation();
 })
 
 sortingDiv.addEventListener("mouseover", function(){
+    if(!is_touch_device()){
+        isExpanded = true;
+    }
+    console.log(isExpanded);
     sortBtnRecent.hidden = false;
     sortBtnOld.hidden = false;
     sortBtnRelevant.hidden = false;
 })
 
-sortingDiv.addEventListener("mouseout", function(){
+sortingDiv.addEventListener("click", function(){
+    if(is_touch_device()){
+        isExpanded = true;
+    }
+    console.log(isExpanded);
+    sortBtnRecent.hidden = false;
+    sortBtnOld.hidden = false;
+    sortBtnRelevant.hidden = false;
+})
+
+sortingDiv.addEventListener("mouseleave", function(){
     checkSorting()
+    isExpanded = false;
 })
 
 function checkSorting(){
+
     sortBtnRecent.hidden = true;
     sortBtnOld.hidden = true;
     sortBtnRelevant.hidden = true;
 
     if(sorting == "recent"){
         sortBtnRecent.hidden = false;
+        sortingBtnsCont.insertBefore(sortBtnRecent, sortingBtnsCont.children[0]);
     } else if(sorting == "old"){
         sortBtnOld.hidden = false;
+        sortingBtnsCont.insertBefore(sortBtnOld, sortingBtnsCont.children[0]);
     } else if (sorting == "relevant"){
         sortBtnRelevant.hidden = false;
+        sortingBtnsCont.insertBefore(sortBtnRelevant, sortingBtnsCont.children[0]);
     }
 }
 
@@ -136,13 +173,9 @@ function getAssets(tags, sorting, limit){
 
         data = JSON.parse(data);
         console.log(data);
-        if(!data.length){
-            console.log("tis falsy");
-        }
 
         assetPool.innerHTML = "";
         for(var i=0; i<data.length; i++){
-            console.log(data[i]);
             if(!data[i] || i==limit){
                 break;
             }
@@ -164,7 +197,7 @@ function getAssets(tags, sorting, limit){
             assetPool.appendChild(link);
         }
         if(!data.length){
-            assetPool.innerHTML = "<br><h3 class='darkText'>No assets matching your criteria</h3><br>";
+            assetPool.innerHTML = "<br><h3>No assets matching your criteria</h3><br>";
         }
         checkLoadMoreBtn();
       }
@@ -191,3 +224,13 @@ function fetchTagset(){
   });
   return tmp;
 }
+
+function is_touch_device() {
+ return (('ontouchstart' in window)
+      || (navigator.MaxTouchPoints > 0)
+      || (navigator.msMaxTouchPoints > 0));
+}
+
+// window.addEventListener('touchstart', function(){
+//     on_touchscreen = true;
+// })
