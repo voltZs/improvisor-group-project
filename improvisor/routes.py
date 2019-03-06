@@ -79,12 +79,12 @@ def addPicture():
     if request.method == "POST" and form.validate() and current_user.is_authenticated:
         relative_path = url_for('static', filename='resources/uploadedFiles/')
         relative_path = relative_path + "user_" + str(current_user.get_id())
-        full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) 
+        full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id())
         save_location = full_path + "/" + form.userPicture.data.filename
 
 
         form.userPicture.data.save(save_location)
-        
+
         current_user.profileImageLocation = relative_path + "/" + form.userPicture.data.filename
         db.session.commit()
         image_user = Image.open(save_location)

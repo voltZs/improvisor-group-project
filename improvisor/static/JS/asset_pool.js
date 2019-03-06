@@ -17,6 +17,8 @@ for(tag in tagset){
     suggestions.appendChild(option);
 }
 
+var on_touchscreen = false;
+var isExpanded = false;
 var sortingDiv = document.getElementById("sortingDiv");
 var sortingBtnsCont = document.getElementById("sortBtnContainer");
 var sortBtnRecent = document.getElementById("sortBtnRecent");
@@ -25,33 +27,64 @@ var sortBtnRelevant = document.getElementById("sortBtnRelevant");
 
 checkSorting();
 
-sortBtnRecent.addEventListener("click", function(){
+sortBtnRecent.addEventListener("click", function(event){
+    if(!isExpanded){
+        return;
+    }
+    isExpanded = false;
     sorting = "recent";
     checkSorting();
     getAssets(filterTags, sorting, limit);
+    event.stopPropagation();
 })
 sortBtnOld.addEventListener("click", function(){
+    if(!isExpanded){
+        return;
+    }
+    isExpanded = false;
     sorting = "old";
     checkSorting();
     getAssets(filterTags, sorting, limit);
+    event.stopPropagation();
 })
 sortBtnRelevant.addEventListener("click", function(){
+    if(!isExpanded){
+        return;
+    }
+    isExpanded = false;
     sorting = "relevant";
     checkSorting();
     getAssets(filterTags, sorting, limit);
+    event.stopPropagation();
 })
 
 sortingDiv.addEventListener("mouseover", function(){
+    if(!is_touch_device()){
+        isExpanded = true;
+    }
+    console.log(isExpanded);
     sortBtnRecent.hidden = false;
     sortBtnOld.hidden = false;
     sortBtnRelevant.hidden = false;
 })
 
-sortingDiv.addEventListener("mouseout", function(){
+sortingDiv.addEventListener("click", function(){
+    if(is_touch_device()){
+        isExpanded = true;
+    }
+    console.log(isExpanded);
+    sortBtnRecent.hidden = false;
+    sortBtnOld.hidden = false;
+    sortBtnRelevant.hidden = false;
+})
+
+sortingDiv.addEventListener("mouseleave", function(){
     checkSorting()
+    isExpanded = false;
 })
 
 function checkSorting(){
+
     sortBtnRecent.hidden = true;
     sortBtnOld.hidden = true;
     sortBtnRelevant.hidden = true;
@@ -191,3 +224,13 @@ function fetchTagset(){
   });
   return tmp;
 }
+
+function is_touch_device() {
+ return (('ontouchstart' in window)
+      || (navigator.MaxTouchPoints > 0)
+      || (navigator.msMaxTouchPoints > 0));
+}
+
+// window.addEventListener('touchstart', function(){
+//     on_touchscreen = true;
+// })
