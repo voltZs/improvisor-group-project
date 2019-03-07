@@ -3,7 +3,7 @@ from flask_wtf.file import FileField
 from db import db
 import os, json, copy, bcrypt
 from os.path import join
-from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin, FormProfilePicture
+from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin, FormProfilePicture, FormUpdateAsset
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
@@ -13,31 +13,6 @@ from improvisor import app, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from PIL import Image, ExifTags
-
-#@app.route('/test')
-#def test():
-#    return render_template('test.html')
-
-#API: inserts tag into database
-@app.route('/api/tag', methods=['GET','POST'])
-def addTag():
-    form = FormTag(request.form)
-    if (not current_user.is_authenticated): #A valid user must be logged in before a tag can be added to db
-        print("No user is logged in. won't add tag")
-        error ="User must be logged in to add a tag" #I don't really know how to use these error things for the flask forms Alex
-        return render_template ("tag_form.html", form = form, error = error)
-
-    if form.validate() and request.method=="POST":
-        print("Valid form submitted: " + form.tag.data)
-        tag = TagModel(form.tag.data, current_user.get_id()) #creates tag database object
-        try:
-            tag.save_to_db()
-        except:
-            error = "Error while saving to db"
-            return render_template('tag_form.html', form=form, error=error)
-        return redirect('/')
-    return render_template('tag_form.html', form=form)
-
 
 #API: extracts all of the current user's tags from the database returning a json
 @login_required
@@ -54,19 +29,6 @@ def getTags():
 @app.route('/api/userList', methods=['GET'])
 def getUsers():
     return jsonify({"users": [user.json() for user in UserModel.query.all()]})
-
-
-#API: given a tag, returns a list of the user's assets containing that tag
-@app.route('/api/assets_with_tag', methods=['GET'])
-def getAssets():
-    phrase = request.form.get('phrase')
-    mentioned_tags = request.form.get("mentionedTags")
-    tag = TagModel.find_by_tagName(phrase)
-    if tag:
-        return {"assets-with-tag" : [asset.json() for asset in tag.assets]}
-    else:
-        return {"message" : "Tag does not exist in database"}
-
 
 #API: returns all assets in the database
 @app.route('/api/all_assets', methods=["GET"])
@@ -92,6 +54,7 @@ def addPicture():
         print(type(filename))
         image_user = Image.open(form.userPicture.data)
        
+        #looks at image metadata to check for a camera orientation and then rotates it appropriately so it appears the right way round in html display 
         try:
             for orientation in ExifTags.TAGS.keys():
                 if ExifTags.TAGS[orientation]=='Orientation': 
@@ -136,9 +99,13 @@ def addAsset():
                 for tag in tags:
                     # Remove extra white space
                     tag = " ".join(tag.split())
-                    # If tag doesn't exist in tag list already then add it
-                    tag_obj = TagModel.add_tag(tag)
-                    asset.tags.append(tag_obj)
+                    tag_obj = TagModel.find_by_tagName(tag)
+                    print(f'tag found {tag_obj.json()}')
+                    if tag_obj is None: #then tag currently does not exist and needs to be added
+                        tag_obj = TagModel(tag, current_user.get_id())
+                        tag_obj.save_to_db()
+                        asset.tags.append(tag_obj)
+      
             else:
                 print("asset already exists") #if no tag is entered then there is nothing to update
                 flash("Asset already exists", "warning")
@@ -150,9 +117,11 @@ def addAsset():
             for tag in tags:
                 # Remove extra white space
                 tag = " ".join(tag.split())
-                # If tag doesn't exist in tag list already then add it
-                tag_obj = TagModel.add_tag(tag)
-                asset.tags.append(tag_obj)
+                tag_obj = TagModel.find_by_tagName(tag)
+                if tag_obj is None: #then tag currently does not exist and needs to be added
+                    tag_obj = TagModel(tag, current_user.get_id())
+                    tag_obj.save_to_db()
+                    asset.tags.append(tag_obj)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
             upload(asset, form.assetResource.data, form.assetThumbnail.data)
@@ -191,6 +160,24 @@ def upload(asset, assetResource, assetThumbnail = None ):
         save_location = full_path + "/" + assetThumbnail.filename
         assetThumbnail.save(save_location)
         asset.thumbnailLocation = relative_path + "/" + assetThumbnail.filename
+
+@app.route('/api/updateAsset', methods=['GET', 'POST'])
+def update_asset(): #Work in progress
+    form = FormUpdateAsset()
+    if request.method == "POST" and form.validate():
+        tag = TagModel.find_by_tagName(form.tagname.data) 
+        if (form.operation == "delete"):
+            print("deleting")
+            if tag:
+                tag.remove_from_db()
+        elif (form.operation == "add"):
+            if tag is None:
+                print("adding")
+                tag = TagModel(form.tagname.data, current_user.get_id())
+            else: #the tag exists as a tag belonging to the current user, add it to the asset being updated
+                pass
+    return render_template('update_asset.html', form= form)
+
 
 
 @app.route('/', methods=['GET'])

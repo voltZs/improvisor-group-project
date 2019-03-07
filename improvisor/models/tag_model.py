@@ -13,29 +13,33 @@ class TagModel(db.Model):
         return {"tag" : self.tagname}
 
     def __init__(self, tagname, user_id):
-        self.tagname = tagname
+        self.tagname = tagname.lower() #all tags will be made lowercase, doing it here means we don't have to worry about using .lower() anywhere else in our code 
         self.user_id = user_id
     
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+    
+    def remove_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
 
     @classmethod
     def find_by_tagName(cls, tagname):
-        return cls.query.filter_by(tagname=tagname, user_id=current_user.get_id()).first()
+        lowerTagname = tagname.lower() #checking database for lower case version of argument. Doing it here for same reason as above
+        return cls.query.filter_by(tagname=lowerTagname, user_id=current_user.get_id()).first()
 
-    @classmethod
-    def add_tag(cls, tagname):
-        tags = cls.query.filter_by(user_id=current_user.get_id())
+    # @classmethod
+    # def add_tag(cls, tagname):
+    #     tags = cls.query.filter_by(user_id=current_user.get_id())
         
-        found = False
-        for tag in tags:
-            if tag.tagname.lower() == tagname.lower():
-                found = True
-                return tag
+    #     found = False
+    #     for tag in tags:
+    #         if tag.tagname.lower() == tagname.lower():
+    #             found = True
+    #             return tag
 
-        if not found:
-            new_tag = TagModel(tagname, current_user.get_id())
-            db.session.add(new_tag)
-            db.session.commit()
-            return new_tag
+    #     if not found:
+    #         new_tag = TagModel(tagname, current_user.get_id())
+    #         new_tag.save_to_db()
+    #         return new_tag

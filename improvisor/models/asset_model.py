@@ -28,6 +28,8 @@ class AssetModel(db.Model):
         self.thumbnailLocation = thumbnailLocation
         self.dateCreated = dateCreated
 
+    def getTags(self):
+        return tags
 
     def save_to_db(self):
         db.session.add(self)
