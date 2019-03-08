@@ -315,6 +315,12 @@ h3 {
     float: right;
 }
 
+@media screen and (max-width: 450px) {
+    #usernameNavigbar {
+        display: none;
+    }
+}
+
 #microphoneToggle {
     position: absolute;
     right: 0;
@@ -722,7 +728,7 @@ Works on mobile but doesn't currently work on desktop unless in touchscreen mode
     white-space: nowrap;
 }
 
-.imageRow .card {
+.imageRow img {
     display: inline-block;
 }
 
@@ -732,16 +738,9 @@ Works on mobile but doesn't currently work on desktop unless in touchscreen mode
     overflow-x: auto;
 }
 
-.imageRow-flexbox .card {
+.imageRow-flexbox img {
     flex: 0 0 auto;
     margin-right: 3px;
-}
-
-.card {
-    border: 1px solid white;
-    width: 150px;
-    height: 100px;
-    background: black;
 }
 
 .imageRow,
