@@ -9,11 +9,12 @@
     <h3 class="whiteText">Current</h2>
         <div class="imageRow" id="currentRow"></div>
 </div>
-<br /><br /><br /><br />
-<button id="add-asset">Add Asset</button>
-<button id="unslick">Unslick</button>
+<br /><br />
+<button id="add-asset" class="btn-warning">Add Asset</button>
+
 <!--
-<div class="frequentBlock">
+<button id="unslick">Unslick</button>
+    <div class="frequentBlock">
     <h3 class="whiteText">Frequent</h2>
         <div class="imageRow" id="frequentRow"></div>
 </div>
@@ -73,9 +74,9 @@
         };
         assets.push(asset);
         console.log("Add asset");
-        unslick();
+        //unslick();
         updateResults();
-        applyScrollGestures();
+        //applyScrollGestures();
     };
 
     function applyScrollGestures() {

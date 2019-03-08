@@ -154,7 +154,7 @@ body {
     }
 }
 
-.rightSpan{
+.rightSpan {
     float: right;
     margin-right: 10px;
 }
@@ -228,7 +228,7 @@ input.hiddenSubmit {
     background-color: #2664c9;
 }
 
-.bubbleButtonDark:hover{
+.bubbleButtonDark:hover {
     color: rgb(28, 80, 165);
     background-color: rgba(255, 255, 255, 0.9);
 }
@@ -237,12 +237,12 @@ input.hiddenSubmit {
     color: rgb(28, 80, 165);
 }
 
-.bubbleButtonTransp:hover{
+.bubbleButtonTransp:hover {
     color: rgba(255, 255, 255, 0.9);
     background-color: #2664c9;
 }
 
-.bubbleButtonTransp.selected{
+.bubbleButtonTransp.selected {
     color: rgba(255, 255, 255, 0.9);
     background-color: #2664c9;
 }
@@ -351,6 +351,8 @@ h3 {
     margin-right: 5px;
     max-width: 200px;
     max-height: 150px;
+    object-fit: cover;
+    width: auto;
 }
 
 .tabPanel {
@@ -419,7 +421,7 @@ div.fileInputVisible {
     z-index: 2;
 }
 
-div.fileInputVisible:hover{
+div.fileInputVisible:hover {
     cursor: pointer !important;
 }
 
@@ -429,11 +431,11 @@ input.fileInputHidden {
     opacity: 0;
 }
 
-input.fileInputHidden:hover{
+input.fileInputHidden:hover {
     cursor: pointer !important;
 }
 
-.fileNameLabelVisible{
+.fileNameLabelVisible {
     margin-left: 10px;
     display: inline-block;
     font-size: 16px;
@@ -581,7 +583,7 @@ p.error {
     font-weight: normal;
 }
 
-#sortingDiv:hover{
+#sortingDiv:hover {
     cursor: pointer;
 }
 
@@ -692,13 +694,63 @@ p.error {
     transform: translateY(-50%);
 }
 
-.arrowBtn:hover, .arrowBtn:active, .arrowBtn:focus {
+.arrowBtn:hover,
+.arrowBtn:active,
+.arrowBtn:focus {
     opacity: 1;
 }
 
-.nextArrowBtn{
+.nextArrowBtn {
     right: 5px;
 }
-.prevArrowBtn{
+
+.prevArrowBtn {
     left: 5px;
+}
+
+/*
+Scrollable image rows on controller view
+
+Works on mobile but doesn't currently work on desktop unless in touchscreen mode on chrome
+(the section on F12 that lets you choose a device (responsive, Galaxy S5, iPhone, iPad etc..)
+
+*/
+
+.imageRow {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.imageRow .card {
+    display: inline-block;
+}
+
+.imageRow-flexbox {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.imageRow-flexbox .card {
+    flex: 0 0 auto;
+    margin-right: 3px;
+}
+
+.card {
+    border: 1px solid white;
+    width: 150px;
+    height: 100px;
+    background: black;
+}
+
+.imageRow,
+.imageRow-flexbox {
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+.imageRow::-webkit-scrollbar,
+.imageRow-flexbox::-webkit-scrollbar {
+    display: none;
 }

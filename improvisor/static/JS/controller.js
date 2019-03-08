@@ -409,18 +409,20 @@ function applyGestureControls() {
     // Add animation class if not already added (addClass checks first)
     element.addClass("animated");
     element.addClass("faster");
-
-    var gestures = new Hammer(this);
+    var gestures = new Hammer(this, {touchAction: "pan-x"});
+    /*
     // enable swipe detection for all directions
     gestures.get('swipe').set({
       direction: Hammer.DIRECTION_ALL,
       threshold: 1,
-      velocity: 0.1
+      velocity: 0.1,
     });
-
+    */
+    
     // listen to events...
-    gestures.on("swipeup tap", function (ev) {
+    gestures.on("tap", function (ev) {
       // Swipe up gesture
+      /*
       if (ev.type == "swipeup") {
         element.removeClass("fadeIn");
         element.addClass("slideOutUp");
@@ -437,7 +439,7 @@ function applyGestureControls() {
           element.removeClass("slideOutUp");
           element.addClass("fadeIn");
         }, 500);
-      }
+      } */
       // Hold (press) gesture
       if (ev.type == "tap") {
         // Load the image popup
@@ -459,7 +461,7 @@ function applyGestureControls() {
                   popupImage.addClass("animated");
                   popupImage.addClass("faster");
                 }
-                var popupGestures = new Hammer(this);
+                var popupGestures = new Hammer(this, {touchAction: "pan-x"});
                 // enable swipe detection for all directions
                 popupGestures.get('swipe').set({
                   direction: Hammer.DIRECTION_ALL,
