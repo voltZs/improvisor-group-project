@@ -7,6 +7,7 @@ from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin, FormProf
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
+from improvisor.models.associationTable_tag_asset import asset_tags
 from sqlalchemy import desc, asc
 from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash, url_for
 from improvisor import app, login_manager
@@ -121,7 +122,7 @@ def addAsset():
                 if tag_obj is None: #then tag currently does not exist and needs to be added
                     tag_obj = TagModel(tag, current_user.get_id())
                     tag_obj.save_to_db()
-                    asset.tags.append(tag_obj)
+                asset.tags.append(tag_obj)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
             upload(asset, form.assetResource.data, form.assetThumbnail.data)
@@ -161,22 +162,7 @@ def upload(asset, assetResource, assetThumbnail = None ):
         assetThumbnail.save(save_location)
         asset.thumbnailLocation = relative_path + "/" + assetThumbnail.filename
 
-@app.route('/api/updateAsset', methods=['GET', 'POST'])
-def update_asset(): #Work in progress
-    form = FormUpdateAsset()
-    if request.method == "POST" and form.validate():
-        tag = TagModel.find_by_tagName(form.tagname.data) 
-        if (form.operation == "delete"):
-            print("deleting")
-            if tag:
-                tag.remove_from_db()
-        elif (form.operation == "add"):
-            if tag is None:
-                print("adding")
-                tag = TagModel(form.tagname.data, current_user.get_id())
-            else: #the tag exists as a tag belonging to the current user, add it to the asset being updated
-                pass
-    return render_template('update_asset.html', form= form)
+
 
 
 
@@ -319,10 +305,11 @@ def assets_select():
 @login_required
 @app.route('/assets/<id>', methods=['GET'])
 def asset(id=None):
+    form = FormUpdateAsset()
     if id is not None:
         asset = AssetModel.find_by_assetId(id)
-        return render_template('asset_page.html', asset=asset)
-    return render_template('asset_page.html', asset=None)
+        return render_template('asset_page.html', asset=asset, form= form)
+    return render_template('asset_page.html', asset=None, form = form) 
 
 
 @login_required
@@ -338,9 +325,34 @@ def asset_delete(id=None):
 @login_required
 @app.route('/assets/<id>/update', methods=['POST'])
 def asset_update(id=None):
+    #known issue: tags can be added multiple times 
     if id is not None:
-        # Update the asset with id from db (not implemented yet)
-        pass
+        form = FormUpdateAsset()
+        asset = AssetModel.find_by_assetId(id)
+        print(asset.tags)
+        if form.validate():
+            print(f"valid form {form.tagname.data} {form.operation.data}")
+            tag = TagModel.find_by_tagName(form.tagname.data)
+            if tag and form.operation.data == "delete":
+                print("delete operation")
+                if tag in asset.tags:
+                    asset.tags.remove(tag)
+                    asset.save_to_db()
+                else:
+                    flash(f"asset {asset.assetname} does not have that tag", "danger") #when the user has this tag on their account but the asset does not contain it
+                    return render_template("asset_page.html", form = form, asset= asset)
+            elif form.operation.data == "add":
+                print("add operation")
+                tag = TagModel(form.tagname.data, current_user.get_id())
+                tag.save_to_db()
+                asset.tags.append(tag)
+                asset.save_to_db()
+                return render_template("asset_page.html", form = form, asset= asset)
+            else:
+                flash(f"asset {asset.assetname} does not have that tag", "danger") #when the tag selected for deletion does not exist on the user's account or no operation radio button was selected
+                return render_template("asset_page.html", form = form, asset= asset)
+        flash ("radio button not selected", "danger")
+        return render_template("asset_page.html", form = form, asset= asset)
     return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
 @login_manager.user_loader

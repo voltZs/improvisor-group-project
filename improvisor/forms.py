@@ -42,12 +42,12 @@ class FormAsset(FlaskForm):
 
 class FormUpdateAsset(FlaskForm):
     tagname = StringField('tagname', validators=[
-        validators.Optional(True),
+        validators.DataRequired(),
         validators.Length(min=2, max=200)
     ])
-    operation = RadioField("Delete or Add", choices =[("delete", "Delete Tag"), ("add", "Add Tag")], validators=[
-        validators.DataRequired(message="choose to delete or add specified tag")
-    ])
+    operation = RadioField("Delete or Add", choices =[("delete", "Delete Tag"), ("add", "Add Tag")])
+        
+ 
 class FormLogin(FlaskForm):
     email = StringField('email', validators= [validators.Email()])
     password = PasswordField('password', validators=[
