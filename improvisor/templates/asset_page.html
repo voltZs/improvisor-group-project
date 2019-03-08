@@ -3,48 +3,57 @@
 {% set page_title = 'Asset' %}
 
 {% block page_content %}
-    <h2 class="darkText">
-        <a href="/assets">
-            <i class="fas fa-arrow-left darkText"></i>
-        </a>
-        {{ asset.assetname }}
-    </h2>
-    <div class="assetpool-list">
-        <div class="assetpool-asset">
-            {% if asset is not none %}
-                {% if asset.thumbnailLocation != None %}
-                    <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
-                {% else %}
-                    <!-- Placeholder until we get a default asset thumbnail -->
-                    <div class="thumbnail-placeholder">Placeholder</div>
-                {% endif %}
-                <p>{{ asset.assetname }}</p>
+<h2 class="darkText">
+    <a href="/assets">
+        <i class="fas fa-arrow-left darkText"></i>
+    </a>
+    {{ asset.assetname }}
+</h2>
+<div class="assetpool-list">
+    <div class="assetpool-asset">
+        {% if asset is not none %}
+            {% if asset.thumbnailLocation != None %}
+                <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
             {% else %}
-                <p>Asset not found</p>
+                <!-- Placeholder until we get a default asset thumbnail -->
+                <div class="thumbnail-placeholder">Placeholder</div>
             {% endif %}
-        </div>
+            <p>{{ asset.assetname }}</p>
+
+            <form method="POST" action="/assets/{{asset.id}}/update" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                {{ form.tagname.label }} {{form.tagname}}
+                {{ form.operation.label }}
+                {% for subfield in form.operation %}
+                <tr>
+                    <td>{{ subfield }}</td>
+                    <td>{{ subfield.label }}</td>
+                </tr>
+                {% endfor %}
+                <input type="submit" value="Submit">
+            </form>
+            <br /><br />
+            <button id="asset-delete" class="btn-danger">Delete Asset</button>
+        {% else %}
+            <p>Asset not found</p>
+        {% endif %}
     </div>
-    <form method="POST" action="/assets/{{asset.id}}/update" enctype="multipart/form-data">
-        {{ form.csrf_token }}
-        {{ form.tagname.label }} {{form.tagname}}
-        {{ form.operation.label }} 
-        {% for subfield in form.operation %}
-        <tr>
-            <td>{{ subfield }}</td>
-            <td>{{ subfield.label }}</td>
-        </tr>
-        {% endfor %}
-        <input type="submit" value="Submit">
-    </form>
-    
-    <br />
-        <div class="flashes">
-            {% include 'includes/_messages.html' %}
-        </div>
+</div>
+
+<br />
+<div class="flashes">
+    {% include 'includes/_messages.html' %}
+</div>
 {% endblock page_content %}
 
 {% block end_body %}
-    <script>
-        document.getElementById('assetPoolOption').classList.add('selected');
-    </script>
+<script>
+    document.getElementById('assetPoolOption').classList.add('selected');
+</script>
+
+<script>    
+    $("#asset-delete").click(function () {
+        alert("Implement an AJAX request with the id to delete route then redirect to asset pool..");
+    });
+</script>
 {% endblock end_body %}

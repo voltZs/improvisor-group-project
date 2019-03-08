@@ -667,7 +667,7 @@ p.error {
     font-weight: bold;
 }
 
-.assetpool-asset:hover {
+#assetPool .assetpool-asset:hover {
     background-color: rgba(255, 255, 255, 1);
 }
 
