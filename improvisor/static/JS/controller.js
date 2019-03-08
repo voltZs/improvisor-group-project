@@ -265,7 +265,7 @@ function updateResults(assets) {
     currentResults.appendChild(image);
   }
   applyGestureControls();
-  applyImageScrolling();
+  //applyImageScrolling();
 }
 
 // TABS LOGIC
