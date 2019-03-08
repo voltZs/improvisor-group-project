@@ -19,6 +19,11 @@
                 <div class="thumbnail-placeholder">Placeholder</div>
             {% endif %}
             <p>{{ asset.assetname }}</p>
+            <p>Tags: 
+                {% for tag in asset.tags %}
+                    {{tag.tagname}}, 
+                {% endfor %}
+            </p>
 
             <form method="POST" action="/assets/{{asset.id}}/update" enctype="multipart/form-data">
                 {{ form.csrf_token }}

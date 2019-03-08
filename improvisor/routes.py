@@ -339,7 +339,7 @@ def asset_update(id=None):
                     asset.tags.remove(tag)
                     asset.save_to_db()
                 else:
-                    flash(f"asset {asset.assetname} does not have that tag", "danger") #when the user has this tag on their account but the asset does not contain it
+                    flash(f"asset {asset.assetname} does not have that tag (1)", "danger") #when the user has this tag on their account but the asset does not contain it
                     return render_template("asset_page.html", form = form, asset= asset)
             elif form.operation.data == "add":
                 print("add operation")
@@ -349,7 +349,7 @@ def asset_update(id=None):
                 asset.save_to_db()
                 return render_template("asset_page.html", form = form, asset= asset)
             else:
-                flash(f"asset {asset.assetname} does not have that tag", "danger") #when the tag selected for deletion does not exist on the user's account or no operation radio button was selected
+                flash(f"asset {asset.assetname} does not have that tag (2)", "danger") #when the tag selected for deletion does not exist on the user's account or no operation radio button was selected
                 return render_template("asset_page.html", form = form, asset= asset)
         flash ("radio button not selected", "danger")
         return render_template("asset_page.html", form = form, asset= asset)
