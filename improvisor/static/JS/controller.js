@@ -387,7 +387,11 @@ function applyGestureControls() {
                 if (ev.type == "swipeup") {
                   popupImage.addClass("slideOutUp");
                   var assetID = element.attr('data-id');
-                  socket.emit('event', assetID);
+                  var data = {
+                    id: assetID,
+                    tab: selectedTab
+                  }
+                  socket.emit('event', data);
                   addToCurrentTab(assetID);
                   flushRecentTags();
                   console.log("sent ID " + assetID + " to socketIO");
