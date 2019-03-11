@@ -124,66 +124,6 @@ function setupPage() {
   }
 }
 
-function applyImageScrolling() {
-  $('.imageRow').each(function () {
-    if ($(this).hasClass('slick-initialized')) {
-      $(this).slick('unslick');
-      $(this).slick('destroy');
-    }
-    // Add responsive setting to make sure slidesToShow is correct for different screen sizes
-    var settings = {
-      mobileFirst: true,
-      useTransform: false,
-      accessibility: true,
-      swipe: true,
-      dots: false,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 5,
-      slidesToScroll: 5,
-      variableWidth: true,
-      edgeFriction: 0.5,
-      arrows: true,
-      nextArrow: '<i class="fas fa-arrow-alt-circle-right arrowBtn nextArrowBtn"></i>',
-      prevArrow: '<i class="fas fa-arrow-alt-circle-left arrowBtn prevArrowBtn"></i>',
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2
-          }
-        },
-        {
-          breakpoint: 100,
-          settings: {
-            speed: 400,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            infinite: false,
-            variableWidth: true
-          }
-        }
-        // You can unslick at a given breakpoint now by adding:
-        // settings: "unslick"
-        // instead of a settings object
-      ]
-    }
-    if ($(this).attr('id') != "currentTabRow")
-    {
-      console.log("adding slick");
-      $(this).slick(settings);
-    }
-  });
-}
-
 function makeAjaxRequest() {
   //only works if local storage is a available in the browser
   if (storageBool) {
@@ -265,7 +205,6 @@ function updateResults(assets) {
     currentResults.appendChild(image);
   }
   applyGestureControls();
-  //applyImageScrolling();
 }
 
 // TABS LOGIC
@@ -354,8 +293,6 @@ function populateActiveTab() {
     tabRow.insertBefore(image, tabRow.children[0]);
   }
   applyGestureControls();
-  // when this function runs here, new tabs retain other assets?
-  //applyImageScrolling();
 
 }
 // END OF TABS LOGIC
@@ -409,87 +346,61 @@ function applyGestureControls() {
     // Add animation class if not already added (addClass checks first)
     element.addClass("animated");
     element.addClass("faster");
-    var gestures = new Hammer(this, {touchAction: "pan-x"});
-    /*
-    // enable swipe detection for all directions
-    gestures.get('swipe').set({
-      direction: Hammer.DIRECTION_ALL,
-      threshold: 1,
-      velocity: 0.1,
+    var gestures = new Hammer(this, {
+      touchAction: "pan-x"
     });
-    */
-    
-    // listen to events...
-    gestures.on("tap", function (ev) {
-      // Swipe up gesture
-      /*
-      if (ev.type == "swipeup") {
-        element.removeClass("fadeIn");
-        element.addClass("slideOutUp");
-        var assetID = element.attr('data-id');
-        socket.emit('event', assetID);
-        addToCurrentTab(assetID);
-        flushRecentTags();
-        console.log("sent ID " + assetID + " to socketIO");
-        // Add the asset back to the display
-        setTimeout(function () {
-          // Reset element state (css class transitions)
-          element.removeClass("element-increase");
-          element.removeClass("element-reset");
-          element.removeClass("slideOutUp");
-          element.addClass("fadeIn");
-        }, 500);
-      } */
-      // Hold (press) gesture
-      if (ev.type == "tap") {
-        // Load the image popup
-        element.magnificPopup({
-          items: {
-            src: element.attr('src'),
-            title: element.attr('title'),
-            type: 'image'
-          },
-          callbacks: {
-            open: function () {
-              $('.mfp-img').each(function () {
-                var popupImage = $(this);
-                // Make sure this method not applied to a thumbnail more than once
-                if (popupImage.hasClass("gestures-added")) {
-                  return true;
-                } else {
-                  popupImage.addClass("gestures-added");
-                  popupImage.addClass("animated");
-                  popupImage.addClass("faster");
-                }
-                var popupGestures = new Hammer(this, {touchAction: "pan-x"});
-                // enable swipe detection for all directions
-                popupGestures.get('swipe').set({
-                  direction: Hammer.DIRECTION_ALL,
-                  threshold: 1,
-                  velocity: 0.1
-                });
 
-                // listen to events...
-                popupGestures.on("swipeup", function (ev) {
-                  // Swipe up gesture
-                  if (ev.type == "swipeup") {
-                    popupImage.addClass("slideOutUp");
-                    var assetID = element.attr('data-id');
-                    socket.emit('event', assetID);
-                    addToCurrentTab(assetID);
-                    flushRecentTags();
-                    console.log("sent ID " + assetID + " to socketIO");
-                    setTimeout(function () {
-                      var magnificPopup = $.magnificPopup.instance;
-                      magnificPopup.close();
-                    }, 500);
-                  }
-                });
+    // listen for a tap event...
+    gestures.on("tap", function (ev) {
+      // Load the image popup
+      element.magnificPopup({
+        items: {
+          src: element.attr('src'),
+          title: element.attr('title'),
+          type: 'image'
+        },
+        callbacks: {
+          open: function () {
+            $('.mfp-img').each(function () {
+              var popupImage = $(this);
+              // Make sure this method not applied to a thumbnail more than once
+              if (popupImage.hasClass("gestures-added")) {
+                return true;
+              } else {
+                popupImage.addClass("gestures-added");
+                popupImage.addClass("animated");
+                popupImage.addClass("faster");
+              }
+              var popupGestures = new Hammer(this, {
+                touchAction: "pan-x"
               });
-            },
-          }
-        });
-      }
+              // enable swipe detection for all directions
+              popupGestures.get('swipe').set({
+                direction: Hammer.DIRECTION_ALL,
+                threshold: 1,
+                velocity: 0.1
+              });
+
+              // listen to events...
+              popupGestures.on("swipeup", function (ev) {
+                // Swipe up gesture
+                if (ev.type == "swipeup") {
+                  popupImage.addClass("slideOutUp");
+                  var assetID = element.attr('data-id');
+                  socket.emit('event', assetID);
+                  addToCurrentTab(assetID);
+                  flushRecentTags();
+                  console.log("sent ID " + assetID + " to socketIO");
+                  setTimeout(function () {
+                    var magnificPopup = $.magnificPopup.instance;
+                    magnificPopup.close();
+                  }, 500);
+                }
+              });
+            });
+          },
+        }
+      });
     });
   });
 }
