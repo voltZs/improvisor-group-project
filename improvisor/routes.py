@@ -332,7 +332,7 @@ def asset_update(id=None):
         print(asset.tags)
         if form.validate():
             print(f"valid form {form.tagname.data} {form.operation.data}")
-            tag = TagModel.find_by_tagName(form.tagname.data)
+            tag = TagModel.add_tag(form.tagname.data)
             if tag and form.operation.data == "delete":
                 print("delete operation")
                 if tag in asset.tags:
@@ -343,15 +343,15 @@ def asset_update(id=None):
                     return render_template("asset_page.html", form = form, asset= asset)
             elif form.operation.data == "add":
                 print("add operation")
-                tag = TagModel(form.tagname.data, current_user.get_id())
-                tag.save_to_db()
-                asset.tags.append(tag)
-                asset.save_to_db()
+                if tag not in asset.tags:
+                    asset.tags.append(tag)
+                    asset.save_to_db()
+                else:
+                    flash("Asset already has the tag '" + tag.tagname  +"'", "warning")
                 return render_template("asset_page.html", form = form, asset= asset)
             else:
                 flash(f"asset {asset.assetname} does not have that tag (2)", "danger") #when the tag selected for deletion does not exist on the user's account or no operation radio button was selected
                 return render_template("asset_page.html", form = form, asset= asset)
-        flash ("radio button not selected", "danger")
         return render_template("asset_page.html", form = form, asset= asset)
     return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 

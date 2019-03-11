@@ -29,17 +29,16 @@ class TagModel(db.Model):
         lowerTagname = tagname.lower() #checking database for lower case version of argument. Doing it here for same reason as above
         return cls.query.filter_by(tagname=lowerTagname, user_id=current_user.get_id()).first()
 
-    # @classmethod
-    # def add_tag(cls, tagname):
-    #     tags = cls.query.filter_by(user_id=current_user.get_id())
+    @classmethod
+    def add_tag(cls, tagname):
+        tags = cls.query.filter_by(user_id=current_user.get_id())
         
-    #     found = False
-    #     for tag in tags:
-    #         if tag.tagname.lower() == tagname.lower():
-    #             found = True
-    #             return tag
-
-    #     if not found:
-    #         new_tag = TagModel(tagname, current_user.get_id())
-    #         new_tag.save_to_db()
-    #         return new_tag
+        found = False
+        for tag in tags:
+            if tag.tagname.lower() == tagname.lower():
+                found = True
+                return tag
+        if not found:
+            new_tag = TagModel(tagname, current_user.get_id())
+            new_tag.save_to_db()
+            return new_tag
