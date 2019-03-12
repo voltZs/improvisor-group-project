@@ -236,9 +236,16 @@ def fetch_asset():
 @login_required
 @app.route('/new_session', methods=['GET'])
 def new_session():
-    new_session = SessionModel()
-    new_session.save_to_db()
-    return render_template('enter_session.html', mode="new")
+    # Check if the active session has any assets in it
+    # If it has no assets then don't create a new session
+    session = SessionModel.find_active_session()
+    if len(session.assets) > 0:
+        new_session = SessionModel()
+        new_session.save_to_db()
+        return render_template('enter_session.html', mode="new")
+    else:
+        return render_template('enter_session.html', mode="empty")
+    
 
 @login_required
 @app.route('/continue_session', methods=['GET'])
