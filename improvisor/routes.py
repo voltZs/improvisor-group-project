@@ -21,7 +21,6 @@ from datetime import datetime
 import time
 
 
-
 @app.route('/api/session')
 def addSessionAsset():
     session1 = SessionModel.find_by_sessionId(1)
@@ -33,7 +32,7 @@ def addSessionAsset():
         if asset != None:
             session1.assets.append(asset)
             asset.add_to_session(session1.id)
-    
+
     session2 = SessionModel.find_by_sessionId(2)
     if session2 == None:
         session2 = SessionModel(1)
@@ -41,14 +40,15 @@ def addSessionAsset():
         asset = AssetModel.find_by_assetId(1)
         if asset != None:
             session2.assets.append(asset)
-            asset.add_to_session(session1.id)
-
-    session_data = DateModel.find_by_sessionId(1 )
+            asset.add_to_session(session2.id)
+    active = SessionModel.find_active_session()
+    print("Active session: " + str(active.id))
+    session_data = DateModel.find_by_sessionId(2)
     if session_data != None:
         print(session_data.json())
-        return jsonify(session_data.json())
-    
+
     return jsonify({"sessionAssets": [session.json() for session in SessionModel.query.all()]})
+
 
 #API: extracts all of the current user's tags from the database returning a json
 @login_required
@@ -71,6 +71,7 @@ def getUsers():
 def allAssets():
     print("all_assets")
     return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
+
 
 #API: adds user profile picture to database
 @app.route ('/api/profile_picture', methods =["GET", "POST"])
@@ -112,9 +113,7 @@ def addPicture():
         image_user2 = image_user.resize((120,120), Image.ANTIALIAS )
         image_user2.save(save_location)
         current_user.profileImageLocation = relative_path + "/" + filename
-        db.session.commit()
-
-        
+        db.session.commit()     
 
 
     return render_template("user_profile.html", form = form)
@@ -219,6 +218,8 @@ def fetch_asset():
     if id is not None:
         asset = AssetModel.find_by_assetId(id).json()
         asset.pop("date-created", None)
+        asset.pop("dateAdded", None)
+        # date time objects are being removed because they're not JSON serializable..
         return json.dumps(asset)
     return None
 

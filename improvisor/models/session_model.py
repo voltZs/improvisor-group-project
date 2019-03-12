@@ -31,3 +31,7 @@ class SessionModel(db.Model):
     @classmethod
     def find_by_sessionId(cls, id):
         return cls.query.filter_by(id=id, user_id=current_user.get_id()).first()
+
+    @classmethod
+    def find_active_session(cls):
+        return cls.query.filter_by(user_id=current_user.get_id(), active=1).first()
