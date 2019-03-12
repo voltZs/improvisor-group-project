@@ -33,6 +33,5 @@ def handleMessage(data):
     asset = AssetModel.find_by_assetId(asset_id)
     if (session):
         session.add_asset(asset, tab)
-        print("Asset added to session using tab " + str(tab))
     else:
         print("No active session")

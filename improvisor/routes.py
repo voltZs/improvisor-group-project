@@ -30,20 +30,7 @@ def inject_active_session():
 
 @login_required
 @app.route('/api/session')
-def addSessionAsset():
-    
-    session1 = SessionModel.find_by_sessionId(1)
-    session2 = SessionModel()
-    session2.save_to_db()
-    asset1 = AssetModel.find_by_assetId(1)
-    session1.add_asset(asset1, 1)
-    session1.add_asset(asset1, 1)
-
-    session2.add_asset(asset1, 1)
-
-    print(asset1.get_dates_for_session(session1.id))
-    print(asset1.sessionDates.all())
-  
+def json_session():
     return jsonify({"sessionAssets": [session.json() for session in SessionModel.query.all()]})
 
 
@@ -274,7 +261,7 @@ def previous_sessions_view():
 @app.route('/sessions/<id>', methods=['GET'])
 def session_page(id=None):
     if id != None:
-        session = SessionModel.find_by_sessionId(id)
+        session = SessionModel.find_by_sessionNumber(id)
         if session != None:
             return render_template('session.html', session=session)
     return redirect('/sessions')
