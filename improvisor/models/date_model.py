@@ -24,6 +24,10 @@ class DateModel(db.Model):
         self.dateAdded = dateAdded
         self.tab = tab
 
+    #@classmethod
+    #def find_by_sessionId(cls, id):
+    #    return cls.query.filter_by(session_id=id, user_id=current_user.get_id()).first()
+    # We should be searching by session number not by session id. Also means we need to change session_id ^ up top to session_num
     @classmethod
-    def find_by_sessionId(cls, id):
-        return cls.query.filter_by(session_id=id, user_id=current_user.get_id()).first()
+    def find_by_sessionNum(cls, id):
+        return cls.query.filter_by(session=id, user_id=current_user.get_id()).first()
