@@ -10,13 +10,14 @@ class DateModel(db.Model):
     asset_id = db.Column(db.Integer, db.ForeignKey("assets.id"))
     session_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer)
+    tab = db.Column(db.Integer)
 
     asset = db.relationship("AssetModel")
 
     def json(self):
-        return {"session_id":self.session_id, "asset_id" : self.asset_id, "dateAdded" : self.dateAdded.__str__()}
+        return {"session_id":self.session_id, "asset_id" : self.asset_id, "dateAdded" : self.dateAdded.__str__(), "tab" : self.tab}
 
-    def __init__(self, asset_id, session_id, user_id, dateAdded = datetime.now()):
+    def __init__(self, asset_id, session_id, user_id, tab, dateAdded = datetime.now()):
         self.asset_id = asset_id
         self.session_id = session_id
         self.user_id =  user_id

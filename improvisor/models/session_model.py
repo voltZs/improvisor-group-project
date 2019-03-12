@@ -7,6 +7,7 @@ class SessionModel(db.Model):
     __tablename__ = "sessions"
 
     id = db.Column(db.Integer, primary_key = True)
+    sessionName = db.Column(db.String)
     active = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
@@ -14,7 +15,7 @@ class SessionModel(db.Model):
     assets = db.relationship("AssetModel", secondary=session_asset, lazy="subquery", backref=db.backref("sessions", lazy=True))
     
     def json(self):
-        return {"active" : self.active, "assets":[asset.assetname for asset in self.assets], "user_id" : self.user_id}
+        return {"SessionName" : self.sessionName, "active" : self.active, "assets":[asset.assetname for asset in self.assets], "user_id" : self.user_id}
 
     def __init__(self):
         self.user_id = current_user.get_id()
@@ -27,6 +28,10 @@ class SessionModel(db.Model):
             oldSession.active = 0
         db.session.add(self)
         db.session.commit()
+    
+    def add_asset(self, assetObj, tab):
+        self.assets.append(assetObj)
+        assetObj.add_to_session(self.id, tab)
 
     @classmethod
     def find_by_sessionId(cls, id):

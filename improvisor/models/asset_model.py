@@ -14,13 +14,16 @@ class AssetModel(db.Model):
     thumbnailLocation = db.Column(db.String(200), nullable=True)
     dateCreated = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    
 
 
     user = db.relationship("UserModel")
+    # sessionDates = db.relationship("DateModel", primaryjoin= "and_(AssetModel.id==DateModel.asset_id, "
+    #                                             "AssetModel.user.activeSession.id == DateModel.session_id) ")
     tags = db.relationship("TagModel",secondary=asset_tags, lazy="subquery", backref=db.backref("assets", lazy=True))
     sessionDates = db.relationship("DateModel", lazy = "dynamic")
     def json(self):
-        return {"id": self.id, "asset": self.assetname, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated.__str__(), "sessions": [session.id for session in self.sessions], "dateAdded" : [date.dateAdded for date in self.sessionDates]}
+        return {"id": self.id, "asset": self.assetname, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated.__str__(), "sessions": [session.id for session in self.sessions], "dateAdded" : [date.dateAdded.__str__() for date in self.sessionDates]}
 
     def __init__(self, assetname, user_id, assetLocation = None, thumbnailLocation = None, dateCreated = datetime.now()):
         self.assetname = assetname
@@ -29,17 +32,19 @@ class AssetModel(db.Model):
         self.thumbnailLocation = thumbnailLocation
         self.dateCreated = dateCreated
 
-    def getTags(self):
-        return tags
-
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
 
-    def add_to_session(self, session_id):
-        date = DateModel(self.id, session_id, self.user_id)
+    def add_to_session(self, session_id, tab):
+        date = DateModel(self.id, session_id, self.user_id, tab)
         self.sessionDates.append(date)
+        print([date.json() for date in self.sessionDates.all()])
         db.session.commit()
+    
+    def get_dates_for_session(self, session_id):
+        datesForSession = [date for date in self.sessionDates if date.session_id == session_id]
+        return datesForSession
 
 
     @classmethod

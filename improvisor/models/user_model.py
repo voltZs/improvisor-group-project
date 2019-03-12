@@ -13,7 +13,9 @@ class UserModel(UserMixin, db.Model):
     password = db.Column(db.String(80))
     profileImageLocation = db.Column(db.String(500))
     
-    sessions = db.relationship("SessionModel", lazy="dynamic")
+    sessions = db.relationship("SessionModel", lazy="dynamic") 
+    # activeSession = db.relationship("SessionModel", primaryjoin ="and_(UserModel.id==SessionModel.user_id, "
+    #                                                     "SessionModel.active=='1')")
     tags = db.relationship("TagModel", lazy="dynamic")
     assets = db.relationship("AssetModel", lazy = "dynamic")
     def json(self):
