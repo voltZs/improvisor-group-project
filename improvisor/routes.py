@@ -7,13 +7,42 @@ from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin, FormProf
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
+from improvisor.models.session_model import SessionModel
 from improvisor.models.associationTable_tag_asset import asset_tags
+from improvisor.models.associationTable_session_asset import session_asset
 from sqlalchemy import desc, asc
 from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash, url_for
 from improvisor import app, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from PIL import Image, ExifTags
+from datetime import datetime
+import time
+
+
+
+@app.route('/api/session')
+def addSessionAsset():
+    session1 = SessionModel(1)
+    session2 = SessionModel(1)
+    session1.save_to_db()
+    session2.save_to_db()
+    
+
+    asset = AssetModel.find_by_assetId(1)
+    
+    session1.assets.append(asset)
+    asset.add_to_session(session1.id)
+    time.sleep(4)
+    session2.assets.append(asset)
+    asset.add_to_session(session2.id)
+    print(asset.json())
+
+
+    
+
+    
+    return jsonify({"sessionAssets": [session.json() for session in SessionModel.query.all()]})
 
 #API: extracts all of the current user's tags from the database returning a json
 @login_required
