@@ -17,8 +17,9 @@ from improvisor import app, login_manager
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from PIL import Image, ExifTags
-from datetime import datetime
+from datetime import datetime, date
 import time
+from json import dumps
 
 
 @app.context_processor
@@ -240,11 +241,9 @@ def new_session():
     # Check if the active session has any assets in it
     # If it has no assets then don't create a new session
     session = SessionModel.find_active_session()
-    if session == None:
+    if session == None or len(session.assets) > 0:
         new_session = SessionModel()
         new_session.save_to_db()
-        return render_template('enter_session.html', mode="new")
-    elif session != None and len(session.assets) > 0:
         return render_template('enter_session.html', mode="new")
     else:
         return render_template('enter_session.html', mode="empty")
@@ -286,7 +285,7 @@ def previous_sessions_view():
 
 @login_required
 @app.route('/sessions/<id>', methods=['GET'])
-def session(id=None):
+def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionId(id)
         if session != None:
@@ -602,4 +601,12 @@ def compare_phrases():
     sorting_obj['assetResults']['frequent'] = sorted_frequent
     sorting_obj['assetResults']['current'] = sorted_current
 
-    return json.dumps(sorting_obj)
+    return dumps(sorting_obj, default=json_serial)
+
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError ("Type %s not serializable" % type(obj))
