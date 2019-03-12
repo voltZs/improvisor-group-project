@@ -27,3 +27,7 @@ class SessionModel(db.Model):
             oldSession.active = 0
         db.session.add(self)
         db.session.commit()
+
+    @classmethod
+    def find_by_sessionId(cls, id):
+        return cls.query.filter_by(id=id, user_id=current_user.get_id()).first()

@@ -8,6 +8,7 @@ from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
 from improvisor.models.session_model import SessionModel
+from improvisor.models.date_model import DateModel
 from improvisor.models.associationTable_tag_asset import asset_tags
 from improvisor.models.associationTable_session_asset import session_asset
 from sqlalchemy import desc, asc
@@ -23,24 +24,29 @@ import time
 
 @app.route('/api/session')
 def addSessionAsset():
-    session1 = SessionModel(1)
-    session2 = SessionModel(1)
-    session1.save_to_db()
-    session2.save_to_db()
+    session1 = SessionModel.find_by_sessionId(1)
+    if session1 == None:
+        print("Session 1 not found")
+        session1 = SessionModel(1)
+        session1.save_to_db()
+        asset = AssetModel.find_by_assetId(1)      
+        if asset != None:
+            session1.assets.append(asset)
+            asset.add_to_session(session1.id)
     
+    session2 = SessionModel.find_by_sessionId(2)
+    if session2 == None:
+        session2 = SessionModel(1)
+        session2.save_to_db()
+        asset = AssetModel.find_by_assetId(1)
+        if asset != None:
+            session2.assets.append(asset)
+            asset.add_to_session(session1.id)
 
-    asset = AssetModel.find_by_assetId(1)
-    
-    session1.assets.append(asset)
-    asset.add_to_session(session1.id)
-    time.sleep(4)
-    session2.assets.append(asset)
-    asset.add_to_session(session2.id)
-    print(asset.json())
-
-
-    
-
+    session_data = DateModel.find_by_sessionId(1 )
+    if session_data != None:
+        print(session_data.json())
+        return jsonify(session_data.json())
     
     return jsonify({"sessionAssets": [session.json() for session in SessionModel.query.all()]})
 

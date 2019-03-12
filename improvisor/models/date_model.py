@@ -1,5 +1,6 @@
 from db import db  
 from datetime import datetime
+from flask_login import current_user
 
 class DateModel(db.Model):
     __tablename__ = "dates"
@@ -20,3 +21,7 @@ class DateModel(db.Model):
         self.session_id = session_id
         self.user_id =  user_id
         self.dateAdded = dateAdded
+
+    @classmethod
+    def find_by_sessionId(cls, id):
+        return cls.query.filter_by(session_id=id, user_id=current_user.get_id()).first()
