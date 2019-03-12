@@ -8,6 +8,7 @@ class SessionModel(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     sessionName = db.Column(db.String)
+    sessionNumber = db.Column(db.Integer)
     active = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
@@ -17,7 +18,9 @@ class SessionModel(db.Model):
     def json(self):
         return {"SessionName" : self.sessionName, "active" : self.active, "assets":[asset.assetname for asset in self.assets], "user_id" : self.user_id}
 
-    def __init__(self):
+    def __init__(self, sessionName, sessionNumber):
+        self.sessionName = sessionName
+        self.sessionNumber = sessionNumber
         self.user_id = current_user.get_id()
         self.active = 1
         
