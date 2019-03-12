@@ -23,11 +23,18 @@
             
         </a>
         <div class="sideBarButtonsDiv">
-            <a href="/join_session">
+            <a href="/new_session">
                 <div class="rightContItem bubbleButton bubbleButtonDark" id="newSessionOption">
                     New Session
                 </div>
             </a>
+            {% if active is not none %}
+                <a href="/continue_session">
+                    <div class="rightContItem bubbleButton bubbleButtonDark" id="newSessionOption">
+                        Continue Session
+                    </div>
+                </a>
+            {% endif %}
             <br>
             <a href="/sessions">
                 <div class="rightContItem bubbleButton bubbleButtonDark" id="prevSessionOption">

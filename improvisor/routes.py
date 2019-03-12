@@ -21,12 +21,19 @@ from datetime import datetime
 import time
 
 
+@app.context_processor
+def inject_active_session():
+    active = SessionModel.find_active_session()
+    return dict(active=active)
+
+
+@login_required
 @app.route('/api/session')
 def addSessionAsset():
     session1 = SessionModel.find_by_sessionId(1)
     if session1 == None:
         print("Session 1 not found")
-        session1 = SessionModel(1)
+        session1 = SessionModel()
         session1.save_to_db()
         asset = AssetModel.find_by_assetId(1)      
         if asset != None:
@@ -35,14 +42,15 @@ def addSessionAsset():
 
     session2 = SessionModel.find_by_sessionId(2)
     if session2 == None:
-        session2 = SessionModel(1)
+        session2 = SessionModel()
         session2.save_to_db()
         asset = AssetModel.find_by_assetId(1)
         if asset != None:
             session2.assets.append(asset)
             asset.add_to_session(session2.id)
     active = SessionModel.find_active_session()
-    print("Active session: " + str(active.id))
+    if (active):
+        print("Active session: " + str(active.id))
     session_data = DateModel.find_by_sessionId(2)
     if session_data != None:
         print(session_data.json())
@@ -74,6 +82,7 @@ def allAssets():
 
 
 #API: adds user profile picture to database
+@login_required
 @app.route ('/api/profile_picture', methods =["GET", "POST"])
 def addPicture():
     print (os.getcwd())
@@ -204,13 +213,14 @@ def upload(asset, assetResource, assetThumbnail = None ):
 def index():
 	return render_template('index.html')
 
-
+@login_required
 @app.route('/fetch_tagset', methods=['GET'])
 def fetch_tagset():
     tag_pool = [tag.tagname for tag in current_user.tags]
     return json.dumps(tag_pool)
 
 
+@login_required
 @app.route('/fetch_asset', methods=['GET'])
 def fetch_asset():
     id = int(request.args.get('id'))
@@ -223,10 +233,22 @@ def fetch_asset():
         return json.dumps(asset)
     return None
 
+@login_required
+@app.route('/new_session', methods=['GET'])
+def new_session():
+    new_session = SessionModel()
+    new_session.save_to_db()
+    return render_template('enter_session.html', mode="new")
 
-@app.route('/join_session', methods=['GET'])
-def enter_session():
-    return render_template('enter_session.html')
+@login_required
+@app.route('/continue_session', methods=['GET'])
+def continue_session():
+    # Make sure a session is already active. If not then create a new one
+    session = SessionModel.find_active_session()
+    if session == None:
+        flash("No active session. A new session was created", "warning")
+        return redirect('/new_session')
+    return render_template('enter_session.html', mode="continue")
 
 
 @login_required
@@ -246,10 +268,11 @@ def controller_view():
 def user_settings_view():
     return render_template('user_settings.html')
 
-
+@login_required
 @app.route('/sessions', methods=['GET'])
 def previous_sessions_view():
-    return render_template('previous_sessions.html')
+    sessions = SessionModel.find_all_sessions()
+    return render_template('previous_sessions.html', sessions=sessions)
 
 
 @login_required
@@ -411,9 +434,8 @@ def login_view():
             return render_template('login.html', form=form)
     return render_template('login.html', form=form)
 
-
-@app.route('/logout', methods=['GET'])
 @login_required
+@app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
     session["selected_asset"] = ""

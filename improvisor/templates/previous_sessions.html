@@ -4,7 +4,43 @@
 
 {% block page_content %}
     <h2 class="darkText">Previous Sessions</h2>
+    <div class="darkText text20">
+        <div id="sortingDiv">
+            <div class="boldText">Sort by:</div>
+            <div id="sortBtnContainer">
+                <div class="bubbleButton bubbleButtonTransp boldText" id="sortBtnRecent">
+                    Most Recent
+                </div>
+                <div class="bubbleButton bubbleButtonTransp boldText" id="sortBtnOld">
+                    Oldest First
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="assetpool-list whiteContainer" id="assetPool">
+        {% for session in sessions %}
 
+            <a href="/sessions/{{session.id}}">
+                <div class="assetpool-asset">
+                    <div class="assetThumbnail darkText">
+                        <br>
+                        {{session.id}}<br>
+                        {% if session.active == 1 %}
+                            <!-- ACTIVE -->
+                        {% endif %}
+                        
+                    </div>
+                    <p class="blackText boldText labelText">DD/MM/YYYY</p>
+                </div>
+            </a>
+
+        {% endfor %}
+    </div>
+    <div class="centerFlex">
+        <div class="bubbleButton bubbleButtonDark rowsButton" id="loadMore">
+            Load more
+        </div>
+    </div>
 {% endblock page_content %}
 
 

@@ -5,7 +5,14 @@
 {% block content %}
     <div class="midScreen whiteText">
         <div>
-            <h2 class="normalFont">You are about to enter a session. Please select mode for this device</h2>
+            {% if mode == "new" %}
+                <h2 class="normalFont">You have started a new session. Please select mode for this device</h2>
+            {% elif mode == "continue" %}
+                <h2 class="normalFont">You are continuing a previous session. Please select mode for this device</h2>
+            {% endif %}
+            <div class="flashes">
+                {% include 'includes/_messages.html' %}
+            </div>
             <a href="/controller">
                 <div class="bubbleButton bubbleButtonDark modeButton">
                     Controller

@@ -16,9 +16,9 @@ class SessionModel(db.Model):
     def json(self):
         return {"active" : self.active, "assets":[asset.assetname for asset in self.assets], "user_id" : self.user_id}
 
-    def __init__(self, user_id, active=1 ):
-        self.user_id = user_id
-        self.active = active
+    def __init__(self):
+        self.user_id = current_user.get_id()
+        self.active = 1
         
     
     def save_to_db(self):
@@ -35,3 +35,7 @@ class SessionModel(db.Model):
     @classmethod
     def find_active_session(cls):
         return cls.query.filter_by(user_id=current_user.get_id(), active=1).first()
+
+    @classmethod
+    def find_all_sessions(cls):
+        return cls.query.filter_by(user_id=current_user.get_id())
