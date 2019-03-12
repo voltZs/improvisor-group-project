@@ -240,9 +240,11 @@ def new_session():
     # Check if the active session has any assets in it
     # If it has no assets then don't create a new session
     session = SessionModel.find_active_session()
-    if len(session.assets) > 0:
+    if session == None:
         new_session = SessionModel()
         new_session.save_to_db()
+        return render_template('enter_session.html', mode="new")
+    elif session != None and len(session.assets) > 0:
         return render_template('enter_session.html', mode="new")
     else:
         return render_template('enter_session.html', mode="empty")
@@ -455,7 +457,6 @@ def login_view():
 @app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
-    session["selected_asset"] = ""
     return redirect('/')
 
 
