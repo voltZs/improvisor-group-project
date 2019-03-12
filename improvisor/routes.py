@@ -30,30 +30,31 @@ def inject_active_session():
 @login_required
 @app.route('/api/session')
 def addSessionAsset():
-    session1 = SessionModel.find_by_sessionId(1)
-    if session1 == None:
-        print("Session 1 not found")
-        session1 = SessionModel()
-        session1.save_to_db()
-        asset = AssetModel.find_by_assetId(1)      
-        if asset != None:
-            session1.assets.append(asset)
-            asset.add_to_session(session1.id)
+    
+    # session1 = SessionModel.find_by_sessionId(1)
+    # if session1 == None:
+    #     print("Session 1 not found")
+    #     session1 = SessionModel()
+    #     session1.save_to_db()
+    #     asset = AssetModel.find_by_assetId(1)      
+    #     if asset != None:
+    #         session1.assets.append(asset)
+    #         asset.add_to_session(session1.id)
 
-    session2 = SessionModel.find_by_sessionId(2)
-    if session2 == None:
-        session2 = SessionModel()
-        session2.save_to_db()
-        asset = AssetModel.find_by_assetId(1)
-        if asset != None:
-            session2.assets.append(asset)
-            asset.add_to_session(session2.id)
-    active = SessionModel.find_active_session()
-    if (active):
-        print("Active session: " + str(active.id))
-    session_data = DateModel.find_by_sessionId(2)
-    if session_data != None:
-        print(session_data.json())
+    # session2 = SessionModel.find_by_sessionId(2)
+    # if session2 == None:
+    #     session2 = SessionModel()
+    #     session2.save_to_db()
+    #     asset = AssetModel.find_by_assetId(1)
+    #     if asset != None:
+    #         session2.assets.append(asset)
+    #         asset.add_to_session(session2.id)
+    # active = SessionModel.find_active_session()
+    # if (active):
+    #     print("Active session: " + str(active.id))
+    # session_data = DateModel.find_by_sessionId(2)
+    # if session_data != None:
+    #     print(session_data.json())
 
     return jsonify({"sessionAssets": [session.json() for session in SessionModel.query.all()]})
 
@@ -280,6 +281,15 @@ def user_settings_view():
 def previous_sessions_view():
     sessions = SessionModel.find_all_sessions()
     return render_template('previous_sessions.html', sessions=sessions)
+
+@login_required
+@app.route('/sessions/<id>', methods=['GET'])
+def session(id=None):
+    if id != None:
+        session = SessionModel.find_by_sessionId(id)
+        if session != None:
+            return render_template('session.html', session=session)
+    return redirect('/sessions')
 
 
 @login_required

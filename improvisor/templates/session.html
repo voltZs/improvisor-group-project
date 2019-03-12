@@ -1,0 +1,39 @@
+{% extends "with_sidebar.html" %}
+
+{% set page_title = 'Session' %}
+
+{% block page_content %}
+<h2 class="darkText">
+    <a href="/assets">
+        <i class="fas fa-arrow-left darkText"></i>
+    </a>
+    {{ session.id }}
+</h2>
+<div class="assetpool-list">
+    <div class="assetpool-asset">
+        Session {{session.id}}
+        <br>
+        Assets Added: 
+        {% if session.assets|length > 0 %}
+            <ul>
+                {% for asset in session.assets %}
+                    <li>{{asset.assetname}}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            None
+        {% endif %}
+    </div>
+</div>
+
+<br />
+<div class="flashes">
+    {% include 'includes/_messages.html' %}
+</div>
+{% endblock page_content %}
+
+{% block end_body %}
+<script>
+    document.getElementById('assetPoolOption').classList.add('selected');
+</script>
+{% endblock end_body %}
