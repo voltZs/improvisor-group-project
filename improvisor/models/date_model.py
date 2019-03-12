@@ -22,6 +22,7 @@ class DateModel(db.Model):
         self.session_id = session_id
         self.user_id =  user_id
         self.dateAdded = dateAdded
+        self.tab = tab
 
     @classmethod
     def find_by_sessionId(cls, id):

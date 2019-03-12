@@ -22,10 +22,8 @@ def on_leave():
 def handleMessage(data):
     session = SessionModel.find_active_session()
     asset_id = data['id']
-    #user_id = current_user.get_id()
-    #date_added = datetime.now()
-    tab = int(data['tab']) # not currently using, still needs to be added to date model
-
+    tab = int(data['tab'])
+    print("Tab: " + str(tab))
     asset = {}
     if id is not None:
         asset = AssetModel.find_by_assetId(asset_id).json()
@@ -34,7 +32,7 @@ def handleMessage(data):
 
     asset = AssetModel.find_by_assetId(asset_id)
     if (session):
-        session.assets.append(asset)
-        asset.add_to_session(session.id)
+        session.add_asset(asset, tab)
+        print("Asset added to session using tab " + str(tab))
     else:
         print("No active session")

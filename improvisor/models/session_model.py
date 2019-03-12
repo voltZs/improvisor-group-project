@@ -7,7 +7,7 @@ class SessionModel(db.Model):
     __tablename__ = "sessions"
 
     id = db.Column(db.Integer, primary_key = True)
-    sessionName = db.Column(db.String)
+    sessionName = db.Column(db.String(200))
     sessionNumber = db.Column(db.Integer)
     active = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
@@ -18,12 +18,12 @@ class SessionModel(db.Model):
     def json(self):
         return {"SessionName" : self.sessionName, "active" : self.active, "assets":[asset.assetname for asset in self.assets], "user_id" : self.user_id}
 
-    def __init__(self, sessionName, sessionNumber):
-        self.sessionName = sessionName
-        self.sessionNumber = sessionNumber
+    def __init__(self):
+        num = next_session_num()
+        self.sessionName = "Session " + str(num)
+        self.sessionNumber = num
         self.user_id = current_user.get_id()
         self.active = 1
-        
     
     def save_to_db(self):
         oldSession = SessionModel.query.filter_by(user_id = self.user_id,active = self.active).first()
@@ -47,3 +47,16 @@ class SessionModel(db.Model):
     @classmethod
     def find_all_sessions(cls):
         return cls.query.filter_by(user_id=current_user.get_id())
+
+    @classmethod
+    def find_by_sessionNumber(cls, number):
+        return cls.query.filter_by(sessionNumber=number, user_id=current_user.get_id()).first()
+
+def next_session_num():
+    sessions = SessionModel.find_all_sessions()
+    max = 0
+    if (sessions):
+        for session in sessions:
+            if (max < session.sessionNumber):
+                max = session.sessionNumber
+    return max + 1
