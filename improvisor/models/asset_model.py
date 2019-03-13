@@ -39,7 +39,6 @@ class AssetModel(db.Model):
     def add_to_session(self, session_id, tab):
         date = DateModel(self.id, session_id, self.user_id, tab)
         self.sessionDates.append(date)
-        print([date.json() for date in self.sessionDates.all()])
         db.session.commit()
     
     def get_dates_for_session(self, session_id):

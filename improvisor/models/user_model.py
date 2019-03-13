@@ -14,12 +14,12 @@ class UserModel(UserMixin, db.Model):
     profileImageLocation = db.Column(db.String(500))
     
     sessions = db.relationship("SessionModel", lazy="dynamic") 
-    # activeSession = db.relationship("SessionModel", primaryjoin ="and_(UserModel.id==SessionModel.user_id, "
-    #                                                     "SessionModel.active=='1')")
+    activeSession = db.relationship("SessionModel", primaryjoin ="and_(UserModel.id==SessionModel.user_id, "
+                                                        "SessionModel.active=='1')")
     tags = db.relationship("TagModel", lazy="dynamic")
     assets = db.relationship("AssetModel", lazy = "dynamic")
     def json(self):
-        return {"email":self.email, "tags" : [tag.json() for tag in self.tags.all()], "assets" : [asset.json() for asset in self.assets.all()], "id" : self.id, "imageLocation" : self.profileImageLocation}
+        return {"email":self.email, "tags" : [tag.json() for tag in self.tags.all()], "assets" : [asset.json() for asset in self.assets.all()], "id" : self.id, "imageLocation" : self.profileImageLocation, "sessions" : [session.json() for session in self.sessions]}
 
     def __init__(self, firstname, lastname, email, password , profileImageLocation = defaultImage):
         self.firstname = firstname
