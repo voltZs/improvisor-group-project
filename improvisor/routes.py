@@ -219,7 +219,7 @@ def new_session():
     # Check if the active session has any assets in it
     # If it has no assets then don't create a new session
     session = current_user.activeSession
-    if len(session) > 0 or len(session[0].assets) > 0:
+    if len(session) ==0  or len(session[0].assets) > 0:
         new_session = SessionModel()
         new_session.save_to_db()
         return render_template('enter_session.html', mode="new")
@@ -257,13 +257,36 @@ def previous_sessions_view():
     sessions = current_user.sessions
     return render_template('previous_sessions.html', sessions=sessions)
 
+@app.route("/api/test")
+def test():
+    asset = AssetModel.find_by_assetId(1)
+    session = SessionModel.find_by_sessionId(1)
+    session.add_asset(asset, 1)
+    session.add_asset(asset, 1)
+    return jsonify(session.json())
+
+@app.route("/api/test2")
+def test2():
+    asset = AssetModel.find_by_assetId(1)
+    session = SessionModel.find_by_sessionId(1)
+    session.add_asset(asset, 1)
+    return jsonify(session.json())
+
 @app.route('/sessions/<id>', methods=['GET'])
 @login_required
 def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionNumber(id)
         if session != None:
-            return render_template('session.html', session=session)
+            dateList =[] 
+            for asset in session.assets:
+                print(asset)
+                for dateObj in asset.get_dates_for_session(1):
+                    print(dateObj)
+                    dateList.append((dateObj.dateAdded, asset.assetname))
+            dateList.sort()
+            print(dateList)
+            return render_template('session.html', session=dateList)
     return redirect('/sessions')
 
 

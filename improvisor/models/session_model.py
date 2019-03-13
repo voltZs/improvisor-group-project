@@ -47,7 +47,7 @@ class SessionModel(db.Model):
         return cls.query.filter_by(sessionNumber=number, user_id=current_user.get_id()).first()
 
 def next_session_num():
-    sessions = current_user.sessions
+    sessions = current_user.sessions.all()
     max = 0
     if len(sessions) > 0:
         for session in sessions:
