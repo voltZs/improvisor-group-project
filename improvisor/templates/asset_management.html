@@ -3,8 +3,14 @@
 {% set page_title = 'Assets' %}
 
 {% block page_content %}
-    <h2 class="darkText">
+    <h2 class="darkText boldText">
         Asset Pool
+        <a href="/assets/new">
+            <span class="rightSpan darkText boldText">
+                Add
+                <i class="fas fa-plus"></i>
+            </span>
+        </a>
     </h2>
     <div class="whiteContainer">
         <div class="inputSection">
@@ -36,12 +42,10 @@
                 </div>
             </div>
         </div>
-        <a href="/assets/new">
-            <span class="rightSpan darkText boldText">
-                Add
-                <i class="fas fa-plus"></i>
-            </span>
-        </a>
+
+        <span class="rightSpan darkText boldText" id="selectAssetsToggle">
+            Select
+        </span>
 
     </div>
     <div class="assetpool-list whiteContainer" id="assetPool">
