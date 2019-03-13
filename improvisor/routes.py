@@ -27,16 +27,15 @@ def inject_active_session():
     active = SessionModel.find_active_session()
     return dict(active=active)
 
-
-@login_required
 @app.route('/api/session')
+@login_required
 def json_session():
     return jsonify({"sessionAssets": [session.json() for session in SessionModel.query.all()]})
 
 
 #API: extracts all of the current user's tags from the database returning a json
-@login_required
 @app.route('/api/user_tags_list', methods=['GET'])
+@login_required
 def getTags():
     if current_user.is_authenticated:
         return jsonify({"tags":[tag.json() for tag in TagModel.query.filter_by(user_id=current_user.get_id()).all()]})
@@ -57,55 +56,55 @@ def allAssets():
     return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
 
 
-#API: adds user profile picture to database
-@login_required
+#API: adds user profile picture to databas
 @app.route ('/api/profile_picture', methods =["GET", "POST"])
+@login_required
 def addPicture():
     print (os.getcwd())
     form = FormProfilePicture()
     if request.method == "POST" and form.validate() and current_user.is_authenticated:
         relative_path = url_for('static', filename='resources/uploadedFiles/')
-        relative_path = relative_path + "user_" + str(current_user.get_id()) 
-        full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) 
+        relative_path = relative_path + "user_" + str(current_user.get_id())
+        full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id())
         save_location = full_path + "/" + form.userPicture.data.filename
 
 
         #form.userPicture.data.save(save_location)
-        
+
         filename = form.userPicture.data.filename
         print(type(filename))
         image_user = Image.open(form.userPicture.data)
-       
-        #looks at image metadata to check for a camera orientation and then rotates it appropriately so it appears the right way round in html display 
+
+        #looks at image metadata to check for a camera orientation and then rotates it appropriately so it appears the right way round in html display
         try:
             for orientation in ExifTags.TAGS.keys():
-                if ExifTags.TAGS[orientation]=='Orientation': 
+                if ExifTags.TAGS[orientation]=='Orientation':
                     break
             exif=dict(image_user._getexif().items())
             print(exif[orientation])
-            if exif[orientation] == 3 : 
+            if exif[orientation] == 3 :
                 image_user2=image_user.rotate(180, expand=True)
-            elif exif[orientation] == 6 : 
+            elif exif[orientation] == 6 :
                 image_user2=image_user.rotate(270, expand=True)
-            elif exif[orientation] == 8 : 
+            elif exif[orientation] == 8 :
                 print("rotating")
                 image_user2=image_user2.rotate(90, expand=True)
-                
+
         except Exception as e:
             print(e)
-        
-            
+
+
         image_user2 = image_user.resize((120,120), Image.ANTIALIAS )
         image_user2.save(save_location)
         current_user.profileImageLocation = relative_path + "/" + filename
-        db.session.commit()     
+        db.session.commit()
 
 
     return render_template("user_profile.html", form = form)
 
 #API: inserts asset into database and allows tags to be added to asset
-@login_required
 @app.route('/assets/new', methods=["GET", "POST"])
+@login_required
 def addAsset():
     form = FormAsset()
     if request.method == "POST" and form.validate():
@@ -125,7 +124,7 @@ def addAsset():
                         tag_obj = TagModel(tag, current_user.get_id())
                         tag_obj.save_to_db()
                         asset.tags.append(tag_obj)
-      
+
             else:
                 print("asset already exists") #if no tag is entered then there is nothing to update
                 flash("Asset already exists", "warning")
@@ -189,15 +188,14 @@ def upload(asset, assetResource, assetThumbnail = None ):
 def index():
 	return render_template('index.html')
 
-@login_required
 @app.route('/fetch_tagset', methods=['GET'])
+@login_required
 def fetch_tagset():
     tag_pool = [tag.tagname for tag in current_user.tags]
     return json.dumps(tag_pool)
 
-
-@login_required
 @app.route('/fetch_asset', methods=['GET'])
+@login_required
 def fetch_asset():
     id = int(request.args.get('id'))
     asset = {}
@@ -209,8 +207,8 @@ def fetch_asset():
         return json.dumps(asset)
     return None
 
-@login_required
 @app.route('/new_session', methods=['GET'])
+@login_required
 def new_session():
     # Check if the active session has any assets in it
     # If it has no assets then don't create a new session
@@ -221,10 +219,9 @@ def new_session():
         return render_template('enter_session.html', mode="new")
     else:
         return render_template('enter_session.html', mode="empty")
-    
 
-@login_required
 @app.route('/continue_session', methods=['GET'])
+@login_required
 def continue_session():
     # Make sure a session is already active. If not then create a new one
     session = SessionModel.find_active_session()
@@ -233,32 +230,29 @@ def continue_session():
         return redirect('/new_session')
     return render_template('enter_session.html', mode="continue")
 
-
-@login_required
 @app.route('/presenter', methods=['GET'])
+@login_required
 def presenter_view():
     return render_template('presenter.html')
 
-
-@login_required
 @app.route('/controller', methods=['GET'])
+@login_required
 def controller_view():
     return render_template('controller.html')
 
-
-@login_required
 @app.route('/user_settings', methods=['GET', 'POST'])
+@login_required
 def user_settings_view():
     return render_template('user_settings.html')
 
-@login_required
 @app.route('/sessions', methods=['GET'])
+@login_required
 def previous_sessions_view():
     sessions = SessionModel.find_all_sessions()
     return render_template('previous_sessions.html', sessions=sessions)
 
-@login_required
 @app.route('/sessions/<id>', methods=['GET'])
+@login_required
 def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionNumber(id)
@@ -267,17 +261,16 @@ def session_page(id=None):
     return redirect('/sessions')
 
 
-@login_required
 @app.route('/assets', methods=['GET', 'POST'])
+@login_required
 def asset_management_view():
     user = UserModel.find_by_id(current_user.get_id())
     # desc => from most recent to oldest
     assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(10).all()
     return render_template('asset_management.html', assets=assets)
 
-
-@login_required
 @app.route('/assets/bulk_delete', methods=['GET'])
+@login_required
 def assets_bulk_delete():
     idList = request.form.get('idList')
     deleted = []
@@ -288,9 +281,8 @@ def assets_bulk_delete():
             deleted.append(id)
     return json.dumps(deleted)
 
-
-@login_required
 @app.route('/assets/select', methods=['POST'])
+@login_required
 def assets_select():
     filter_tags = request.form.get('filterTags')
     # possible values: RECENT, OLD, RELEVANT
@@ -353,18 +345,17 @@ def assets_select():
 
 
 #anything that has /asset/... needs to be before /asset/<id>
-@login_required
 @app.route('/assets/<id>', methods=['GET'])
+@login_required
 def asset(id=None):
     form = FormUpdateAsset()
     if id is not None:
         asset = AssetModel.find_by_assetId(id)
         return render_template('asset_page.html', asset=asset, form= form)
-    return render_template('asset_page.html', asset=None, form = form) 
+    return render_template('asset_page.html', asset=None, form = form)
 
-
-@login_required
 @app.route('/assets/<id>/delete', methods=['POST'])
+@login_required
 def asset_delete(id=None):
     if id is not None:
         # Delete the asset with id from db
@@ -372,11 +363,10 @@ def asset_delete(id=None):
         return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
     return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
-
-@login_required
 @app.route('/assets/<id>/update', methods=['POST'])
+@login_required
 def asset_update(id=None):
-    #known issue: tags can be added multiple times 
+    #known issue: tags can be added multiple times
     if id is not None:
         form = FormUpdateAsset()
         asset = AssetModel.find_by_assetId(id)
@@ -412,7 +402,7 @@ def load_user(user_id):
 
 
 @app.route('/login', methods=['GET', 'POST'])
-def login_view():
+def login():
     form = FormLogin(request.form)
 
     if request.method == "POST" and form.validate():
@@ -426,8 +416,8 @@ def login_view():
             return render_template('login.html', form=form)
     return render_template('login.html', form=form)
 
-@login_required
 @app.route('/logout', methods=['GET'])
+@login_required
 def logout():
     logout_user()
     return redirect('/')

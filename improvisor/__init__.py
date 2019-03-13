@@ -16,6 +16,7 @@ app.secret_key = app.config['SECRET_KEY']
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 CORS(app)
 bootstrap = Bootstrap(app)
@@ -27,7 +28,7 @@ db.init_app(app)
 def initialisation():
     db.create_all()
     session["selected_asset"] = ""
-    if not os.path.exists("improvisor/static/resources/uploadedFiles"): 
+    if not os.path.exists("improvisor/static/resources/uploadedFiles"):
         os.mkdir("improvisor/static/resources/uploadedFiles")
 
 from improvisor import routes, sockets
