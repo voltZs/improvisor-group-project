@@ -31,7 +31,7 @@ def handleMessage(data):
     socketio.emit('presenter', asset, room=str(current_user.get_id()))
 
     asset = AssetModel.find_by_assetId(asset_id)
-    if (session):
-        session.add_asset(asset, tab)
+    if (len(session) > 1):
+        session[0].add_asset(asset, tab)
     else:
         print("No active session")
