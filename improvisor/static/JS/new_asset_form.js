@@ -93,10 +93,6 @@ function setEvents(number){
     // });
 }
 
-// $("ul li").click(function(){
-//
-//     $(this).children()[0].click();
-// });
 
 function setStyling(){
     $("ul").attr("class", "no-bulletpoint midScreen");
