@@ -10,13 +10,14 @@ class SessionModel(db.Model):
     sessionName = db.Column(db.String(200))
     sessionNumber = db.Column(db.Integer)
     active = db.Column(db.Integer)
+    dateCreated = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     user = db.relationship("UserModel")
     assets = db.relationship("AssetModel", secondary=session_asset, lazy="subquery", backref=db.backref("sessions", lazy=True))
     
     def json(self):
-        return {"SessionName" : self.sessionName, "active" : self.active, "assets":[asset.assetname for asset in self.assets], "user_id" : self.user_id}
+        return {"SessionName" : self.sessionName, "active" : self.active, "assets":[asset.assetname for asset in self.assets], "user_id" : self.user_id, "dateCreated" : self.dateCreated.__str__()}
 
     def __init__(self):
         num = next_session_num()
@@ -24,6 +25,7 @@ class SessionModel(db.Model):
         self.sessionNumber = num
         self.user_id = current_user.get_id()
         self.active = 1
+        self.dateCreated = datetime.now()
     
     def save_to_db(self):
         oldSession = SessionModel.query.filter_by(user_id = self.user_id,active = self.active).first()
@@ -39,14 +41,6 @@ class SessionModel(db.Model):
     @classmethod
     def find_by_sessionId(cls, id):
         return cls.query.filter_by(id=id, user_id=current_user.get_id()).first()
-
-    @classmethod
-    def find_active_session(cls):
-        return cls.query.filter_by(user_id=current_user.get_id(), active=1).first()
-
-    @classmethod
-    def find_all_sessions(cls):
-        return cls.query.filter_by(user_id=current_user.get_id())
 
     @classmethod
     def find_by_sessionNumber(cls, number):
