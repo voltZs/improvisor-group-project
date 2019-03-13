@@ -1,6 +1,8 @@
 var formsContainer = document.getElementById("assetFormsContainer");
 var firstFormClones = [];
 $("#linkUploadFields1").hide();
+$("#assetLink").attr("id", "assetLink1");
+
 firstFormClones.push(formsContainer.children[0].cloneNode(true));
 var addAssetBtn = document.getElementById("addAssetBtn");
 var submit = document.getElementById("submitButton");
@@ -8,6 +10,7 @@ var numOfForms = 1;
 
 setEvents(1);
 setStyling();
+
 
 addAssetBtn.addEventListener("click", function(){
     firstFormClones.push(firstFormClones[numOfForms-1].cloneNode(true));
@@ -18,6 +21,7 @@ addAssetBtn.addEventListener("click", function(){
     // $(firstFormClones[numOfForms-1]).find("#thumbUploadVisible1").attr("id", "thumbUploadVisible"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#fileUploadFields1").attr("id", "fileUploadFields"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#linkUploadFields1").attr("id", "linkUploadFields"+(numOfForms+1));
+    $(firstFormClones[numOfForms-1]).find("#assetLink").attr("id", "assetLink"+(numOfForms+1));
 
     // chunk elowe prevents radio buttons from conflicting (label for : referst to input id)
     $(firstFormClones[numOfForms-1]).find("#assettype-0").parent().children().eq(1).attr("for", "#assettype-0-"+(numOfForms+1))
@@ -71,19 +75,28 @@ function setEvents(number){
     var linkButton = $("#form"+(number)).find("ul li:nth-child(2)");
     var fileUploadFields = $("#fileUploadFields"+(number));
     var linkUploadFields = $("#linkUploadFields"+(number));
+    var assetLinkInput = document.getElementById("assetLink"+(number));
 
     fileButton.click(function(){
         $(this).children()[0].click();
         setStyling();
+
         fileUploadFields.show();
         linkUploadFields.hide();
+
+        fileHiddenButton.required = true;
+        assetLinkInput.removeAttribute("required");
     });
 
     linkButton.click(function(){
         $(this).children()[0].click();
         setStyling();
+
         fileUploadFields.hide();
         linkUploadFields.show();
+
+        fileHiddenButton.removeAttribute("required");
+        assetLinkInput.required = true;
     });
 
     // var thumbVisibleButton = document.getElementById("thumbUploadVisible"+(number));
