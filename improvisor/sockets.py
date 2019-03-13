@@ -20,7 +20,7 @@ def on_leave():
 
 @socketio.on('event')
 def handleMessage(data):
-    session = SessionModel.find_active_session()
+    session = current_user.activeSession
     asset_id = data['id']
     tab = int(data['tab'])
     print("Tab: " + str(tab))

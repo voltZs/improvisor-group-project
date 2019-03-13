@@ -24,8 +24,14 @@ from json import dumps
 
 @app.context_processor
 def inject_active_session():
-    active = SessionModel.find_active_session()
-    return dict(active=active)
+    if current_user.is_authenticated:
+        active = current_user.activeSession
+        if (len(active) > 0):
+            return dict(active=active[0])
+        else:
+            return dict(active=None) 
+    else:
+        return dict(active=None)
 
 @app.route('/api/session')
 @login_required
@@ -212,8 +218,8 @@ def fetch_asset():
 def new_session():
     # Check if the active session has any assets in it
     # If it has no assets then don't create a new session
-    session = SessionModel.find_active_session()
-    if session == None or len(session.assets) > 0:
+    session = current_user.activeSession
+    if len(session) > 0 or len(session[0].assets) > 0:
         new_session = SessionModel()
         new_session.save_to_db()
         return render_template('enter_session.html', mode="new")
@@ -224,8 +230,8 @@ def new_session():
 @login_required
 def continue_session():
     # Make sure a session is already active. If not then create a new one
-    session = SessionModel.find_active_session()
-    if session == None:
+    session = current_user.activeSession
+    if len(session) == 0:
         flash("No active session. A new session was created", "warning")
         return redirect('/new_session')
     return render_template('enter_session.html', mode="continue")
@@ -248,7 +254,7 @@ def user_settings_view():
 @app.route('/sessions', methods=['GET'])
 @login_required
 def previous_sessions_view():
-    sessions = SessionModel.find_all_sessions()
+    sessions = current_user.sessions
     return render_template('previous_sessions.html', sessions=sessions)
 
 @app.route('/sessions/<id>', methods=['GET'])
