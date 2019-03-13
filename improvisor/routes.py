@@ -29,7 +29,7 @@ def inject_active_session():
         if (len(active) > 0):
             return dict(active=active[0])
         else:
-            return dict(active=None) 
+            return dict(active=None)
     else:
         return dict(active=None)
 
@@ -278,7 +278,7 @@ def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionNumber(id)
         if session != None:
-            dateList =[] 
+            dateList =[]
             for asset in session.assets:
                 print(asset)
                 for dateObj in asset.get_dates_for_session(1):
@@ -298,10 +298,10 @@ def asset_management_view():
     assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(10).all()
     return render_template('asset_management.html', assets=assets)
 
-@app.route('/assets/bulk_delete', methods=['GET'])
+@app.route('/assets/bulk_delete', methods=['POST'])
 @login_required
 def assets_bulk_delete():
-    idList = request.form.get('idList')
+    idList = json.loads(request.form.get('idList'));
     deleted = []
     if idList is not None:
         for id in idList:

@@ -6,7 +6,7 @@
     <h2 class="darkText boldText">
         Asset Pool
         <a href="/assets/new">
-            <span class="rightSpan darkText boldText">
+            <span class="rightSpan darkText boldText ">
                 Add
                 <i class="fas fa-plus"></i>
             </span>
@@ -27,7 +27,7 @@
             </div> -->
         </div>
     </div>
-    <div class="darkText text20">
+    <div class="darkText text20 flexCont">
         <div id="sortingDiv">
             <div class="boldText">Sort by:</div>
             <div id="sortBtnContainer">
@@ -42,17 +42,21 @@
                 </div>
             </div>
         </div>
-
-        <span class="rightSpan darkText boldText" id="selectAssetsToggle">
-            Select
-        </span>
+        <div class="rightSpan">
+            <span class="bubbleButton boldText bubbleButtonRedHover" id="selectAssetsDelete">
+                Delete
+            </span>
+            <span class="bubbleButton boldText bubbleButtonTransp" id="selectAssetsToggle">
+                Select
+            </span>
+        </div>
 
     </div>
     <div class="assetpool-list whiteContainer" id="assetPool">
         {% for asset in assets %}
 
             <a href="/assets/{{asset.id}}">
-                <div class="assetpool-asset">
+                <div class="assetpool-asset" id="{{asset.id}}">
                         {% if asset.thumbnailLocation != None %}
                         <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
                         {% else %}

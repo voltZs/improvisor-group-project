@@ -25,8 +25,47 @@ var sortBtnRecent = document.getElementById("sortBtnRecent");
 var sortBtnOld = document.getElementById("sortBtnOld");
 var sortBtnRelevant = document.getElementById("sortBtnRelevant");
 
+var selectAssetsToggle = document.getElementById("selectAssetsToggle");
+var selectAssetsDelete = document.getElementById("selectAssetsDelete");
+selectAssetsDelete.hidden = true;
+var toBeDeleted = [];
+
+var selectionMode = false;
+
 checkSorting();
 checkIfNoData();
+addThumbnailDeleteListeners();
+
+
+selectAssetsToggle.addEventListener("click", function(){
+    if(selectionMode){
+        selectionMode = false;
+        selectAssetsToggle.classList.remove("selected");
+        selectAssetsDelete.hidden=true;
+        removeSelections();
+        toBeDeleted = [];
+    } else {
+        selectionMode = true;
+        selectAssetsToggle.classList.add("selected");
+    }
+
+})
+
+selectAssetsDelete.addEventListener("click", function(){
+    $.ajax({
+      type: "POST",
+      url: "/assets/bulk_delete",
+      data: {
+        'idList': JSON.stringify(toBeDeleted)
+      },
+      timeout: 60000,
+      success: function (data) {
+          console.log("Deleted assets:" + JSON.parse(data));
+          getAssets(filterTags, sorting, limit);
+      }
+    });
+    toBeDeleted = [];
+})
 
 sortBtnRecent.addEventListener("click", function(event){
     if(!isExpanded){
@@ -184,6 +223,7 @@ function getAssets(tags, sorting, limit){
             link.setAttribute("href", "/assets/" + data[i]["id"]);
             var div = document.createElement("DIV");
             div.classList.add("assetpool-asset");
+            div.setAttribute('id', data[i]["id"]);
             var img = document.createElement("IMG");
             img.classList.add("assetThumbnail");
             img.setAttribute("src", data[i]["thumbnailLocation"]);
@@ -195,12 +235,50 @@ function getAssets(tags, sorting, limit){
             div.appendChild(img);
             div.appendChild(p);
             link.appendChild(div);
+            link.addEventListener("click", function(event){
+                if(selectionMode){
+                    event.preventDefault();
+                    console.log("Clicking button");
+                }
+            })
             assetPool.appendChild(link);
         }
+        addThumbnailDeleteListeners();
+        selectAssetsDelete.hidden = true;
         checkIfNoData();
         checkLoadMoreBtn();
       }
     });
+}
+
+
+
+function addThumbnailDeleteListeners(){
+    for(var i =0; i< assetPool.children.length; i++){
+        assetPool.children[i].addEventListener("click", function(event){
+            if(selectionMode){
+                event.preventDefault();
+                var asset = this.children[0];
+                var asset_id = parseInt(asset.getAttribute("id"), 10);
+                if(toBeDeleted.includes(asset_id))
+                    toBeDeleted.splice(toBeDeleted.indexOf(asset_id), 1);
+                else
+                    toBeDeleted.push(asset_id);
+                if(toBeDeleted.length > 0)
+                    selectAssetsDelete.hidden = false;
+                else
+                    selectAssetsDelete.hidden = true;
+                asset.classList.toggle("selected");
+            }
+        })
+    }
+}
+
+function removeSelections(){
+    for(var i =0; i< assetPool.children.length; i++){
+        var asset = assetPool.children[i].children[0];
+        asset.classList.remove("selected");
+    }
 }
 
 function checkIfNoData(){

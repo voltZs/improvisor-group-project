@@ -154,7 +154,11 @@ body {
 
 .rightSpan {
     float: right;
+    align-self: flex-end;
     margin-right: 20px;
+}
+.rightSpan span{
+    margin-left: 10px;
 }
 
 .whiteText {
@@ -632,6 +636,10 @@ p.error {
 
 /* ============= */
 
+.flexCont{
+    display: flex;
+    justify-content: space-between;
+}
 
 #sortingDiv {
     margin-left: 10px;
@@ -639,6 +647,7 @@ p.error {
     justify-content: flex-start;
     font-weight: normal;
 }
+
 
 #sortingDiv:hover {
     cursor: pointer;
@@ -653,6 +662,21 @@ p.error {
 #sortBtnContainer div:hover {
     font-weight: bold;
 }
+
+@media screen and (max-width: 500px) {
+    #sortingDiv{
+        flex-direction: column;
+
+    }
+    #sortingDiv div:nth-child(1){
+        flex-direction: column;
+        padding-left: 10px;
+    }
+    #sortBtnContainer{
+        margin-left: 0;
+    }
+}
+
 
 #filterTagsContainter {
     margin-top: 10px;
@@ -709,6 +733,7 @@ p.error {
 }
 
 .assetpool-asset {
+    margin: 5px;
     height: auto;
     padding: 5px !important;
     text-align: center;
@@ -730,11 +755,16 @@ p.error {
     background-color: rgba(255, 255, 255, 1);
 }
 
+.assetpool-asset.selected {
+    background-color: rgba(255, 255, 255, 1);
+}
 
 .assetpool-asset img {
     object-fit: cover;
     padding: 0;
 }
+
+/* _________ */
 
 .mfp-figure:after {
     visibility: hidden;
