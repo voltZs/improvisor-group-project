@@ -26,6 +26,7 @@ var sortBtnOld = document.getElementById("sortBtnOld");
 var sortBtnRelevant = document.getElementById("sortBtnRelevant");
 
 checkSorting();
+checkIfNoData();
 
 sortBtnRecent.addEventListener("click", function(event){
     if(!isExpanded){
@@ -196,12 +197,16 @@ function getAssets(tags, sorting, limit){
             link.appendChild(div);
             assetPool.appendChild(link);
         }
-        if(!data.length){
-            assetPool.innerHTML = "<br><h3>No assets matching your criteria</h3><br>";
-        }
+        checkIfNoData();
         checkLoadMoreBtn();
       }
     });
+}
+
+function checkIfNoData(){
+    if(assetPool.children.length == 0){
+        assetPool.innerHTML = "<br><h3>No assets matching your criteria</h3><br>";
+    }
 }
 
 function checkLoadMoreBtn(){

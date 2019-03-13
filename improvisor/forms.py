@@ -7,7 +7,7 @@ class FormTag(FlaskForm):
     tag = StringField('tag', validators=[
         validators.DataRequired()
     ])
-    
+
 class FormSignup(FlaskForm):
     firstname = StringField('firstname',validators= [
 	    validators.Length(min=2, max=50),
@@ -32,9 +32,22 @@ class FormAsset(FlaskForm):
         validators.Optional(True),
         validators.Length(min=2,max=200)
     ])
+
+    assettype = RadioField('assettype', choices=[
+        ('file','File'),
+        ('link','Link')],
+    default='file')
+
     assetResource = FileField("UPLOAD ASSET FILE:", validators=[
-        FileRequired()
+        # if we want to be able to upload a link this should probably be optional
+        # FileRequired()
     ])
+
+    assetLink = StringField('assetlink',validators=[
+        validators.Optional(True),
+        validators.URL()
+    ])
+
     assetThumbnail = FileField("UPLOAD ASSET THUMBNAIL:", validators=[
         validators.Optional(True),
         FileAllowed(['jpg', 'png'])
@@ -46,8 +59,8 @@ class FormUpdateAsset(FlaskForm):
         validators.Length(min=2, max=200)
     ])
     operation = RadioField("Delete or Add", choices =[("delete", "Delete Tag"), ("add", "Add Tag")])
-        
- 
+
+
 class FormLogin(FlaskForm):
     email = StringField('email', validators= [validators.Email()])
     password = PasswordField('password', validators=[

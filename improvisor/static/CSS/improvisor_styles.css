@@ -39,8 +39,6 @@ body {
     justify-content: center;
     align-items: center;
     padding: 0 30px;
-    /* transform: translate(-50%, -100%); */
-    margin: 0 auto;
     text-align: center;
 }
 
@@ -223,6 +221,18 @@ input.hiddenSubmit {
     padding: 0 10px;
 }
 
+.toggleButton {
+    border-radius: 8px;
+    font-weight: bold;;
+    line-height: 30px;
+    font-size: 18px;
+    padding: 0 20px;
+    margin: 15px 5px;
+}
+.toggleButton:hover{
+    cursor: pointer;
+}
+
 .bubbleButtonDark {
     color: rgba(255, 255, 255, 0.9);
     background-color: #2664c9;
@@ -231,6 +241,26 @@ input.hiddenSubmit {
 .bubbleButtonDark:hover {
     color: rgb(28, 80, 165);
     background-color: rgba(255, 255, 255, 0.9);
+}
+
+.bubbleButtonDark.selected {
+    color: rgb(28, 80, 165);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.bubbleButtonWhite {
+    color: rgb(28, 80, 165);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.bubbleButtonWhite:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #2664c9;
+}
+
+.bubbleButtonWhite.selected {
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #2664c9;
 }
 
 .bubbleButtonTransp {
@@ -248,20 +278,15 @@ input.hiddenSubmit {
 }
 
 .bubbleButton:hover {
-    cursor: pointer;
+    cursor: pointer!important;
 }
+
 
 .bubbleButtonRedHover:hover {
     cursor: pointer;
     color: rgba(255, 255, 255, 0.9);
     background-color: #c92641;
 }
-
-.bubbleButtonDark.selected {
-    color: rgb(28, 80, 165);
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
 
 
 a {
@@ -414,6 +439,21 @@ input {
 
 input:active {
     outline: none;
+}
+
+ul.no-bulletpoint{
+    list-style-type: none;
+    padding: 0;
+}
+input[type="radio"]{
+    position: fixed;
+    visibility:hidden;
+}
+li.toggleButton label{
+    margin: 0;
+}
+li.toggleButton label:hover{
+    cursor: pointer;
 }
 
 div.fileInputDiv {
