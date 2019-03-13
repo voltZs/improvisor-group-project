@@ -45,6 +45,8 @@ class AssetModel(db.Model):
         datesForSession = [date for date in self.sessionDates if date.session_id == session_id]
         return datesForSession
 
+    def get_user_session_appearances(self):
+        return [session for session in self.sessions if session.user_id == self.user_id]
 
     @classmethod
     def find_by_assetName(cls, assetname):
