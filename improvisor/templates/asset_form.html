@@ -24,7 +24,7 @@
             {{render_field(form.assettype)}}
             <div id="fileUploadFields1">
                 <div class="fileInputDiv">
-                    {{form.assetResource(class="fileInputHidden", id="fileUploadHidden1", required="true")}}
+                    {{form.assetResource(class="fileInputHidden", id="fileUploadHidden1", required="true", onchange="createThumbnail()")}}
                     <div id="fileUploadVisible1">
                         <div class="fileInputVisible bubbleButton bubbleButtonDark">
                             Upload File
