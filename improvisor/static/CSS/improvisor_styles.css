@@ -57,13 +57,13 @@ body {
 
 .mainContainer {
     position: relative;
-    width: 65%;
+    width: 75%;
     min-height: 360px;
     /* min-width: 670px; */
     margin: 0 auto;
 }
 
-@media screen and (min-width: 701px) and (max-width: 970px) {
+@media screen and (min-width: 750px) and (max-width: 970px) {
     .mainContainer {
         width: 100%;
         padding-left: 30px;
@@ -71,7 +71,7 @@ body {
     }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 749px) {
     .mainContainer {
         width: 100%;
     }
@@ -121,7 +121,7 @@ body {
     cursor: pointer;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 749px) {
     .mainContainer {
         padding-left: 5px;
         padding-right: 5px;
@@ -290,6 +290,12 @@ input.hiddenSubmit {
     cursor: pointer;
     color: rgba(255, 255, 255, 0.9);
     background-color: #c92641;
+}
+
+.bubbleButtonGreenHover:hover {
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #00a821;
 }
 
 
@@ -508,6 +514,39 @@ input.fileInputHidden:hover {
     width: 100%;
     justify-content: center;
 }
+/* ===================== */
+
+
+.assetPageTop{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.assetPageLeft{
+    display: inline-flex;
+}
+.assetPageRight{
+    margin-left: 10px;
+    display: inline-flex;
+    flex-direction: column;
+}
+.assetTitle{
+    font-size: 22px;
+    margin-bottom: 7px;
+}
+.assetLabel{
+    font-size: 17px;
+    margin-bottom: 6px;
+}
+.spaced10top{
+    margin-top: 10px;
+}
+.spaced20top{
+    margin-top: 20px;
+}
+
 
 /* ===================== */
 .element-increase {
@@ -640,6 +679,11 @@ p.error {
     display: flex;
     justify-content: space-between;
 }
+.flexContVertical{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
 
 #sortingDiv {
     margin-left: 10px;
@@ -678,7 +722,7 @@ p.error {
 }
 
 
-#filterTagsContainter {
+.tagsContainer {
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
@@ -741,7 +785,7 @@ p.error {
 
 }
 
-.assetpool-asset .assetThumbnail {
+.assetThumbnail {
     width: 150px;
     height: 90px;
     margin: 5px;

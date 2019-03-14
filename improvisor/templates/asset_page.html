@@ -9,43 +9,58 @@
     </a>
     {{ asset.assetname }}
 </h2>
-<div class="assetpool-list">
-    <div class="assetpool-asset">
-        {% if asset is not none %}
-            {% if asset.thumbnailLocation != None %}
-                <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
-            {% else %}
-                <!-- Placeholder until we get a default asset thumbnail -->
-                <div class="thumbnail-placeholder">Placeholder</div>
-            {% endif %}
-            <p>{{ asset.assetname }}</p>
-            <p>Tags: 
-                {% for tag in asset.tags %}
-                    {{tag.tagname}}, 
-                {% endfor %}
-            </p>
+{% if asset is not none %}
+<div class="whiteContainer flexContVertical">
+    <div class="assetPageTop">
+        <div class="assetPageLeft">
 
-            <form method="POST" action="/assets/{{asset.id}}/update" enctype="multipart/form-data">
-                {{ form.csrf_token }}
-                {{ form.tagname.label }} {{form.tagname}}
-                {{ form.operation.label }}
-                {% for subfield in form.operation %}
-                <tr>
-                    <td>{{ subfield }}</td>
-                    <td>{{ subfield.label }}</td>
-                </tr>
-                {% endfor %}
-                <input type="submit" value="Submit">
-            </form>
-            <br /><br />
-            <button id="asset-delete" class="btn-danger">Delete Asset</button>
-        {% else %}
-            <p>Asset not found</p>
-        {% endif %}
+                {% if asset.thumbnailLocation != None %}
+                    <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
+                {% else %}
+                    <!-- Placeholder until we get a default asset thumbnail -->
+                    <div class="thumbnail-placeholder">Placeholder</div>
+                {% endif %}
+        </div>
+        <div class="assetPageRight">
+            <div class="assetTitle darkText boldText ">{{ asset.assetname }}</div>
+            <div class="assetLabel darkText boldText">{{ asset.dateCreated }} </div>
+        </div>
     </div>
+
+    {% for tag in asset.tags %}
+        <span class="hidden-data" data="{{tag.tagname}}"></span>
+    {% endfor %}
+    <input id="tagTextInput" list="suggestions" placeholder="Provide tag and press enter." class="bubbleButton growText spaced10top">
+    <div id="assetTagsContainter" class="tagsContainer"></div>
+    <datalist id="suggestions"></datalist>
+
+
+
+    <!-- <form method="POST" action="/assets/{{asset.id}}/update" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {{ form.tagname.label }} {{form.tagname}}
+        {{ form.operation.label }}
+        {% for subfield in form.operation %}
+        <tr>
+            <td>{{ subfield }}</td>
+            <td>{{ subfield.label }}</td>
+        </tr>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form> -->
+</div>
+<div id="asset-save" class="bubbleButton bubbleButtonDark bubbleButtonGreenHover rowsButton">Save Changes</div>
+<div id="asset-delete" class="bubbleButton darkText rowsButton bubbleButtonRedHover rightSpan">Delete Asset</div>
+
+{% else %}
+    <p>Asset not found</p>
+{% endif %}
+
+<div class="whiteContainer flexContVertical spaced20top">
+    <div class="assetTitle darkText boldText ">Asset Preview</div>
 </div>
 
-<br />
+
 <div class="flashes">
     {% include 'includes/_messages.html' %}
 </div>
@@ -55,10 +70,5 @@
 <script>
     document.getElementById('assetPoolOption').classList.add('selected');
 </script>
-
-<script>    
-    $("#asset-delete").click(function () {
-        alert("Implement an AJAX request with the id to delete route then redirect to asset pool..");
-    });
-</script>
+<script type="text/javascript" src="{{url_for('static', filename='JS/asset_page.js')}}"></script>
 {% endblock end_body %}
