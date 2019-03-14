@@ -34,35 +34,30 @@
                         </div>
                     </div>
                 </div>
+                <!-- hidden input for uploading own thumbnail img  -->
+                {{form.assetThumbnail(id="thumbUploadHidden1")}}
+
+                <!-- hidden input for sending thumbnail's base64 to server -->
+                <input type="submit" class="hiddenSubmit">
+                {{form.assetAutomaticThumbnail(id="thumbHidden1")}}
+
+                {{ form.hidden_tag() }}
+                <!-- buttons for selecting page of pdf -->
+
+                <div id="thumbnailSpace1" class="thumbnailSpace">
+                  <!-- container for thumbnail -->
+                </div>
+                <div class="midScreen">
+                  <div class="bubbleButton bubbleButtonDark rowsButton" id="prevButton1">Previous</div>
+                  <div class="bubbleButton bubbleButtonDark rowsButton" id="nextButton1">Next</div>
+                </div>
+                <div id="thumbnailNameCheckbox1" class="midScreen">
+                    <input type="checkbox" id="thumbnailNameCheckbox1">
+                    <span class="text18">Use name as thumbnail</span>
+                </div>
             </div>
             <div id="linkUploadFields1" class="inputSection">
                 {{render_field(form.assetLink, placeholder="www.example.com/url", class="bubbleButton growText", minlength="2", maxlength="50")}}
-            </div>
-
-            <br />
-            <div class="">
-                <div class="labelDiv">Thumbnail upload - will be replaced</div>
-                <!-- <div class="fileInputDiv"> -->
-                    {{form.assetThumbnail(id="thumbUploadHidden1")}}
-                    <!-- <div class="fileInputVisible bubbleButton bubbleButtonDark" id="thumbUploadVisible1">
-                        Upload File
-                    </div> -->
-                <!-- </div> -->
-            </div>
-
-            <!-- hidden input for sending thumbnail's base64 to server -->
-            <input type="submit" class="hiddenSubmit">
-            {{form.assetAutomaticThumbnail(id="thumbHidden1")}}
-            <br />
-            <input type="checkbox" id="thumbnailNameCheckbox1"> Use name as thumbnail <br>
-            {{ form.hidden_tag() }}
-            <!-- buttons for selecting page of pdf -->
-            <div class="midScreen">
-              <button class="bubbleButton bubbleButtonDark rowsButton" id="prevButton1">Previous</button>
-              <button class="bubbleButton bubbleButtonDark rowsButton" id="nextButton1">Next</button>
-            </div>
-            <div id="thumbnailSpace1">
-              <!-- container for thumbnail -->
             </div>
         </form>
 

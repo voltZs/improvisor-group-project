@@ -9,6 +9,19 @@ var submit = document.getElementById("submitButton");
 var numOfForms = 1;
 
 var lastClickedPDF;
+// CREDIT TO USEFUL ANGLE
+// source : http://usefulangle.com/post/20/pdfjs-tutorial-1-preview-pdf-during-upload-wih-next-prev-buttons
+
+// creating variables used
+var __PDF_DOC; // will hold the P?DFDocumentProxy object that is passed into the
+// callback of the getDocumentPromise
+var __CURRENT_PAGE; // will hole the current page number.
+var __TOTAL_PAGES; // will old the total no of pages
+var __PAGE_RENDERING_IN_PROGRESS = 0; // is a flag that will hold whether a
+// currently being rendered or not. if rendering is in pgogress Previous & next buttons will be disabled
+var __CANVAS = document.createElement('canvas');
+var __CANVAS_CTX = __CANVAS.getContext('2d');
+
 
 setEvents(1);
 setStyling();
@@ -70,35 +83,40 @@ submitButton.addEventListener("click", function(){
 function setEvents(number){
     var fileVisibleButton = document.getElementById("fileUploadVisible"+(number));
     var fileHiddenButton = document.getElementById("fileUploadHidden"+(number));
-    // grabs the div element where the thumbnail will be displayed
-    //######################
-    //#  thumbnailSpace    #
-    //######################
+    var thumbHiddenButton = document.getElementById("thumbUploadHidden"+(number));
     var thumbnailSpace = document.getElementById('thumbnailSpace'+ (number));
-    // set the value of the hiddenField to the thumbnail source so it can be
-    // read in on the server side
-    //######################
-    //#    thumbHidden     #
-    //######################
     var hiddenField = document.getElementById('thumbHidden' + (number));
-    // thumbnailNameCheckbox
+    var fileButton = $("#form"+(number)).find("ul li:nth-child(1)");
+    var linkButton = $("#form"+(number)).find("ul li:nth-child(2)");
+    var fileUploadFields = $("#fileUploadFields"+(number));
+    var linkUploadFields = $("#linkUploadFields"+(number));
+    var assetLinkInput = document.getElementById("assetLink"+(number));
+    var file;
+    // PDF page buttons
+    var prevButton =  document.getElementById('prevButton' + (number));
+    var nextButton =  document.getElementById('nextButton' + (number));
+    var thumbnailNameCheckboxCont = document.getElementById('thumbnailNameCheckbox' + (number));
+    var thumbnailNameCheckbox = thumbnailNameCheckboxCont.children[0];
 
+    $(thumbHiddenButton).hide();
+    $(nextButton).hide();
+    $(prevButton).hide();
+    $(nextButton).parent().hide();
+    $(thumbnailNameCheckboxCont).hide();
     fileVisibleButton.addEventListener("click", function(event){
         fileHiddenButton.click();
         event.stopPropagation();
     });
+
+    thumbnailSpace.addEventListener("click", function(){
+        thumbHiddenButton.click();
+    })
 
     $(fileHiddenButton).change(function(){
         var valueArray = fileHiddenButton.value.split("\\");
         var value = valueArray[valueArray.length-1];
         fileVisibleButton.children[1].innerHTML = value;
     });
-
-    var fileButton = $("#form"+(number)).find("ul li:nth-child(1)");
-    var linkButton = $("#form"+(number)).find("ul li:nth-child(2)");
-    var fileUploadFields = $("#fileUploadFields"+(number));
-    var linkUploadFields = $("#linkUploadFields"+(number));
-    var assetLinkInput = document.getElementById("assetLink"+(number));
 
     fileButton.click(function(){
         $(this).children()[0].click();
@@ -121,20 +139,21 @@ function setEvents(number){
         fileHiddenButton.removeAttribute("required");
         assetLinkInput.required = true;
     });
-    var file;
+
     fileHiddenButton.addEventListener("change", function(){
         file = fileHiddenButton.files[0];
         createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton, number);
+        $(thumbnailNameCheckboxCont).show();
     });
 
-    // Previous page of the PDF
-    var prevButton =  document.getElementById('prevButton' + (number));
-    // Next page of the PDF
-    var nextButton =  document.getElementById('nextButton' + (number));
+    thumbHiddenButton.addEventListener("change", function(){
+        file = thumbHiddenButton.files[0];
+        createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton, number);
+        $(thumbnailNameCheckboxCont).show();
+    });
 
-    prevButton.addEventListener('click', function() {
+    prevButton.addEventListener('click', function(event) {
         if(lastClickedPDF != number){
-            console.log("lol");
             showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton, number);
         } else {
             if(__CURRENT_PAGE > 0){
@@ -155,14 +174,10 @@ function setEvents(number){
         }
     });
 
-    //#############################
-
-    var thumbnailNameCheckbox = document.getElementById('thumbnailNameCheckbox' + (number));
     thumbnailNameCheckbox.addEventListener('change', function(){
       if(this.checked == true){
         console.log('The checkbox has been ticked');
-        nextButton.hidden = true;
-        prevButton.hidden = true;
+        $(nextButton).parent().hide();
         //gets the text from the asset name text input
         //######################
         //#  assetname         #
@@ -171,13 +186,11 @@ function setEvents(number){
         thumbnailFromAssetName(name, thumbnailSpace, hiddenField);
       }else{
         console.log('The checkbox has been unticked');
-        nextButton.hidden = false;
-        prevButton.hidden = false;
+        $(nextButton).parent().show();
         thumbnailSpace.innerHTML= "";
         createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton);
       }
     });
-
 }
 
 
@@ -203,15 +216,14 @@ function createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButt
     image.src = reader.result;
 
     if(file.type ==='application/pdf'){
-
-      showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton, id);
-
-      // createThumbnailFromPDF();
+        $(nextButton).parent().show();
+        $(nextButton).show();
+        $(prevButton).show();
+        showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton, id);
     }else if (file.type ==='image/png') {
       createThumbnailFromImage(image.src, thumbnailSpace, hiddenField);
-      // hides buttons for selecting the PDF page if they are visible
-      // document.getElementById('nextButton').classList.add('hidden');
-      // document.getElementById('prevButton').classList.add('hidden');
+      $(nextButton).hide();
+      $(prevButton).hide();
     }
   }, false);
 
@@ -219,7 +231,6 @@ function createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButt
     reader.readAsDataURL(file);
   }
 }
-
 
 
 function resizeUsingCanvas(image) {
@@ -255,7 +266,6 @@ function resizeUsingCanvas(image) {
 
 
 
-
 //creates a thumbnail from image source
 function createThumbnailFromImage(imageSource, thumbnailSpace, hiddenField){
   // creates a variable to hold the original image
@@ -288,27 +298,6 @@ function populateThumbnail(thumbnail, thumbnailSpace, hiddenField){
 
 
 //######################### PDF ##############################
-
-// CREDIT TO USEFUL ANGLE
-// source : http://usefulangle.com/post/20/pdfjs-tutorial-1-preview-pdf-during-upload-wih-next-prev-buttons
-
-//######################
-//#  all orange var    #
-//######################
-
-// creating variables used
-var __PDF_DOC; // will hold the P?DFDocumentProxy object that is passed into the
-// callback of the getDocumentPromise
-var __CURRENT_PAGE; // will hole the current page number.
-var __TOTAL_PAGES; // will old the total no of pages
-var __PAGE_RENDERING_IN_PROGRESS = 0; // is a flag that will hold whether a
-// currently being rendered or not. if rendering is in pgogress Previous & next buttons will be disabled
-var __CANVAS = document.createElement('canvas');
-var __CANVAS_CTX = __CANVAS.getContext('2d');
-// showPDF(URL.createObjectURL(file));
-
-var prev_pdf_url;
-
 
 // Initialize and load the PDF
 function showPDF(pdf_url, thumbnailSpace, hiddenField, nextButton, prevButton, id) {

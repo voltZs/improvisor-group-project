@@ -184,7 +184,10 @@ body {
 .text20 {
     font-size: 20px;
 }
-
+.text18{
+    line-height: 18px;
+    font-size: 18px;
+}
 .darkBack {
     background-color: #2664c9;
 }
@@ -514,6 +517,27 @@ input.fileInputHidden:hover {
     width: 100%;
     justify-content: center;
 }
+
+input[type=checkbox]{
+    -webkit-appearance:none;
+    width: 18px;
+    height: 18px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: none;
+    background: white;
+    margin: 0 6px;
+}
+
+input[type=checkbox]:checked{
+    background: #2664c9;
+
+}
+
+.thumbnailSpace{
+    margin: 20px 0 10px 0;
+}
+
 /* ===================== */
 
 
@@ -888,10 +912,9 @@ Works on mobile but doesn't currently work on desktop unless in touchscreen mode
   margin-right: auto;
   margin-top: auto;
   margin-bottom: auto;
-  max-width:150px;
-  max-height: 150px;
+  max-width: 100%;
+  max-height: 200px;
   height: auto;
-  border:  2px solid black;
   border-radius: 7%;
 
 }
