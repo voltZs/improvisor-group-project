@@ -1,5 +1,7 @@
 var assetTags = [];
 
+var assetNameInput = document.getElementById("assetNameInput");
+
 var textInputFilter = document.getElementById("tagTextInput");
 var tagsContainer = document.getElementById("assetTagsContainter");
 var tagset = fetchTagset();
@@ -55,10 +57,6 @@ function addTagElement(newTag){
         tagButton.parentNode.removeChild(tagButton);
     })
     assetTagsContainter.appendChild(tagButton);
-}
-
-function saveChanges(){
-
 }
 
 deleteButton.addEventListener("click", function(){

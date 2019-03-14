@@ -17,7 +17,9 @@
     {{ asset.assetname }}
 </h2>
 
-<div class="whiteContainer flexContVertical">
+<div class="whiteContainer">
+    <form id="formUpdate" class="flexContVertical" method="POST" action="/assets/{{asset.id}}/update" enctype="multipart/form-data">
+
     <div class="assetPageTop">
         <div class="assetPageLeft">
 
@@ -29,7 +31,7 @@
                 {% endif %}
         </div>
         <div class="assetPageRight">
-            <div class="assetTitle darkText boldText ">{{ asset.assetname }}</div>
+            {{form.assetname(class="assetTitle darkText boldText", id="assetNameInput", data=asset.assetname, value=asset.assetname )}}
             <div class="assetLabel darkText boldText">{{ asset.dateCreated }} </div>
         </div>
     </div>
@@ -38,7 +40,6 @@
     <div id="assetTagsContainter" class="tagsContainer"></div>
     <datalist id="suggestions"></datalist>
 
-    <form id="formUpdate" method="POST" action="/assets/{{asset.id}}/update" enctype="multipart/form-data">
         {{form.tagArrayString(id="inputTagArray")}}
     </form>
 </div>

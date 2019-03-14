@@ -58,6 +58,11 @@ class FormAsset(FlaskForm):
     ])
 
 class FormUpdateAsset(FlaskForm):
+    assetname = StringField('assetname', validators=[
+        validators.DataRequired(),
+        validators.length(min=2, max =200)
+    ]);
+
     tagArrayString = StringField('tagArrayString', validators=[
         validators.DataRequired()
     ]);

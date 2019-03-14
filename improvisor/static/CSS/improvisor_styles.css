@@ -536,6 +536,10 @@ input.fileInputHidden:hover {
     font-size: 22px;
     margin-bottom: 7px;
 }
+input.assetTitle{
+    background-color: rgba(1,1,1,0);
+    border: none;
+}
 .assetLabel{
     font-size: 17px;
     margin-bottom: 6px;
@@ -546,7 +550,6 @@ input.fileInputHidden:hover {
 .spaced20top{
     margin-top: 20px;
 }
-
 
 /* ===================== */
 .element-increase {
