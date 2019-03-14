@@ -14,7 +14,7 @@
         <form method='POST' action="" enctype="multipart/form-data" class="whiteContainer" id="form1">
             <div class="inputSection">
                 <div class="labelDiv">Asset Name:</div>
-                {{render_field(form.assetname, autocomplete="assetname", placeholder="Example Name", class="bubbleButton growText", minlength="2", maxlength="50", required="true")}}
+                {{render_field(form.assetname, autocomplete="assetname", placeholder="Example Name", class="bubbleButton growText", minlength="2", maxlength="50", required="true", id="assetName")}}
             </div>
             <br />
             <div class="inputSection">
@@ -50,11 +50,22 @@
                 <!-- </div> -->
             </div>
 
-
+            <!-- hidden input for sending thumbnail's base64 to server -->
             <input type="submit" class="hiddenSubmit">
+            {{form.assetAutomaticThumbnail(id="thumbHidden")}}
             <br />
+            <input type="checkbox" id="thumbnailNameCheckbox"> Use name as thumbnail <br>
             {{ form.hidden_tag() }}
         </form>
+
+        <!-- buttons for selecting page of pdf -->
+        <div class="buttonMiddle">
+          <button class="bubbleButton bubbleButtonDark hidden" id="prevButton">Previous</button>
+          <button class="bubbleButton bubbleButtonDark ml-2 hidden" id="nextButton">Next</button>
+        </div>
+        <div id="thumbnailSpace">
+          <!-- container for thumbnail -->
+        </div>
     </div>
     <div class="formFooter">
         <div class="bubbleButton bubbleButtonDark rowsButton" id="addAssetBtn">
