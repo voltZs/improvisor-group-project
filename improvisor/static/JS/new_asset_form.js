@@ -8,6 +8,8 @@ var addAssetBtn = document.getElementById("addAssetBtn");
 var submit = document.getElementById("submitButton");
 var numOfForms = 1;
 
+var lastClickedPDF;
+
 setEvents(1);
 setStyling();
 
@@ -28,6 +30,14 @@ addAssetBtn.addEventListener("click", function(){
     $(firstFormClones[numOfForms-1]).find("#assettype-0").attr("id", "#assettype-0-"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#assettype-1").parent().children().eq(1).attr("for", "#assettype-1-"+(numOfForms+1))
     $(firstFormClones[numOfForms-1]).find("#assettype-1").attr("id", "#assettype-1-"+(numOfForms+1));
+
+    $(firstFormClones[numOfForms-1]).find("#thumbnailSpace1").attr("id", "thumbnailSpace"+(numOfForms+1));
+    $(firstFormClones[numOfForms-1]).find("#hiddenField1").attr("id", "hiddenField"+(numOfForms+1));
+    $(firstFormClones[numOfForms-1]).find("#thumbHidden1").attr("id", "thumbHidden"+(numOfForms+1));
+    $(firstFormClones[numOfForms-1]).find("#thumbnailNameCheckbox1").attr("id", "thumbnailNameCheckbox"+(numOfForms+1));
+    $(firstFormClones[numOfForms-1]).find("#prevButton1").attr("id", "prevButton"+(numOfForms+1));
+    $(firstFormClones[numOfForms-1]).find("#nextButton1").attr("id", "nextButton"+(numOfForms+1));
+    $(firstFormClones[numOfForms-1]).find("#assetName1").attr("id", "assetName"+(numOfForms+1));
 
     formsContainer.appendChild(firstFormClones[numOfForms-1]);
     numOfForms++;
@@ -60,6 +70,19 @@ submitButton.addEventListener("click", function(){
 function setEvents(number){
     var fileVisibleButton = document.getElementById("fileUploadVisible"+(number));
     var fileHiddenButton = document.getElementById("fileUploadHidden"+(number));
+    // grabs the div element where the thumbnail will be displayed
+    //######################
+    //#  thumbnailSpace    #
+    //######################
+    var thumbnailSpace = document.getElementById('thumbnailSpace'+ (number));
+    // set the value of the hiddenField to the thumbnail source so it can be
+    // read in on the server side
+    //######################
+    //#    thumbHidden     #
+    //######################
+    var hiddenField = document.getElementById('thumbHidden' + (number));
+    // thumbnailNameCheckbox
+
     fileVisibleButton.addEventListener("click", function(event){
         fileHiddenButton.click();
         event.stopPropagation();
@@ -98,12 +121,63 @@ function setEvents(number){
         fileHiddenButton.removeAttribute("required");
         assetLinkInput.required = true;
     });
+    var file;
+    fileHiddenButton.addEventListener("change", function(){
+        file = fileHiddenButton.files[0];
+        createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton, number);
+    });
 
-    // var thumbVisibleButton = document.getElementById("thumbUploadVisible"+(number));
-    // var thumbHiddenButton = document.getElementById("thumbUploadHidden"+(number));
-    // thumbVisibleButton.addEventListener("click", function(){
-    //     thumbHiddenButton.click();
-    // });
+    // Previous page of the PDF
+    var prevButton =  document.getElementById('prevButton' + (number));
+    // Next page of the PDF
+    var nextButton =  document.getElementById('nextButton' + (number));
+
+    prevButton.addEventListener('click', function() {
+        if(lastClickedPDF != number){
+            console.log("lol");
+            showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton, number);
+        } else {
+            if(__CURRENT_PAGE > 0){
+                showPage(--__CURRENT_PAGE, thumbnailSpace, hiddenField, nextButton, prevButton, number);
+                createThumbnailPDF(thumbnailSpace, hiddenField);
+            }
+        }
+    });
+
+    nextButton.addEventListener('click', function() {
+        if(lastClickedPDF != number){
+            showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton);
+        } else {
+            if(__CURRENT_PAGE <= __TOTAL_PAGES){
+                showPage(++__CURRENT_PAGE, thumbnailSpace, hiddenField, nextButton, prevButton);
+                createThumbnailPDF(thumbnailSpace, hiddenField);
+            }
+        }
+    });
+
+    //#############################
+
+    var thumbnailNameCheckbox = document.getElementById('thumbnailNameCheckbox' + (number));
+    thumbnailNameCheckbox.addEventListener('change', function(){
+      if(this.checked == true){
+        console.log('The checkbox has been ticked');
+        nextButton.hidden = true;
+        prevButton.hidden = true;
+        //gets the text from the asset name text input
+        //######################
+        //#  assetname         #
+        //######################
+        var name = document.getElementById('assetName' + (number)).value;
+        thumbnailFromAssetName(name, thumbnailSpace, hiddenField);
+      }else{
+        console.log('The checkbox has been unticked');
+        nextButton.hidden = false;
+        prevButton.hidden = false;
+        thumbnailSpace.innerHTML= "";
+        createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton);
+      }
+    });
+
 }
 
 
@@ -115,22 +189,12 @@ function setStyling(){
 }
 
 
-
-
-
-
-
 // ################## Thumbnail Generation ################
 
 // creates a thumbnail from the uploaded file (png or pdf)
-var createThumbnail = function(){
-  // grabs the file input element from the form
-  //######################
-  //#  fileUploadHidden1 #
-  //######################
-  var file = $('#fileUploadHidden1').get(0).files[0];
-  var reader = new FileReader();
+function createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton, id){
 
+  var reader = new FileReader();
   reader.addEventListener("load", function(){
     //creates a temporary img element that will hold the downloaded image
     // which will then be resized using canvas and the resized image will be
@@ -140,14 +204,14 @@ var createThumbnail = function(){
 
     if(file.type ==='application/pdf'){
 
-      showPDF(URL.createObjectURL(file));
+      showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton, id);
 
       // createThumbnailFromPDF();
     }else if (file.type ==='image/png') {
-      createThumbnailFromImage(image.src);
+      createThumbnailFromImage(image.src, thumbnailSpace, hiddenField);
       // hides buttons for selecting the PDF page if they are visible
-      document.getElementById('nextButton').classList.add('hidden');
-      document.getElementById('prevButton').classList.add('hidden');
+      // document.getElementById('nextButton').classList.add('hidden');
+      // document.getElementById('prevButton').classList.add('hidden');
     }
   }, false);
 
@@ -193,7 +257,7 @@ function resizeUsingCanvas(image) {
 
 
 //creates a thumbnail from image source
-function createThumbnailFromImage(imageSource){
+function createThumbnailFromImage(imageSource, thumbnailSpace, hiddenField){
   // creates a variable to hold the original image
   var originalImage = new Image();
   // assigns the source of the original image
@@ -202,32 +266,21 @@ function createThumbnailFromImage(imageSource){
   // image finished loading
   originalImage.addEventListener("load", function () {
     var thumbnailImage = resizeUsingCanvas(originalImage);
-    populateThumbnail(thumbnailImage);
+    populateThumbnail(thumbnailImage, thumbnailSpace, hiddenField);
   });
 
 }
 
-function populateThumbnail(thumbnail){
+function populateThumbnail(thumbnail, thumbnailSpace, hiddenField){
 
   thumbnail.classList.add('smallBox');
-  // grabs the div element where the thumbnail will be displayed
-  //######################
-  //#  thumbnailSpace    #
-  //######################
-  var thumbnailSpace = document.getElementById('thumbnailSpace');
+
   // if there is already a thumbnail in the space, remove it before adding new
-  while(thumbnailSpace.firstChild){
-    thumbnailSpace.removeChild(thumbnailSpace.firstChild);
-  }
+  thumbnailSpace.innerHTML=""
+
   // add the image to be displayed to the div
   thumbnailSpace.appendChild(thumbnail);
-  // set the value of the hiddenField to the thumbnail source so it can be
-  // read in on the server side
-  //######################
-  //#    thumbHidden     #
-  //######################
-  var hiddenField = $('#thumbHidden');
-  hiddenField[0].setAttribute("value", thumbnail.src);
+  hiddenField.setAttribute("value", thumbnail.src);
 }
 
 
@@ -254,17 +307,21 @@ var __CANVAS = document.createElement('canvas');
 var __CANVAS_CTX = __CANVAS.getContext('2d');
 // showPDF(URL.createObjectURL(file));
 
+var prev_pdf_url;
 
 
 // Initialize and load the PDF
-function showPDF(pdf_url) {
+function showPDF(pdf_url, thumbnailSpace, hiddenField, nextButton, prevButton, id) {
 
   PDFJS.getDocument({ url: pdf_url }).then(function(pdf_doc) {
     __PDF_DOC = pdf_doc;
     __TOTAL_PAGES = __PDF_DOC.numPages;
+    prev_pdf_ulr = pdf_url;
+
+    lastClickedPDF = id;
 
     // Show the first page
-    showPage(1);
+    showPage(1, thumbnailSpace, hiddenField, nextButton, prevButton);
 
   }).catch(function(error) {
 
@@ -273,7 +330,7 @@ function showPDF(pdf_url) {
 }
 
 // Load and render a specific page of the PDF
-function showPage(page_no) {
+function showPage(page_no, thumbnailSpace, hiddenField, nextButton, prevButton) {
   __PAGE_RENDERING_IN_PROGRESS = 1;
   __CURRENT_PAGE = page_no;
 
@@ -297,67 +354,22 @@ function showPage(page_no) {
     page.render(renderContext).then(function() {
       __PAGE_RENDERING_IN_PROGRESS = 0;
 
-      createThumbnailPDF();
-      document.getElementById('nextButton').classList.remove('hidden');
-      document.getElementById('prevButton').classList.remove('hidden');
+      createThumbnailPDF(thumbnailSpace, hiddenField);
+      nextButton.classList.remove('hidden');
+      prevButton.classList.remove('hidden');
     });
   });
 }
 
 
-function createThumbnailPDF(){
+function createThumbnailPDF(thumbnailSpace, hiddenField){
   thumbnail = new Image();
   thumbnail.src = __CANVAS.toDataURL('image/peg', 1);
-  populateThumbnail(thumbnail);
+  populateThumbnail(thumbnail, thumbnailSpace, hiddenField);
 }
 
 
-
-
-// Previous page of the PDF
-$("#prevButton").on('click', function() {
-  if(__CURRENT_PAGE != 1)
-  showPage(--__CURRENT_PAGE);
-  createThumbnailPDF();
-});
-
-// Next page of the PDF
-$("#nextButton").on('click', function() {
-  if(__CURRENT_PAGE != __TOTAL_PAGES)
-  showPage(++__CURRENT_PAGE);
-  createThumbnailPDF();
-});
-
-//#############################
-
-
-$('#thumbnailNameCheckbox').change(function(){
-  if(this.checked == true){
-    console.log('The checkbox has been ticked');
-    document.getElementById('nextButton').classList.add('hidden');
-    document.getElementById('prevButton').classList.add('hidden');
-    thumbnailFromAssetName();
-  }else{
-    console.log('The checkbox has been unticked');
-
-    document.getElementById('nextButton').classList.add('hidden');
-    document.getElementById('prevButton').classList.add('hidden');
-    var thumbnailSpace = document.getElementById('thumbnailSpace');
-    while(thumbnailSpace.firstChild){
-      thumbnailSpace.removeChild(thumbnailSpace.firstChild);
-    }
-    createThumbnail();
-  }
-});
-
-
-
-function thumbnailFromAssetName (){
-  //gets the text from the asset name text input
-  //######################
-  //#  assetname         #
-  //######################
-  var text = document.getElementById('assetName').value;
+function thumbnailFromAssetName(name, thumbnailSpace, hiddenField){
   var canvas = document.createElement('canvas');
   canvas.width = 150;
   canvas.height = 150;
@@ -367,11 +379,11 @@ function thumbnailFromAssetName (){
   var width = 150; //width of the canvas
   ctx.fillStyle = 'black';
   ctx.font = fontSize + 'px Arial'; // font can be changed here
-  wrapText (ctx, text, 5, 40, 148, 36)
+  wrapText (ctx, name, 5, 40, 148, 36)
 
   thumbnail = new Image();
   thumbnail.src = canvas.toDataURL('image/peg', 1);
-  populateThumbnail(thumbnail);
+  populateThumbnail(thumbnail, thumbnailSpace, hiddenField);
 
 }
 

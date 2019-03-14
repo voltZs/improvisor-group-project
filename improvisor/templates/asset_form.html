@@ -14,7 +14,7 @@
         <form method='POST' action="" enctype="multipart/form-data" class="whiteContainer" id="form1">
             <div class="inputSection">
                 <div class="labelDiv">Asset Name:</div>
-                {{render_field(form.assetname, autocomplete="assetname", placeholder="Example Name", class="bubbleButton growText", minlength="2", maxlength="50", required="true", id="assetName")}}
+                {{render_field(form.assetname, autocomplete="assetname", placeholder="Example Name", class="bubbleButton growText", minlength="2", maxlength="50", required="true", id="assetName1")}}
             </div>
             <br />
             <div class="inputSection">
@@ -24,7 +24,7 @@
             {{render_field(form.assettype)}}
             <div id="fileUploadFields1">
                 <div class="fileInputDiv">
-                    {{form.assetResource(class="fileInputHidden", id="fileUploadHidden1", required="true", onchange="createThumbnail()")}}
+                    {{form.assetResource(class="fileInputHidden", id="fileUploadHidden1", required="true")}}
                     <div id="fileUploadVisible1">
                         <div class="fileInputVisible bubbleButton bubbleButtonDark">
                             Upload File
@@ -52,20 +52,21 @@
 
             <!-- hidden input for sending thumbnail's base64 to server -->
             <input type="submit" class="hiddenSubmit">
-            {{form.assetAutomaticThumbnail(id="thumbHidden")}}
+            {{form.assetAutomaticThumbnail(id="thumbHidden1")}}
             <br />
-            <input type="checkbox" id="thumbnailNameCheckbox"> Use name as thumbnail <br>
+            <input type="checkbox" id="thumbnailNameCheckbox1"> Use name as thumbnail <br>
             {{ form.hidden_tag() }}
+            <!-- buttons for selecting page of pdf -->
+            <div class="midScreen">
+              <button class="bubbleButton bubbleButtonDark rowsButton" id="prevButton1">Previous</button>
+              <button class="bubbleButton bubbleButtonDark rowsButton" id="nextButton1">Next</button>
+            </div>
+            <div id="thumbnailSpace1">
+              <!-- container for thumbnail -->
+            </div>
         </form>
 
-        <!-- buttons for selecting page of pdf -->
-        <div class="buttonMiddle">
-          <button class="bubbleButton bubbleButtonDark hidden" id="prevButton">Previous</button>
-          <button class="bubbleButton bubbleButtonDark ml-2 hidden" id="nextButton">Next</button>
-        </div>
-        <div id="thumbnailSpace">
-          <!-- container for thumbnail -->
-        </div>
+
     </div>
     <div class="formFooter">
         <div class="bubbleButton bubbleButtonDark rowsButton" id="addAssetBtn">
