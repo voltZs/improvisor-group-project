@@ -235,6 +235,10 @@ function populateThumbnail(thumbnail){
 
 
 //######################### PDF ##############################
+
+// CREDIT TO USEFUL ANGLE
+// source : http://usefulangle.com/post/20/pdfjs-tutorial-1-preview-pdf-during-upload-wih-next-prev-buttons
+
 //######################
 //#  all orange var    #
 //######################
