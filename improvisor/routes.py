@@ -392,38 +392,66 @@ def asset_delete(id=None):
         return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
     return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
-@app.route('/assets/<id>/update', methods=['POST'])
+@app.route('/assets/<id>/update', methods=['GET', 'POST'])
 @login_required
 def asset_update(id=None):
-    #known issue: tags can be added multiple times
     if id is not None:
-        form = FormUpdateAsset()
+        form = FormUpdateAsset(request.form)
         asset = AssetModel.find_by_assetId(id)
-        print(asset.tags)
-        if form.validate():
-            print(f"valid form {form.tagname.data} {form.operation.data}")
-            tag = TagModel.add_tag(form.tagname.data)
-            if tag and form.operation.data == "delete":
-                print("delete operation")
-                if tag in asset.tags:
-                    asset.tags.remove(tag)
-                    asset.save_to_db()
-                else:
-                    flash(f"asset {asset.assetname} does not have that tag (1)", "danger") #when the user has this tag on their account but the asset does not contain it
-                    return render_template("asset_page.html", form = form, asset= asset)
-            elif form.operation.data == "add":
-                print("add operation")
-                if tag not in asset.tags:
-                    asset.tags.append(tag)
-                    asset.save_to_db()
-                else:
-                    flash("Asset already has the tag '" + tag.tagname  +"'", "warning")
-                return render_template("asset_page.html", form = form, asset= asset)
-            else:
-                flash(f"asset {asset.assetname} does not have that tag (2)", "danger") #when the tag selected for deletion does not exist on the user's account or no operation radio button was selected
-                return render_template("asset_page.html", form = form, asset= asset)
-        return render_template("asset_page.html", form = form, asset= asset)
-    return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
+
+        if form.validate() == False:
+            print(form.errors)
+
+        tag_array = form.tagArrayString.data
+        tag_array = tag_array.split(',')
+        existing_tags =[item.tagname for item in asset.tags]
+        for tag in tag_array:
+            if not tag in existing_tags: # if the tag does not exist in the asset add it
+                new_tag = TagModel.add_tag(tag)
+                asset.tags.append(new_tag);
+                asset.save_to_db()
+                print("added tag " + tag)
+            # if tag already exists in the asset, do nothing
+
+        for existing_tag in existing_tags:
+            if not existing_tag in tag_array: #if existing tag is not in the new tag_array, delete it
+                tag_to_delete = TagModel.add_tag(existing_tag)
+                asset.tags.remove(tag_to_delete)
+                asset.save_to_db()
+                print("deleted tag " + existing_tag)
+            #if existing tag is present in the new tag_array keep it
+
+    return redirect(url_for('asset', id=id));
+
+    #known issue: tags can be added multiple times
+    # if id is not None:
+    #     form = FormUpdateAsset()
+    #     asset = AssetModel.find_by_assetId(id)
+    #     print(asset.tags)
+    #     if form.validate():
+    #         print(f"valid form {form.tagname.data} {form.operation.data}")
+    #         tag = TagModel.add_tag(form.tagname.data)
+    #         if tag and form.operation.data == "delete":
+    #             print("delete operation")
+    #             if tag in asset.tags:
+    #                 asset.tags.remove(tag)
+    #                 asset.save_to_db()
+    #             else:
+    #                 flash(f"asset {asset.assetname} does not have that tag (1)", "danger") #when the user has this tag on their account but the asset does not contain it
+    #                 return render_template("asset_page.html", form = form, asset= asset)
+    #         elif form.operation.data == "add":
+    #             print("add operation")
+    #             if tag not in asset.tags:
+    #                 asset.tags.append(tag)
+    #                 asset.save_to_db()
+    #             else:
+    #                 flash("Asset already has the tag '" + tag.tagname  +"'", "warning")
+    #             return render_template("asset_page.html", form = form, asset= asset)
+    #         else:
+    #             flash(f"asset {asset.assetname} does not have that tag (2)", "danger") #when the tag selected for deletion does not exist on the user's account or no operation radio button was selected
+    #             return render_template("asset_page.html", form = form, asset= asset)
+    #     return render_template("asset_page.html", form = form, asset= asset)
+    # return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
 @login_manager.user_loader
 def load_user(user_id):

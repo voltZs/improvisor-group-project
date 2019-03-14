@@ -4,7 +4,12 @@ var textInputFilter = document.getElementById("tagTextInput");
 var tagsContainer = document.getElementById("assetTagsContainter");
 var tagset = fetchTagset();
 
-$(".hidden-data").each(function(){
+var deleteButton = document.getElementById("asset-delete");
+var saveButton = document.getElementById("asset-save");
+var assetID = parseInt($("#hidden-id-data").attr("data"));
+document.getElementById("inputTagArray").hidden = true;
+
+$(".hidden-tags-data").each(function(){
     var tag =$(this).attr("data");
     addTagElement(tag);
 })
@@ -55,6 +60,33 @@ function addTagElement(newTag){
 function saveChanges(){
 
 }
+
+deleteButton.addEventListener("click", function(){
+    $.ajax({
+      type: "POST",
+      url: "/assets/" + assetID + "/delete",
+      timeout: 60000,
+      success: function (data) {
+        var retrieved = JSON.parse(data);
+        if(retrieved['success'])
+            window.location.replace("/assets");
+        else
+            console.log("Could not delete the asset id");
+      }
+    });
+})
+
+saveButton.addEventListener("click", function(){
+    var stringArray = "";
+    for(var i=0; i<assetTags.length; i++){
+        if(i==assetTags.length-1)
+            stringArray += assetTags[i];
+        else
+            stringArray += assetTags[i] + ",";
+    }
+    document.getElementById("inputTagArray").value = stringArray;
+    document.getElementById("formUpdate").submit();
+})
 
 
 function fetchTagset(){

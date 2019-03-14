@@ -54,11 +54,14 @@ class FormAsset(FlaskForm):
     ])
 
 class FormUpdateAsset(FlaskForm):
-    tagname = StringField('tagname', validators=[
-        validators.DataRequired(),
-        validators.Length(min=2, max=200)
-    ])
-    operation = RadioField("Delete or Add", choices =[("delete", "Delete Tag"), ("add", "Add Tag")])
+    tagArrayString = StringField('tagArrayString', validators=[
+        validators.DataRequired()
+    ]);
+    # tagname = StringField('tagname', validators=[
+    #     validators.DataRequired(),
+    #     validators.Length(min=2, max=200)
+    # ])
+    # operation = RadioField("Delete or Add", choices =[("delete", "Delete Tag"), ("add", "Add Tag")])
 
 
 class FormLogin(FlaskForm):
