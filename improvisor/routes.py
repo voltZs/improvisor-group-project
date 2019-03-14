@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from db import db
 import os, json, copy, bcrypt
+import base64
 from os.path import join
 from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin, FormProfilePicture, FormUpdateAsset
 from improvisor.models.tag_model import TagModel
@@ -149,7 +150,7 @@ def addAsset():
                 asset.tags.append(tag_obj)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
-            upload(asset, form.assetResource.data, form.assetThumbnail.data)
+            upload(asset, form.assetResource.data, form.assetAutomaticThumbnail.data, form.assetThumbnail.data)
         except Exception as e:
             print(e)
             flash("Error uploading file", "danger")
@@ -166,7 +167,7 @@ def addAsset():
     return render_template("asset_form.html", form=form)
 
 
-def upload(asset, assetResource, assetThumbnail = None ):
+def upload(asset, assetResource, thumbBase64, assetThumbnail = None ):
     print ("saving upload")
     full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) +"/"+ asset.assetname
     relative_path = url_for('static', filename='resources/uploadedFiles/')
@@ -185,6 +186,15 @@ def upload(asset, assetResource, assetThumbnail = None ):
         save_location = full_path + "/" + assetThumbnail.filename
         assetThumbnail.save(save_location)
         asset.thumbnailLocation = relative_path + "/" + assetThumbnail.filename
+    elif thumbBase64:
+        print("In thumbase64")
+        save_location = full_path + "/Thumb" + assetResource.filename
+        #removes the description from the string
+        thumbBase64 = thumbBase64.replace("data:image/png;base64,", '')
+        image = base64.b64decode(thumbBase64 + "==")
+        with open(save_location, 'wb') as f:
+            f.write(image)
+        asset.thumbnailLocation = relative_path + "/Thumb" + assetResource.filename
 
 
 
