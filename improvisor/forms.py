@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import StringField, IntegerField, validators, PasswordField, RadioField
+from wtforms import StringField, IntegerField, HiddenField, validators, PasswordField, RadioField
 
 
 class FormTag(FlaskForm):
@@ -51,6 +51,10 @@ class FormAsset(FlaskForm):
     assetThumbnail = FileField("UPLOAD ASSET THUMBNAIL:", validators=[
         validators.Optional(True),
         FileAllowed(['jpg', 'png'])
+    ])
+
+    assetAutomaticThumbnail = HiddenField("This field should be hidden", validators=[
+        validators.Optional(True)
     ])
 
 class FormUpdateAsset(FlaskForm):
