@@ -217,10 +217,10 @@ def fetch_asset():
     asset = {}
     if id is not None:
         asset = AssetModel.find_by_assetId(id).json()
-        asset.pop("date-created", None)
-        asset.pop("dateAdded", None)
+        # asset.pop("date-created", None)
+        # asset.pop("dateAdded", None)
         # date time objects are being removed because they're not JSON serializable..
-        return json.dumps(asset)
+        return dumps(asset, default = json_serial)
     return None
 
 @app.route('/new_session', methods=['GET'])
@@ -374,8 +374,7 @@ def assets_select():
             assets_match_count.append(asset)
         sorted_assets = sorted(assets_match_count, key=itemgetter('tag_match_count'), reverse=True)
     sorted_assets = sorted_assets[0:limit]
-    [asset.pop('date-created', None) for asset in sorted_assets]
-    return json.dumps(sorted_assets)
+    return dumps(sorted_assets, default=json_serial)
 
 
 #anything that has /asset/... needs to be before /asset/<id>
@@ -589,7 +588,7 @@ def compare_phrases():
 
     # MANAGE ADDING asset_selection
     for asset in assets:
-        asset.pop('date-created', None)
+        # asset.pop('date-created', None)
         print(asset)
         ###### FOR ALL -> FREQUENT
         mentioned_all = mentioned_tags['all'].keys()
