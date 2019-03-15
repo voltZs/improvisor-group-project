@@ -290,13 +290,14 @@ def session_page(id=None):
         session = SessionModel.find_by_sessionNumber(id)
         custom_session = copy.deepcopy(session)
         if session != None:
-            dateList =[]
+            dateList = []
             for asset in session.assets:
-                print(asset)
-                for dateObj in asset.get_dates_for_session(1):
-                    print(dateObj)
-                    dateList.append((dateObj.dateAdded, asset.assetname))
-            dateList.sort()
+                print(asset.assetname)
+                for dateObj in asset.get_dates_for_session(id):
+                    custom_asset = copy.deepcopy(asset)
+                    setattr(custom_asset, 'dateAdded', dateObj.dateAdded)
+                    dateList.append((custom_asset))
+            #dateList.sort() #this is not how you sort a object list by date
             print(dateList)
             custom_session.assets = dateList
             return render_template('session.html', session=custom_session)
