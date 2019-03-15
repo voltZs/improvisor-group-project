@@ -50,6 +50,7 @@
 
             <a href="/assets/{{asset.id}}">
                 <div class="assetpool-asset" id="{{asset.id}}">
+                    <div>
                         {% if asset.thumbnailLocation != None %}
                         <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
                         {% else %}
@@ -59,7 +60,8 @@
                                 Placeholder
                             </div>
                         {% endif %}
-                        <p class="blackText boldText labelText">{{ asset.assetname }}</p>
+                        <div class="blackText boldText labelText">{{ asset.assetname }}</div>
+                    </div>
                 </div>
             </a>
 
