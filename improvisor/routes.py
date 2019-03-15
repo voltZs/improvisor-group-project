@@ -345,7 +345,7 @@ def assets_select():
     # filtering
     unfiltered = [asset.json() for asset in UserModel.find_by_id(current_user.get_id()).assets.all()]
     filtered = []
-    if not (filter_tags is None or filter_tags == []):
+    if not (filter_tags == None or len(filter_tags) == 0):
         for asset in unfiltered:
             for filter_tag in filter_tags:
                 if filter_tag in asset['tags']:
@@ -353,6 +353,7 @@ def assets_select():
                     # move on to next asset
                     break
     else:
+        print("here")
         filtered = unfiltered
 
     sorted_assets = []
@@ -360,25 +361,19 @@ def assets_select():
     # sorting
     if sorting.lower() == "recent":
         sorted_assets = sorted(filtered, key=itemgetter('date-created'), reverse=True)
-        sorted_assets = sorted_assets[0:limit]
     elif sorting.lower() == "old":
         sorted_assets = sorted(filtered, key=itemgetter('date-created'), reverse=False)
-        sorted_assets = sorted_assets[0:limit]
     elif sorting.lower() == "relevant":
         assets_match_count =[]
-        match_count = 0
         for asset in filtered:
-            if match_count < limit:
-                asset['tag_match_count']= 0
-                if not (filter_tags is None or filter_tags == []):
-                    for filter_tag in filter_tags:
-                        if filter_tag in asset['tags']:
-                            asset['tag_match_count'] += 1
-                    assets_match_count.append(asset)
-                    match_count += 1
-            else:
-                break
+            asset['tag_match_count']= 0
+            if not (filter_tags is None or len(filter_tags) == 0):
+                for filter_tag in filter_tags:
+                    if filter_tag in asset['tags']:
+                        asset['tag_match_count'] += 1
+            assets_match_count.append(asset)
         sorted_assets = sorted(assets_match_count, key=itemgetter('tag_match_count'), reverse=True)
+    sorted_assets = sorted_assets[0:limit]
     [asset.pop('date-created', None) for asset in sorted_assets]
     return json.dumps(sorted_assets)
 

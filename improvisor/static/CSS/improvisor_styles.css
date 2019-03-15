@@ -537,6 +537,9 @@ input[type=checkbox]:checked{
 .thumbnailSpace{
     margin: 20px 0 10px 0;
 }
+.thumbnailSpace:hover{
+    cursor: pointer;
+}
 
 /* ===================== */
 

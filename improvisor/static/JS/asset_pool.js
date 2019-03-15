@@ -162,6 +162,8 @@ function getTagFromInput(){
         addTagElement(newTag);
     }
     textInputFilter.value = "";
+    sorting = "relevant";
+    checkSorting();
     getAssets(filterTags, sorting, limit);
 }
 
