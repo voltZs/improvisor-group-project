@@ -17,11 +17,11 @@ class DateModel(db.Model):
     def json(self):
         return {"session_id":self.session_id, "asset_id" : self.asset_id, "dateAdded" : self.dateAdded.__str__(), "tab" : self.tab}
 
-    def __init__(self, asset_id, session_id, user_id, tab, dateAdded = datetime.now()):
+    def __init__(self, asset_id, session_id, user_id, tab):
         self.asset_id = asset_id
         self.session_id = session_id
         self.user_id =  user_id
-        self.dateAdded = dateAdded
+        self.dateAdded = datetime.now()
         self.tab = tab
 
     #@classmethod
