@@ -26,9 +26,9 @@ from json import dumps
 @app.context_processor
 def inject_active_session():
     if current_user.is_authenticated:
-        active = current_user.activeSession
-        if (len(active) > 0):
-            return dict(active=active[0])
+        active = SessionModel.find_active_session()
+        if active:
+            return dict(active=active)
         else:
             return dict(active=None)
     else:
@@ -228,8 +228,8 @@ def fetch_asset():
 def new_session():
     # Check if the active session has any assets in it
     # If it has no assets then don't create a new session
-    session = current_user.activeSession
-    if len(session) ==0  or len(session[0].assets) > 0:
+    session = SessionModel.find_active_session()
+    if session == None or len(session.assets) > 0:
         new_session = SessionModel()
         new_session.save_to_db()
         return render_template('enter_session.html', mode="new")
@@ -240,8 +240,8 @@ def new_session():
 @login_required
 def continue_session():
     # Make sure a session is already active. If not then create a new one
-    session = current_user.activeSession
-    if len(session) == 0:
+    session = SessionModel.find_active_session()
+    if session == None:
         flash("No active session. A new session was created", "warning")
         return redirect('/new_session')
     return render_template('enter_session.html', mode="continue")
@@ -264,7 +264,7 @@ def user_settings_view():
 @app.route('/sessions', methods=['GET'])
 @login_required
 def previous_sessions_view():
-    sessions = current_user.sessions
+    sessions = SessionModel.find_all_sessions()
     return render_template('previous_sessions.html', sessions=sessions)
 
 @app.route("/api/test")
@@ -286,7 +286,9 @@ def test2():
 @login_required
 def session_page(id=None):
     if id != None:
+        
         session = SessionModel.find_by_sessionNumber(id)
+        custom_session = copy.deepcopy(session)
         if session != None:
             dateList =[]
             for asset in session.assets:
@@ -296,7 +298,8 @@ def session_page(id=None):
                     dateList.append((dateObj.dateAdded, asset.assetname))
             dateList.sort()
             print(dateList)
-            return render_template('session.html', session=dateList)
+            custom_session.assets = dateList
+            return render_template('session.html', session=custom_session)
     return redirect('/sessions')
 
 

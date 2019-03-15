@@ -7,11 +7,11 @@
     <a href="/assets">
         <i class="fas fa-arrow-left darkText"></i>
     </a>
-    {{ session.id }}
+    {{ session.sessionNumber }}
 </h2>
 <div class="assetpool-list">
     <div class="assetpool-asset">
-        Session {{session.id}}
+        {{session.sessionName}}
         <br>
         Assets Added: 
         {% if session.assets|length > 0 %}
