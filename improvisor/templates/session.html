@@ -22,11 +22,6 @@
                 {% endfor %}
             </div>
         </div>
-        <ul>
-            {% for date in session.dates %}
-            <li>{{date.asset.assetname}}</li>
-            {% endfor %}
-        </ul>
     {% else %}
         None
     {% endif %}

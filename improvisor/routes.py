@@ -265,7 +265,7 @@ def controller_view():
 @app.route('/api/test1')
 def test1():
     #With a database that contained one session and 2 assets I used this test two add the 1 of the assets twice and the other once to the session
-    session = current_user.activeSession[0]
+    session = current_user.activeSession
     asset = AssetModel.find_by_assetId(1)
     asset2 = AssetModel.find_by_assetId(2)
     print(session)
@@ -281,7 +281,7 @@ def fetch_active_session_assets():
     if session:
         dates = get_full_session(session)
         # Need to return the full list of the assets in the session
-        return jsonify({"assets" : [date.asset.json() for date in dates]})
+        return jsonify({"assets" : [date.json() for date in dates]})
     else:
         return dumps([])
 
