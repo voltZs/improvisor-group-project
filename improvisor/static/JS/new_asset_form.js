@@ -363,7 +363,8 @@ function thumbnailFromAssetName(name, thumbnailSpace, hiddenField){
   canvas.width = 150;
   canvas.height = 150;
   var ctx = canvas.getContext('2d');
-
+  ctx.fillStyle = "white";
+  ctx.fillRect(0,0, canvas.width, canvas.height);
   var fontSize = 25;
   var width = 150; //width of the canvas
   ctx.fillStyle = 'black';
