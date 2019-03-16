@@ -256,7 +256,23 @@ def presenter_view():
 @app.route('/controller', methods=['GET'])
 @login_required
 def controller_view():
-    return render_template('controller.html')
+    session = SessionModel.find_active_session()
+    if session:
+        return render_template('controller.html')
+    else:
+        return redirect('/new_session')
+
+
+@app.route('/fetch_active_session_assets', methods=['GET'])
+@login_required
+def fetch_active_session_assets():
+    session = SessionModel.find_active_session()
+    if session:
+        session = get_full_session(session)
+        # Need to return the full list of the assets in the session
+        return dumps([])
+    else:
+        return dumps([])
 
 @app.route('/user_settings', methods=['GET', 'POST'])
 @login_required
@@ -289,20 +305,26 @@ def test2():
 def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionNumber(id)
-        # Make a deep copy of the session to ensure the session is not altered
-        custom_session = copy.deepcopy(session)
-        if session != None:
-            dateList = []
-            for asset in session.assets:
-                for dateObj in asset.get_dates_for_session(id):
-                    custom_asset = copy.deepcopy(asset)
-                    setattr(custom_asset, 'dateAdded', dateObj.dateAdded)
-                    dateList.append((custom_asset))
-            dateList.sort(key=lambda x : x.dateAdded)
-            custom_session.assets = dateList
-            return render_template('session.html', session=custom_session)
+        session = get_full_session(session)
+        return render_template('session.html', session=session)
     return redirect('/sessions')
 
+
+# Returns a session with ALL occurences of the assets in it, including duplicates
+def get_full_session(session):
+    # Make a deep copy of the session to ensure the session is not altered
+    custom_session = copy.deepcopy(session)  
+    if session != None:
+        dateList = []
+        for asset in session.assets:
+            id = custom_session.sessionNumber
+            for dateObj in asset.get_dates_for_session(id):
+                custom_asset = copy.deepcopy(asset)
+                setattr(custom_asset, 'dateAdded', dateObj.dateAdded)
+                dateList.append((custom_asset))
+        dateList.sort(key=lambda x : x.dateAdded)
+        custom_session.assets = dateList
+    return custom_session
 
 @app.route('/sessions/<id>/delete', methods=['POST'])
 @login_required

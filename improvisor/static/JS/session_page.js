@@ -1,6 +1,5 @@
 var deleteButton = document.getElementById("session-delete");
 var sessionID = parseInt($(".session").attr("id"));
-console.log(sessionID);
 deleteButton.addEventListener("click", function(){
     if(window.confirm("Are you sure you want to delete this session?"))
     {
