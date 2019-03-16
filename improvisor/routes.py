@@ -262,15 +262,26 @@ def controller_view():
     else:
         return redirect('/new_session')
 
+@app.route('/api/test1')
+def test1():
+    #With a database that contained one session and 2 assets I used this test two add the 1 of the assets twice and the other once to the session
+    session = current_user.activeSession[0]
+    asset = AssetModel.find_by_assetId(1)
+    asset2 = AssetModel.find_by_assetId(2)
+    print(session)
+    session.add_asset(asset, 1)
+    session.add_asset(asset2, 1)
+    session.add_asset(asset, 1)
+    return dumps([])
 
 @app.route('/fetch_active_session_assets', methods=['GET'])
 @login_required
 def fetch_active_session_assets():
     session = SessionModel.find_active_session()
     if session:
-        session = get_full_session(session)
+        dates = get_full_session(session)
         # Need to return the full list of the assets in the session
-        return dumps([])
+        return jsonify({"assets" : [date.asset.json() for date in dates]})
     else:
         return dumps([])
 
@@ -285,46 +296,28 @@ def previous_sessions_view():
     sessions = SessionModel.find_all_sessions()
     return render_template('previous_sessions.html', sessions=sessions)
 
-@app.route("/api/test")
-def test():
-    asset = AssetModel.find_by_assetId(1)
-    session = SessionModel.find_by_sessionId(1)
-    session.add_asset(asset, 1)
-    session.add_asset(asset, 2)
-    return jsonify(session.json())
-
-@app.route("/api/test2")
-def test2():
-    asset = AssetModel.find_by_assetId(1)
-    session = SessionModel.find_by_sessionId(1)
-    session.add_asset(asset, 1)
-    return jsonify(session.json())
 
 @app.route('/sessions/<id>', methods=['GET'])
 @login_required
 def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionNumber(id)
-        session = get_full_session(session)
-        return render_template('session.html', session=session)
+        custom_session = copy.deepcopy(session)
+        dateList = get_full_session(session)
+        setattr(custom_session, "dates", dateList)
+        return render_template('session.html', session=custom_session)
     return redirect('/sessions')
 
 
 # Returns a session with ALL occurences of the assets in it, including duplicates
 def get_full_session(session):
     # Make a deep copy of the session to ensure the session is not altered
-    custom_session = copy.deepcopy(session)  
-    if session != None:
-        dateList = []
-        for asset in session.assets:
-            id = custom_session.sessionNumber
-            for dateObj in asset.get_dates_for_session(id):
-                custom_asset = copy.deepcopy(asset)
-                setattr(custom_asset, 'dateAdded', dateObj.dateAdded)
-                dateList.append((custom_asset))
-        dateList.sort(key=lambda x : x.dateAdded)
-        custom_session.assets = dateList
-    return custom_session
+    dateList = []
+    for asset in session.assets:
+        for dateObj in asset.get_dates_for_session(session.sessionNumber):
+            dateList.append(dateObj)
+    dateList.sort(key=lambda x : x.dateAdded)
+    return dateList
 
 @app.route('/sessions/<id>/delete', methods=['POST'])
 @login_required

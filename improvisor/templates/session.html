@@ -17,8 +17,8 @@
     Assets Added:
     {% if session.assets|length > 0 %}
         <ul>
-            {% for asset in session.assets %}
-            <li>{{asset.assetname}}</li>
+            {% for date in session.dates %}
+            <li>{{date.asset.assetname}}</li>
             {% endfor %}
         </ul>
     {% else %}
