@@ -17,20 +17,13 @@
             </div>
         </div>
     </div>
-    <div class="assetpool-list whiteContainer" id="assetPool">
+    <div class="sessions whiteContainer" id="assetPool">
         {% for session in sessions %}
-
             <a href="/sessions/{{session.sessionNumber}}">
-                <div class="assetpool-asset">
-                    <div class="assetThumbnail darkText">
-                        <br>
-                        {{session.sessionNumber}}<br>
-                        {% if session.active == 1 %}
-                            <!-- ACTIVE -->
-                        {% endif %}
-                        
-                    </div>
-                    <p class="blackText boldText labelText">DD/MM/YYYY</p>
+                <div class="session darkText">
+                    <p class="darkText text20 boldText">{{session.sessionName}}</p>
+                    <p class="blackText boldText labelText">ID: {{session.sessionNumber}}</p>
+                    <p class="blackText boldText labelText">{{session.dateCreated.strftime('%d-%m-%Y')}}</p>                     
                 </div>
             </a>
 
