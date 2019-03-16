@@ -359,9 +359,12 @@ function storageAvailable(type) {
 
 function flushRecentTags() {
   storedTags = JSON.parse(localStorage.getItem('mentionedTags'));
-  console.log(storedTags);
-  storedTags['recent'] = {};
-  localStorage.setItem('mentionedTags', JSON.stringify(storedTags));
+  if (storedTags != null)
+  {
+    console.log(storedTags);
+    storedTags['recent'] = {};
+    localStorage.setItem('mentionedTags', JSON.stringify(storedTags));
+  }
 }
 
 function fetchTagset() {
