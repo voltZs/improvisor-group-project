@@ -416,11 +416,12 @@ def asset_update(id=None):
         tag_array = tag_array.split(',')
         existing_tags =[item.tagname for item in asset.tags]
         for tag in tag_array:
-            if not tag in existing_tags: # if the tag does not exist in the asset add it
-                new_tag = TagModel.add_tag(tag)
-                asset.tags.append(new_tag);
-                asset.save_to_db()
-                print("added tag " + tag)
+            if len(tag) > 0:
+                if not tag in existing_tags: # if the tag does not exist in the asset add it
+                    new_tag = TagModel.add_tag(tag)
+                    asset.tags.append(new_tag);
+                    asset.save_to_db()
+                    print("added tag " + tag)
             # if tag already exists in the asset, do nothing
 
         for existing_tag in existing_tags:
