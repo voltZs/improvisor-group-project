@@ -288,13 +288,12 @@ def test2():
 @login_required
 def session_page(id=None):
     if id != None:
-        
         session = SessionModel.find_by_sessionNumber(id)
+        # Make a deep copy of the session to ensure the session is not altered
         custom_session = copy.deepcopy(session)
         if session != None:
             dateList = []
             for asset in session.assets:
-                print(asset.assetname)
                 for dateObj in asset.get_dates_for_session(id):
                     custom_asset = copy.deepcopy(asset)
                     setattr(custom_asset, 'dateAdded', dateObj.dateAdded)
@@ -303,6 +302,17 @@ def session_page(id=None):
             custom_session.assets = dateList
             return render_template('session.html', session=custom_session)
     return redirect('/sessions')
+
+
+@app.route('/sessions/<id>/delete', methods=['POST'])
+@login_required
+def session_delete(id=None):
+    if id is not None:
+        # Delete the session with number <id> from db
+        session = SessionModel.find_by_sessionNumber(id)
+        session.remove_from_db()
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
 
 @app.route('/assets', methods=['GET', 'POST'])
