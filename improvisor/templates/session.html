@@ -3,27 +3,29 @@
 {% set page_title = 'Session' %}
 
 {% block page_content %}
+<!--
 <h2 class="darkText">
     <a href="/assets">
         <i class="fas fa-arrow-left darkText"></i>
     </a>
-    {{ session.id }}
+    {{ session.sessionNumber }}
 </h2>
-<div class="assetpool-list">
-    <div class="assetpool-asset">
-        Session {{session.id}}
-        <br>
-        Assets Added: 
-        {% if session.assets|length > 0 %}
-            <ul>
-                {% for asset in session.assets %}
-                    <li>{{asset.assetname}}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            None
-        {% endif %}
-    </div>
+-->
+<div id="{{session.sessionNumber}}" class="session">
+    <h2 class="darkText">{{session.sessionName}}</h2>
+    <br>
+    Assets Added:
+    {% if session.assets|length > 0 %}
+        <ul>
+            {% for asset in session.assets %}
+            <li>{{asset.assetname}}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        None
+    {% endif %}
+
+    <div id="session-delete" class="bubbleButton darkText rowsButton bubbleButtonRedHover rightSpan">Delete Session</div>
 </div>
 
 <br />
@@ -33,7 +35,5 @@
 {% endblock page_content %}
 
 {% block end_body %}
-<script>
-    document.getElementById('assetPoolOption').classList.add('selected');
-</script>
+<script type="text/javascript" src="{{url_for('static', filename='JS/session_page.js')}}"></script>
 {% endblock end_body %}

@@ -26,9 +26,9 @@ from json import dumps
 @app.context_processor
 def inject_active_session():
     if current_user.is_authenticated:
-        active = current_user.activeSession
-        if (len(active) > 0):
-            return dict(active=active[0])
+        active = SessionModel.find_active_session()
+        if active:
+            return dict(active=active)
         else:
             return dict(active=None)
     else:
@@ -125,12 +125,13 @@ def addAsset():
                 for tag in tags:
                     # Remove extra white space
                     tag = " ".join(tag.split())
-                    tag_obj = TagModel.find_by_tagName(tag)
-                    print(f'tag found {tag_obj.json()}')
-                    if tag_obj is None: #then tag currently does not exist and needs to be added
-                        tag_obj = TagModel(tag, current_user.get_id())
-                        tag_obj.save_to_db()
-                        asset.tags.append(tag_obj)
+                    if len(tag) > 0:
+                        tag_obj = TagModel.find_by_tagName(tag)
+                        print(f'tag found {tag_obj.json()}')
+                        if tag_obj is None: #then tag currently does not exist and needs to be added
+                            tag_obj = TagModel(tag, current_user.get_id())
+                            tag_obj.save_to_db()
+                            asset.tags.append(tag_obj)
 
             else:
                 print("asset already exists") #if no tag is entered then there is nothing to update
@@ -143,11 +144,12 @@ def addAsset():
             for tag in tags:
                 # Remove extra white space
                 tag = " ".join(tag.split())
-                tag_obj = TagModel.find_by_tagName(tag)
-                if tag_obj is None: #then tag currently does not exist and needs to be added
-                    tag_obj = TagModel(tag, current_user.get_id())
-                    tag_obj.save_to_db()
-                asset.tags.append(tag_obj)
+                if len(tag) > 0:
+                    tag_obj = TagModel.find_by_tagName(tag)
+                    if tag_obj is None: #then tag currently does not exist and needs to be added
+                        tag_obj = TagModel(tag, current_user.get_id())
+                        tag_obj.save_to_db()
+                    asset.tags.append(tag_obj)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
             upload(asset, form.assetResource.data, form.assetAutomaticThumbnail.data, form.assetThumbnail.data)
@@ -228,8 +230,8 @@ def fetch_asset():
 def new_session():
     # Check if the active session has any assets in it
     # If it has no assets then don't create a new session
-    session = current_user.activeSession
-    if len(session) ==0  or len(session[0].assets) > 0:
+    session = SessionModel.find_active_session()
+    if session == None or len(session.assets) > 0:
         new_session = SessionModel()
         new_session.save_to_db()
         return render_template('enter_session.html', mode="new")
@@ -240,8 +242,8 @@ def new_session():
 @login_required
 def continue_session():
     # Make sure a session is already active. If not then create a new one
-    session = current_user.activeSession
-    if len(session) == 0:
+    session = SessionModel.find_active_session()
+    if session == None:
         flash("No active session. A new session was created", "warning")
         return redirect('/new_session')
     return render_template('enter_session.html', mode="continue")
@@ -254,7 +256,23 @@ def presenter_view():
 @app.route('/controller', methods=['GET'])
 @login_required
 def controller_view():
-    return render_template('controller.html')
+    session = SessionModel.find_active_session()
+    if session:
+        return render_template('controller.html')
+    else:
+        return redirect('/new_session')
+
+
+@app.route('/fetch_active_session_assets', methods=['GET'])
+@login_required
+def fetch_active_session_assets():
+    session = SessionModel.find_active_session()
+    if session:
+        session = get_full_session(session)
+        # Need to return the full list of the assets in the session
+        return dumps([])
+    else:
+        return dumps([])
 
 @app.route('/user_settings', methods=['GET', 'POST'])
 @login_required
@@ -264,7 +282,7 @@ def user_settings_view():
 @app.route('/sessions', methods=['GET'])
 @login_required
 def previous_sessions_view():
-    sessions = current_user.sessions
+    sessions = SessionModel.find_all_sessions()
     return render_template('previous_sessions.html', sessions=sessions)
 
 @app.route("/api/test")
@@ -272,7 +290,7 @@ def test():
     asset = AssetModel.find_by_assetId(1)
     session = SessionModel.find_by_sessionId(1)
     session.add_asset(asset, 1)
-    session.add_asset(asset, 1)
+    session.add_asset(asset, 2)
     return jsonify(session.json())
 
 @app.route("/api/test2")
@@ -287,17 +305,36 @@ def test2():
 def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionNumber(id)
-        if session != None:
-            dateList =[]
-            for asset in session.assets:
-                print(asset)
-                for dateObj in asset.get_dates_for_session(1):
-                    print(dateObj)
-                    dateList.append((dateObj.dateAdded, asset.assetname))
-            dateList.sort()
-            print(dateList)
-            return render_template('session.html', session=dateList)
+        session = get_full_session(session)
+        return render_template('session.html', session=session)
     return redirect('/sessions')
+
+
+# Returns a session with ALL occurences of the assets in it, including duplicates
+def get_full_session(session):
+    # Make a deep copy of the session to ensure the session is not altered
+    custom_session = copy.deepcopy(session)  
+    if session != None:
+        dateList = []
+        for asset in session.assets:
+            id = custom_session.sessionNumber
+            for dateObj in asset.get_dates_for_session(id):
+                custom_asset = copy.deepcopy(asset)
+                setattr(custom_asset, 'dateAdded', dateObj.dateAdded)
+                dateList.append((custom_asset))
+        dateList.sort(key=lambda x : x.dateAdded)
+        custom_session.assets = dateList
+    return custom_session
+
+@app.route('/sessions/<id>/delete', methods=['POST'])
+@login_required
+def session_delete(id=None):
+    if id is not None:
+        # Delete the session with number <id> from db
+        session = SessionModel.find_by_sessionNumber(id)
+        session.remove_from_db()
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
 
 @app.route('/assets', methods=['GET', 'POST'])
@@ -411,11 +448,12 @@ def asset_update(id=None):
         tag_array = tag_array.split(',')
         existing_tags =[item.tagname for item in asset.tags]
         for tag in tag_array:
-            if not tag in existing_tags: # if the tag does not exist in the asset add it
-                new_tag = TagModel.add_tag(tag)
-                asset.tags.append(new_tag);
-                asset.save_to_db()
-                print("added tag " + tag)
+            if len(tag) > 0:
+                if not tag in existing_tags: # if the tag does not exist in the asset add it
+                    new_tag = TagModel.add_tag(tag)
+                    asset.tags.append(new_tag);
+                    asset.save_to_db()
+                    print("added tag " + tag)
             # if tag already exists in the asset, do nothing
 
         for existing_tag in existing_tags:
@@ -428,35 +466,7 @@ def asset_update(id=None):
 
     return redirect(url_for('asset', id=id));
 
-    #known issue: tags can be added multiple times
-    # if id is not None:
-    #     form = FormUpdateAsset()
-    #     asset = AssetModel.find_by_assetId(id)
-    #     print(asset.tags)
-    #     if form.validate():
-    #         print(f"valid form {form.tagname.data} {form.operation.data}")
-    #         tag = TagModel.add_tag(form.tagname.data)
-    #         if tag and form.operation.data == "delete":
-    #             print("delete operation")
-    #             if tag in asset.tags:
-    #                 asset.tags.remove(tag)
-    #                 asset.save_to_db()
-    #             else:
-    #                 flash(f"asset {asset.assetname} does not have that tag (1)", "danger") #when the user has this tag on their account but the asset does not contain it
-    #                 return render_template("asset_page.html", form = form, asset= asset)
-    #         elif form.operation.data == "add":
-    #             print("add operation")
-    #             if tag not in asset.tags:
-    #                 asset.tags.append(tag)
-    #                 asset.save_to_db()
-    #             else:
-    #                 flash("Asset already has the tag '" + tag.tagname  +"'", "warning")
-    #             return render_template("asset_page.html", form = form, asset= asset)
-    #         else:
-    #             flash(f"asset {asset.assetname} does not have that tag (2)", "danger") #when the tag selected for deletion does not exist on the user's account or no operation radio button was selected
-    #             return render_template("asset_page.html", form = form, asset= asset)
-    #     return render_template("asset_page.html", form = form, asset= asset)
-    # return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
+
 
 @login_manager.user_loader
 def load_user(user_id):

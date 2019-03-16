@@ -394,11 +394,13 @@ h3 {
     flex: 0 0 auto;
     margin-left: 5px;
     margin-right: 5px;
-    max-width: 200px;
-    max-height: 150px;
-    object-fit: cover;
+    max-width: 260px;
+    max-height: 100%;
+    object-fit: contain;
     width: auto;
+    border-radius: 0;
 }
+
 
 
 @media screen and (max-width: 700px) {
@@ -553,6 +555,7 @@ input[type=checkbox]:checked{
 
 .assetPageLeft{
     display: inline-flex;
+    margin-right: 10px;
 }
 .assetPageRight{
     margin-left: 10px;
@@ -802,24 +805,23 @@ p.error {
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: row;
     justify-content: space-around;
 }
 
 .assetpool-asset {
     margin: 5px;
-    height: auto;
     padding: 5px !important;
     text-align: center;
     border-radius: 9px;
-
+    min-height: 170px;
+    display: flex;
+    align-items: center;
 }
 
 .assetThumbnail {
-    width: 150px;
-    height: 90px;
+    max-width: 170px;
+    max-height: 130px;;
     margin: 5px;
-    border: 1px rgb(0, 0, 0, 0.1) solid;
     border-radius: 5px;
     font-size: 20px;
     font-weight: bold;
@@ -918,8 +920,7 @@ Works on mobile but doesn't currently work on desktop unless in touchscreen mode
   max-width: 100%;
   max-height: 200px;
   height: auto;
-  border-radius: 7%;
-
+  border-radius: 10px;;
 }
 
 .buttonMiddle{

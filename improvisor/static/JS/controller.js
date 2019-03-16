@@ -1,6 +1,9 @@
 var currentResults = document.getElementById("currentRow");
 var frequentResults = document.getElementById("frequentRow");
 var storageBool = storageAvailable('localStorage');
+// Get the assets from the active session
+var assets = fetch_active_session_assets();
+console.log(JSON.stringify(assets));
 //annyang.start({
 //    autoRestart: true
 //});
@@ -102,6 +105,7 @@ function stopListening() {
 }
 
 function setupPage() {
+  localStorage.clear();
   stopListening();
 
   if (!localStorage.getItem('tabs')) {
@@ -254,6 +258,27 @@ function addToCurrentTab(assetID) {
   tabs[selectedTab].push(asset);
   localStorage.setItem('tabs', JSON.stringify(tabs));
   populateActiveTab();
+}
+
+function loadAssetsFromSession()
+{
+  var tabs = JSON.parse(localStorage.getItem('tabs'));
+
+  
+
+}
+
+function fetch_active_session_assets() {
+  var tmp = null;
+  $.ajax({
+    async: false,
+    url: "/fetch_active_session_assets",
+    timeout: 60000,
+    success: function (data) {
+      tmp = JSON.parse(data);
+    }
+  });
+  return tmp;
 }
 
 function getAsset(assetID) {

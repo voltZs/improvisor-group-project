@@ -20,11 +20,11 @@
     <div class="assetpool-list whiteContainer" id="assetPool">
         {% for session in sessions %}
 
-            <a href="/sessions/{{session.id}}">
+            <a href="/sessions/{{session.sessionNumber}}">
                 <div class="assetpool-asset">
                     <div class="assetThumbnail darkText">
                         <br>
-                        {{session.id}}<br>
+                        {{session.sessionNumber}}<br>
                         {% if session.active == 1 %}
                             <!-- ACTIVE -->
                         {% endif %}

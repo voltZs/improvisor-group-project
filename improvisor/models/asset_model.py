@@ -4,6 +4,7 @@ from improvisor.models.date_model import DateModel
 from flask import session
 from datetime import datetime
 from flask_login import current_user
+from improvisor.models.session_model import SessionModel
 
 class AssetModel(db.Model):
     __tablename__ = "assets"
@@ -42,7 +43,8 @@ class AssetModel(db.Model):
         db.session.commit()
     
     def get_dates_for_session(self, session_id):
-        datesForSession = [date for date in self.sessionDates if date.session_id == session_id]
+        actual_session_id = SessionModel.find_by_sessionNumber(session_id)
+        datesForSession = [date for date in self.sessionDates if date.session_id == actual_session_id.id]
         return datesForSession
 
     def get_user_session_appearances(self):
