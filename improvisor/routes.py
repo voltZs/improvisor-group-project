@@ -125,12 +125,13 @@ def addAsset():
                 for tag in tags:
                     # Remove extra white space
                     tag = " ".join(tag.split())
-                    tag_obj = TagModel.find_by_tagName(tag)
-                    print(f'tag found {tag_obj.json()}')
-                    if tag_obj is None: #then tag currently does not exist and needs to be added
-                        tag_obj = TagModel(tag, current_user.get_id())
-                        tag_obj.save_to_db()
-                        asset.tags.append(tag_obj)
+                    if len(tag) > 0:
+                        tag_obj = TagModel.find_by_tagName(tag)
+                        print(f'tag found {tag_obj.json()}')
+                        if tag_obj is None: #then tag currently does not exist and needs to be added
+                            tag_obj = TagModel(tag, current_user.get_id())
+                            tag_obj.save_to_db()
+                            asset.tags.append(tag_obj)
 
             else:
                 print("asset already exists") #if no tag is entered then there is nothing to update
@@ -143,11 +144,12 @@ def addAsset():
             for tag in tags:
                 # Remove extra white space
                 tag = " ".join(tag.split())
-                tag_obj = TagModel.find_by_tagName(tag)
-                if tag_obj is None: #then tag currently does not exist and needs to be added
-                    tag_obj = TagModel(tag, current_user.get_id())
-                    tag_obj.save_to_db()
-                asset.tags.append(tag_obj)
+                if len(tag) > 0:
+                    tag_obj = TagModel.find_by_tagName(tag)
+                    if tag_obj is None: #then tag currently does not exist and needs to be added
+                        tag_obj = TagModel(tag, current_user.get_id())
+                        tag_obj.save_to_db()
+                    asset.tags.append(tag_obj)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
             upload(asset, form.assetResource.data, form.assetAutomaticThumbnail.data, form.assetThumbnail.data)

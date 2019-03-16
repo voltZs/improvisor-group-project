@@ -102,6 +102,7 @@ function stopListening() {
 }
 
 function setupPage() {
+  localStorage.clear();
   stopListening();
 
   if (!localStorage.getItem('tabs')) {
