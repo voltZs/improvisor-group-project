@@ -11,11 +11,17 @@
     {{ session.sessionNumber }}
 </h2>
 -->
-<div id="{{session.sessionNumber}}" class="session">
+<div id="{{session.sessionNumber}}" class="session-page">
     <h2 class="darkText">{{session.sessionName}}</h2>
-    <br>
-    Assets Added:
     {% if session.assets|length > 0 %}
+        <div class="currentBlock">
+            <h3 class="blackText">Session Assets:</h2>
+            <div class="imageRow style-2" id="currentRow">
+                {% for asset in session.assets %}
+                    <img src="{{asset.thumbnailLocation}}" data-id="{{asset.id}}" title="{{asset.assetname}}" class="assetThumbnail" style="touch-action: pan-x; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                {% endfor %}
+            </div>
+        </div>
         <ul>
             {% for date in session.dates %}
             <li>{{date.asset.assetname}}</li>
@@ -24,7 +30,7 @@
     {% else %}
         None
     {% endif %}
-
+    <button id="session-export" class="bubbleButton darkText rowsButton">Export Session</button>
     <div id="session-delete" class="bubbleButton darkText rowsButton bubbleButtonRedHover rightSpan">Delete Session</div>
 </div>
 
