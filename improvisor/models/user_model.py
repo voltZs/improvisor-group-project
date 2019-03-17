@@ -14,7 +14,7 @@ class UserModel(UserMixin, db.Model):
     profileImageLocation = db.Column(db.String(500))
     
     sessions = db.relationship("SessionModel", lazy="dynamic") 
-    activeSession = db.relationship("SessionModel", primaryjoin ="and_(UserModel.id==SessionModel.user_id, "
+    activeSession = db.relationship("SessionModel", uselist=False, primaryjoin ="and_(UserModel.id==SessionModel.user_id, "
                                                         "SessionModel.active=='1')")
     tags = db.relationship("TagModel", lazy="dynamic")
     assets = db.relationship("AssetModel", lazy = "dynamic")
