@@ -1018,6 +1018,10 @@ p.error {
     border: 1px solid #ccc;
 }
 
+.session p {
+    margin: 5px;
+}
+
 .assetThumbnail {
     max-width: 170px;
     max-height: 130px;;

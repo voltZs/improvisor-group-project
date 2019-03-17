@@ -325,7 +325,9 @@ def get_full_session(session):
 def session_delete(id=None):
     if id is not None:
         # Delete the session with number <id> from db
+        print(id)
         session = SessionModel.find_by_sessionNumber(id)
+        print(type(session))
         session.remove_from_db()
         return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
     return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
