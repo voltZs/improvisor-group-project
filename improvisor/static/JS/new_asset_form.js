@@ -424,58 +424,43 @@ function wrapText (context, text, x, y, maxWidth, lineHeight) {
 // Annyang for checking tags
 
 var listening = false;
+tagSpeechText = document.getElementById('tagSpeechOutput');
+microphoneToggle = document.getElementById("microphoneIcon");
+microphoneIcon = document.getElementById('microphoneIcon');
 if (annyang) {
 
   annyang.addCallback('result', function (phrases) {
     var text = phrases[0];
     text = text.toLowerCase();
 
-    // checking if the list is not empty before iterating through it!
-    // if (recognisedTagsUsed.length != 0) {
-    //   recognisedTagsUsed.forEach(function (item) {
-    //     text = text.replace(item, "");
-    //   });
-    // }
-    // prints the result with recognised tags removed
     console.log("Recognized text: ", text);
-    // goes through the tags and checks if they are in the text
-    // tagset.forEach(function (tag) {
-    //   if (text.toLowerCase().includes(tag)) {
-    //     // adds the new recognised tag into the recognisedTag list
-    //     recognisedTags.push(tag);
-    //     console.log(recognisedTags);
-    //     text.replace(tag, "");
-    //   }
-    // });
+    tagSpeechText.value = text;
 
-    // this will also empty what's currently in the recognised tags
-    // if (recognisedTags) {
-    //   makeAjaxRequest();
-    //   recognisedTagsUsed = recognisedTagsUsed.concat(recognisedTags);
-    //   recognisedTags = [];
-    // }
 
   });
 
   annyang.addCallback('end', function () {
-    if (recognisedTagsUsed.length != 0) {
-      recognisedTagsUsed = [];
-    }
+    // if (recognisedTagsUsed.length != 0) {
+    //   //recognisedTagsUsed = [];
+    // }
   });
   // Start listening. You can call this here, or attach this call to an event, button, etc.
 
   microphoneToggle.addEventListener('click', function () {
     if (listening) {
       stopListening();
+      console.log('listening is set to:' + listening);
     } else {
+      console.log('listening is set to:' + listening);
       startListening();
+      console.log('listening is set to:' + listening);
     }
   });
 
 }
 
 function startListening() {
-  noSleep.enable();
+  //noSleep.enable();
   annyang.start({
     autoRestart: true,
     continuous: false
@@ -484,8 +469,11 @@ function startListening() {
   recognition.interimResults = true;
   console.log("Started listening");
 
-  // microphoneIcon.classList.add("fa-microphone");
-  // microphoneIcon.classList.remove("fa-microphone-slash");
+  microphoneIcon.classList.add("fa-microphone");
+  microphoneIcon.classList.remove("fa-microphone-slash");
+  tagSpeechText.classList.remove("hidden");
+  microphoneIcon.title = "";
+  document.getElementById("microphoneIcon").title = "";
   listening = true;
 }
 
@@ -493,9 +481,15 @@ function stopListening() {
   if (listening) {
     console.log("Stopped listening");
   }
-  noSleep.disable();
+  //noSleep.disable();
   annyang.abort()
-  // microphoneIcon.classList.add("fa-microphone-slash");
-  // microphoneIcon.classList.remove("fa-microphone");
+  microphoneIcon.classList.add("fa-microphone-slash");
+  microphoneIcon.classList.remove("fa-microphone");
+  tagSpeechText.classList.add("hidden");
+  tagSpeechText.value="";
   listening = false;
 }
+
+$(function(){
+  $('[data-toggle="tooltip"]').tooltip()
+});

@@ -930,7 +930,6 @@ Works on mobile but doesn't currently work on desktop unless in touchscreen mode
   margin-bottom: 5px;
 }
 
-.tagMicrophone{
-  text: white;
-  background: blue;
+#tagSpeechOutput{
+  width: 260px;
 }
