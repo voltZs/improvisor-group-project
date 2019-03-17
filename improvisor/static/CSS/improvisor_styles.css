@@ -837,13 +837,6 @@ p.error {
     justify-content: space-around;
 }
 
-.sessions-list{
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 .assetpool-asset {
     margin: 5px;
     padding: 5px !important;
@@ -908,7 +901,7 @@ p.error {
 }
 
 .imageRow {
-    /* set 'overflow-x: scroll' to always show scrollbar */ 
+    /* set 'overflow-x: scroll' to always show scrollbar */
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -982,11 +975,10 @@ p.error {
   margin-bottom: 5px;
 }
 
-<<<<<<< HEAD
 #tagSpeechOutput{
   width: 260px;
 }
-=======
+
 .sessions-list {
     margin-top: 10px;
     display: flex;
@@ -1038,4 +1030,3 @@ p.error {
 .sessions .session:hover {
     background-color: rgba(255, 255, 255, 1);
 }
->>>>>>> 1dda2a185b0032b2a088d635fe4fa7c33e391cc2
