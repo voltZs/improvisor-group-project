@@ -15,13 +15,13 @@ class DateModel(db.Model):
     asset = db.relationship("AssetModel")
 
     def json(self):
-        return {"session_id":self.session_id, "asset_id" : self.asset_id, "dateAdded" : self.dateAdded.__str__(), "tab" : self.tab}
+        return {"session_id":self.session_id, "asset" : self.asset.json(), "asset_id" : self.asset_id, "dateAdded" : self.dateAdded.__str__(), "tab" : self.tab}
 
-    def __init__(self, asset_id, session_id, user_id, tab, dateAdded = datetime.now()):
+    def __init__(self, asset_id, session_id, user_id, tab):
         self.asset_id = asset_id
         self.session_id = session_id
         self.user_id =  user_id
-        self.dateAdded = dateAdded
+        self.dateAdded = datetime.now()
         self.tab = tab
 
     #@classmethod
@@ -30,4 +30,4 @@ class DateModel(db.Model):
     # We should be searching by session number not by session id. Also means we need to change session_id ^ up top to session_num
     @classmethod
     def find_by_sessionNum(cls, id):
-        return cls.query.filter_by(session_id=id, user_id=current_user.get_id()).first()
+        return cls.query.filter_by(session_id=id, user_id=current_user.get_id())

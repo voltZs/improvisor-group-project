@@ -1,9 +1,10 @@
 var currentResults = document.getElementById("currentRow");
 var frequentResults = document.getElementById("frequentRow");
 var storageBool = storageAvailable('localStorage');
-//annyang.start({
-//    autoRestart: true
-//});
+// Get the assets from the active session
+var assets = fetch_active_session_assets();
+assets = assets.assets;
+console.log(assets);
 var noSleep = new NoSleep();
 var socket;
 $(document).ready(function () {
@@ -72,7 +73,6 @@ if (annyang) {
       startListening();
     }
   });
-
 }
 
 function startListening() {
@@ -102,6 +102,8 @@ function stopListening() {
 }
 
 function setupPage() {
+  localStorage.clear();
+  loadAssetsFromSession();
   stopListening();
 
   if (!localStorage.getItem('tabs')) {
@@ -127,7 +129,7 @@ function setupPage() {
 function makeAjaxRequest() {
   //only works if local storage is a available in the browser
   if (storageBool) {
-    console.log("localStorage available");
+    //console.log("localStorage available");
 
     var mentionedTags = localStorage.getItem('mentionedTags');
     if (mentionedTags) {
@@ -141,7 +143,7 @@ function makeAjaxRequest() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          console.log(retrieved);
+          //console.log(retrieved);
           updateResults(retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));
@@ -159,7 +161,7 @@ function makeAjaxRequest() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          console.log(retrieved);
+          //console.log(retrieved);
           updateResults(retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));
@@ -256,6 +258,54 @@ function addToCurrentTab(assetID) {
   populateActiveTab();
 }
 
+function loadAssetsFromSession()
+{
+<<<<<<< HEAD
+  var tabs = JSON.parse(localStorage.getItem('tabs'));
+
+
+
+=======
+  var maxTab = 0;
+  
+  var tabs = {}
+  // Find the maximum tab
+  for (var i = 0; i < assets.length; i++)
+  {
+    if (maxTab < assets[i].tab)
+    {
+      maxTab = assets[i].tab;
+    }
+  }
+  // Initialise all the tabs
+  for (var i = 1; i <= maxTab; i++)
+  {
+    tabs[i] = [];
+  }
+  // Add the asset to the relevant tab
+  for (var i = 0; i < assets.length; i++)
+  {
+    var currentTab = assets[i].tab;
+    tabs[currentTab].push(assets[i].asset);
+  }
+  localStorage.setItem('tabs', JSON.stringify(tabs));
+  populateActiveTab();
+>>>>>>> 1dda2a185b0032b2a088d635fe4fa7c33e391cc2
+}
+
+function fetch_active_session_assets() {
+  var tmp = null;
+  $.ajax({
+    async: false,
+    url: "/fetch_active_session_assets",
+    timeout: 60000,
+    success: function (data) {
+      tmp = data;
+    }
+  });
+  return tmp;
+}
+
 function getAsset(assetID) {
   var tmp = null;
   $.ajax({
@@ -316,9 +366,12 @@ function storageAvailable(type) {
 
 function flushRecentTags() {
   storedTags = JSON.parse(localStorage.getItem('mentionedTags'));
-  console.log(storedTags);
-  storedTags['recent'] = {};
-  localStorage.setItem('mentionedTags', JSON.stringify(storedTags));
+  if (storedTags != null)
+  {
+    console.log(storedTags);
+    storedTags['recent'] = {};
+    localStorage.setItem('mentionedTags', JSON.stringify(storedTags));
+  }
 }
 
 function fetchTagset() {

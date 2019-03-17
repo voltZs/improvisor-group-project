@@ -34,6 +34,10 @@ class SessionModel(db.Model):
         db.session.add(self)
         db.session.commit()
     
+    def remove_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+    
     def add_asset(self, assetObj, tab):
         self.assets.append(assetObj)
         assetObj.add_to_session(self.id, tab)
@@ -46,11 +50,20 @@ class SessionModel(db.Model):
     def find_by_sessionNumber(cls, number):
         return cls.query.filter_by(sessionNumber=number, user_id=current_user.get_id()).first()
 
+    @classmethod
+    def find_active_session(cls):
+        return cls.query.filter_by(active=1, user_id=current_user.get_id()).first()
+
+    @classmethod
+    def find_all_sessions(cls):
+        return cls.query.filter_by(user_id=current_user.get_id())
+
+
 def next_session_num():
-    sessions = current_user.sessions.all()
+    sessions = SessionModel.find_all_sessions()
     max = 0
-    if len(sessions) > 0:
+    if (sessions):
         for session in sessions:
             if (max < session.sessionNumber):
                 max = session.sessionNumber
-    return max + 1
+    return max + 1 

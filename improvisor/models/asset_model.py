@@ -4,6 +4,7 @@ from improvisor.models.date_model import DateModel
 from flask import session
 from datetime import datetime
 from flask_login import current_user
+from improvisor.models.session_model import SessionModel
 
 class AssetModel(db.Model):
     __tablename__ = "assets"
@@ -23,7 +24,7 @@ class AssetModel(db.Model):
     tags = db.relationship("TagModel",secondary=asset_tags, lazy="subquery", backref=db.backref("assets", lazy=True))
     sessionDates = db.relationship("DateModel", lazy = "dynamic")
     def json(self):
-        return {"id": self.id, "asset": self.assetname, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated.__str__(), "sessions": [session.id for session in self.sessions], "dateAdded" : [date.dateAdded.__str__() for date in self.sessionDates]}
+        return {"id": self.id, "asset": self.assetname, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated.__str__(), "sessions": [session.id for session in self.sessions]}
 
     def __init__(self, assetname, user_id, assetLocation = None, thumbnailLocation = None, dateCreated = datetime.now()):
         self.assetname = assetname
@@ -42,7 +43,8 @@ class AssetModel(db.Model):
         db.session.commit()
     
     def get_dates_for_session(self, session_id):
-        datesForSession = [date for date in self.sessionDates if date.session_id == session_id]
+        actual_session_id = SessionModel.find_by_sessionNumber(session_id)
+        datesForSession = [date for date in self.sessionDates if date.session_id == actual_session_id.id]
         return datesForSession
 
     def get_user_session_appearances(self):

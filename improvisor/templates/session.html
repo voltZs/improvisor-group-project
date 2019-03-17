@@ -3,27 +3,30 @@
 {% set page_title = 'Session' %}
 
 {% block page_content %}
+<!--
 <h2 class="darkText">
     <a href="/assets">
         <i class="fas fa-arrow-left darkText"></i>
     </a>
-    {{ session.id }}
+    {{ session.sessionNumber }}
 </h2>
-<div class="assetpool-list">
-    <div class="assetpool-asset">
-        Session {{session.id}}
-        <br>
-        Assets Added: 
-        {% if session.assets|length > 0 %}
-            <ul>
-                {% for asset in session.assets %}
-                    <li>{{asset.assetname}}</li>
+-->
+<div id="{{session.sessionNumber}}" class="session-page">
+    <h2 class="darkText">{{session.sessionName}}</h2>
+    {% if session.dates|length > 0 %}
+        <div class="currentBlock">
+            <h3 class="blackText">Session Assets:</h2>
+            <div class="imageRow style-2" id="currentRow">
+                {% for asset in session.dates %}
+                    <img src="{{asset.asset.thumbnailLocation}}" data-id="{{asset.asset.id}}" title="{{asset.asset.assetname}}" class="assetThumbnail" style="touch-action: pan-x; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
                 {% endfor %}
-            </ul>
-        {% else %}
-            None
-        {% endif %}
-    </div>
+            </div>
+        </div>
+    {% else %}
+        None
+    {% endif %}
+    <button id="session-export" class="bubbleButton darkText rowsButton">Export Session</button>
+    <div id="session-delete" class="bubbleButton darkText rowsButton bubbleButtonRedHover rightSpan">Delete Session</div>
 </div>
 
 <br />
@@ -33,7 +36,5 @@
 {% endblock page_content %}
 
 {% block end_body %}
-<script>
-    document.getElementById('assetPoolOption').classList.add('selected');
-</script>
+<script type="text/javascript" src="{{url_for('static', filename='JS/session_page.js')}}"></script>
 {% endblock end_body %}

@@ -20,7 +20,8 @@ def on_leave():
 
 @socketio.on('event')
 def handleMessage(data):
-    session = current_user.activeSession
+    session = SessionModel.find_active_session()
+    print(session.active)
     asset_id = data['id']
     tab = int(data['tab'])
     print("Tab: " + str(tab))
@@ -31,7 +32,7 @@ def handleMessage(data):
     socketio.emit('presenter', asset, room=str(current_user.get_id()))
 
     asset = AssetModel.find_by_assetId(asset_id)
-    if (len(session) > 1):
-        session[0].add_asset(asset, tab)
+    if (session):
+        session.add_asset(asset, tab)
     else:
         print("No active session")

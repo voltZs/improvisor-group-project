@@ -20,6 +20,7 @@
             <div class="inputSection">
                 <div class="labelDiv">Asset Tags:</div>
                 {{render_field(form.tagname, autocomplete="tags", placeholder="tag1, tag2, tag3...", class="bubbleButton growText", minlength="2", maxlength="100", required="true")}}
+
             </div>
             {{render_field(form.assettype)}}
             <div id="fileUploadFields1">
@@ -62,6 +63,11 @@
         </form>
 
 
+    </div>
+    <div class="formFooter" id="microphoneToggle1">
+        <i class="fas fa-microphone-slash bubbleButton bubbleButtonDark rowsButton" id="microphoneIcon"
+          data-toggle="tooltip" title="" data-placement="top"></i>
+        <input id="tagSpeechOutput" class="hidden bubbleButton" type="text" disabled>
     </div>
     <div class="formFooter">
         <div class="bubbleButton bubbleButtonDark rowsButton" id="addAssetBtn">
