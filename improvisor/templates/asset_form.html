@@ -20,6 +20,9 @@
             <div class="inputSection">
                 <div class="labelDiv">Asset Tags:</div>
                 {{render_field(form.tagname, autocomplete="tags", placeholder="tag1, tag2, tag3...", class="bubbleButton growText", minlength="2", maxlength="100", required="true")}}
+                <div class="" id="microphoneToggle1">
+                    <i class="fas fa-microphone bubbleButton growText" id="microphoneIcon"></i>
+                </div>
             </div>
             {{render_field(form.assettype)}}
             <div id="fileUploadFields1">

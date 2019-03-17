@@ -929,3 +929,8 @@ Works on mobile but doesn't currently work on desktop unless in touchscreen mode
   margin-right: auto;
   margin-bottom: 5px;
 }
+
+.tagMicrophone{
+  text: white;
+  background: blue;
+}

@@ -131,7 +131,7 @@ function setupPage() {
 function makeAjaxRequest() {
   //only works if local storage is a available in the browser
   if (storageBool) {
-    console.log("localStorage available");
+    //console.log("localStorage available");
 
     var mentionedTags = localStorage.getItem('mentionedTags');
     if (mentionedTags) {
@@ -145,7 +145,7 @@ function makeAjaxRequest() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          console.log(retrieved);
+          //console.log(retrieved);
           updateResults(retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));
@@ -163,7 +163,7 @@ function makeAjaxRequest() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          console.log(retrieved);
+          //console.log(retrieved);
           updateResults(retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));
@@ -264,7 +264,7 @@ function loadAssetsFromSession()
 {
   var tabs = JSON.parse(localStorage.getItem('tabs'));
 
-  
+
 
 }
 

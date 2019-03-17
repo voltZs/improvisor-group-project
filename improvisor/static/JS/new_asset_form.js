@@ -419,3 +419,83 @@ function wrapText (context, text, x, y, maxWidth, lineHeight) {
 
   context.fillText(line, x, y);
 }
+
+
+// Annyang for checking tags
+
+var listening = false;
+if (annyang) {
+
+  annyang.addCallback('result', function (phrases) {
+    var text = phrases[0];
+    text = text.toLowerCase();
+
+    // checking if the list is not empty before iterating through it!
+    // if (recognisedTagsUsed.length != 0) {
+    //   recognisedTagsUsed.forEach(function (item) {
+    //     text = text.replace(item, "");
+    //   });
+    // }
+    // prints the result with recognised tags removed
+    console.log("Recognized text: ", text);
+    // goes through the tags and checks if they are in the text
+    // tagset.forEach(function (tag) {
+    //   if (text.toLowerCase().includes(tag)) {
+    //     // adds the new recognised tag into the recognisedTag list
+    //     recognisedTags.push(tag);
+    //     console.log(recognisedTags);
+    //     text.replace(tag, "");
+    //   }
+    // });
+
+    // this will also empty what's currently in the recognised tags
+    // if (recognisedTags) {
+    //   makeAjaxRequest();
+    //   recognisedTagsUsed = recognisedTagsUsed.concat(recognisedTags);
+    //   recognisedTags = [];
+    // }
+
+  });
+
+  annyang.addCallback('end', function () {
+    if (recognisedTagsUsed.length != 0) {
+      recognisedTagsUsed = [];
+    }
+  });
+  // Start listening. You can call this here, or attach this call to an event, button, etc.
+
+  microphoneToggle.addEventListener('click', function () {
+    if (listening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  });
+
+}
+
+function startListening() {
+  noSleep.enable();
+  annyang.start({
+    autoRestart: true,
+    continuous: false
+  });
+  var recognition = annyang.getSpeechRecognizer();
+  recognition.interimResults = true;
+  console.log("Started listening");
+
+  // microphoneIcon.classList.add("fa-microphone");
+  // microphoneIcon.classList.remove("fa-microphone-slash");
+  listening = true;
+}
+
+function stopListening() {
+  if (listening) {
+    console.log("Stopped listening");
+  }
+  noSleep.disable();
+  annyang.abort()
+  // microphoneIcon.classList.add("fa-microphone-slash");
+  // microphoneIcon.classList.remove("fa-microphone");
+  listening = false;
+}
