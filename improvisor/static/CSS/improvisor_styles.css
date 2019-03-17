@@ -1034,3 +1034,8 @@ p.error {
 .sessions .session:hover {
     background-color: rgba(255, 255, 255, 1);
 }
+
+button {
+    font-family: 'Nunito', sans-serif;
+    background: white;
+}
