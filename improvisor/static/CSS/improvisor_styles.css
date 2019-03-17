@@ -301,6 +301,20 @@ input.hiddenSubmit {
     background-color: #00a821;
 }
 
+.circleRed{
+    background-color: #c92641;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%
+}
+
+.circleGreen{
+    display: inline-block;
+    background-color: #00a821;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%
+}
 
 a {
     text-decoration: none !important;
@@ -561,6 +575,7 @@ input[type=checkbox]:checked{
 
 .assetPageLeft{
     display: inline-flex;
+    flex-direction: column;
     margin-right: 10px;
 }
 .assetPageRight{
@@ -568,6 +583,14 @@ input[type=checkbox]:checked{
     display: inline-flex;
     flex-direction: column;
 }
+
+.assetPageRight.sessionPage{
+    margin-left: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .assetTitle{
     font-size: 22px;
     margin-bottom: 7px;
@@ -812,6 +835,13 @@ p.error {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+}
+
+.sessions-list{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .assetpool-asset {

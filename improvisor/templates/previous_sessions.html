@@ -17,20 +17,33 @@
             </div>
         </div>
     </div>
-    <div class="assetpool-list whiteContainer" id="assetPool">
+    <div class="assetpool-list sessions-list whiteContainer" id="assetPool">
         {% for session in sessions %}
 
             <a href="/sessions/{{session.id}}">
-                <div class="assetpool-asset">
-                    <div class="assetThumbnail darkText">
-                        <br>
-                        {{session.id}}<br>
+                <div class="assetPageTop assetpool-asset">
+                    <div class="assetPageLeft boldText darkText text18">
+                        <p>Session {{session.id}}</p>
                         {% if session.active == 1 %}
-                            <!-- ACTIVE -->
+                            <p>
+                                <span class="circleGreen"></span>
+                                Active
+                            </p>
+                        {% else %}
+                            <p>
+                                Finished
+                            </p>
                         {% endif %}
-                        
+                        <p>DD/MM/YY</p>
                     </div>
-                    <p class="blackText boldText labelText">DD/MM/YYYY</p>
+                    <div class="assetPageRight sessionPage">
+                        <div class="bubbleButton bubbleButtonDark bubbleButtonGreenHover rowsButton">
+                            Export session
+                        </div>
+                        <div class="bubbleButton bubbleButtonDark bubbleButtonRedHover rowsButton">
+                            Delete
+                        </div>
+                    </div>
                 </div>
             </a>
 

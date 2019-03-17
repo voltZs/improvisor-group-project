@@ -187,6 +187,8 @@ function addTagElement(newTag){
            filterTags.splice(index, 1);
         }
         tagButton.parentNode.removeChild(tagButton);
+        sorting = "relevant";
+        checkSorting();
         getAssets(filterTags, sorting, limit);
         if(assetPool.children.length < limit){
             var newLimit = assetPool.children.length;
