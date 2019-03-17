@@ -302,10 +302,11 @@ def previous_sessions_view():
 def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionNumber(id)
-        custom_session = copy.deepcopy(session)
-        dateList = get_full_session(session)
-        setattr(custom_session, "dates", dateList)
-        return render_template('session.html', session=custom_session)
+        if session != None:
+            custom_session = copy.deepcopy(session)
+            dates = get_full_session(session)
+            setattr(custom_session, "dates", [date.json() for date in dates])
+            return render_template('session.html', session=custom_session)
     return redirect('/sessions')
 
 
