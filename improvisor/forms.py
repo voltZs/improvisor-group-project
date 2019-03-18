@@ -93,3 +93,9 @@ class FormProfilePicture(FlaskForm):
         validators.Email(),
         validators.Optional(True)
     ])
+
+class FormSession(FlaskForm):
+    sessionname = StringField('sessionname', validators= [
+        validators.Length(min=1, max=50),
+        validators.Regexp('/[A-Za-z]+$/', message="Session name must contain at least one character (A-Z)")
+    ])

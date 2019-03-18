@@ -3,23 +3,22 @@
 {% set page_title = 'Session' %}
 
 {% block page_content %}
-<!--
-<h2 class="darkText">
-    <a href="/assets">
-        <i class="fas fa-arrow-left darkText"></i>
-    </a>
-    {{ session.sessionNumber }}
-</h2>
--->
 <h2 class="darkText">
     <a href="/sessions">
         <i class="fas fa-arrow-left darkText"></i>
     </a>
-    {{session.sessionName}}
+    Previous Sessions
 </h2>
 
 <div id="{{session.sessionNumber}}" class="session-page whiteContainer">
-
+    <div class="session-title">
+        {{form.sessionname(class="assetTitle darkText boldText", id="sessionNameInput", data=session.sessionName, value=session.sessionName )}}
+        {% if form.sessionname.errors %}
+            {% for error in form.sessionname.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
     {% if session.dates|length > 0 %}
         <div class="currentBlock">
             <h3 class="blackText">Session Assets:</h3>

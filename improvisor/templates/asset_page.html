@@ -32,6 +32,7 @@
         </div>
         <div class="assetPageRight">
             {{form.assetname(class="assetTitle darkText boldText", id="assetNameInput", data=asset.assetname, value=asset.assetname )}}
+            {{ form.hidden_tag() }}
             <div class="assetLabel darkText boldText">{{ asset.dateCreated }} </div>
         </div>
     </div>

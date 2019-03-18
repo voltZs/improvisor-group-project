@@ -989,6 +989,28 @@ p.error {
     justify-content: space-around;
 }
 
+.session-page h2 {
+    text-align: center;
+}
+
+.session-page {
+    font-family: 'Nunito', sans-serif;
+}
+
+.session-page input {
+    font-family: 'Nunito', sans-serif;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.session-page .session-title {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
 .sessions-item {
     margin: 5px;
     padding: 5px !important;
@@ -1018,6 +1040,7 @@ p.error {
     align-items: center;
     justify-content: center;
     width: 200px;
+    border: solid 1px #ccc;
 }
 
 .session p {

@@ -4,7 +4,7 @@ from db import db
 import os, json, copy, bcrypt
 import base64
 from os.path import join
-from improvisor.forms import FormTag, FormSignup, FormAsset, FormLogin, FormProfilePicture, FormUpdateAsset
+from improvisor.forms import FormSession, FormTag, FormSignup, FormAsset, FormLogin, FormProfilePicture, FormUpdateAsset
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
@@ -303,10 +303,11 @@ def session_page(id=None):
     if id != None:
         session = SessionModel.find_by_sessionNumber(id)
         if session != None:
+            form = FormSession()
             custom_session = copy.deepcopy(session)
             dates = get_full_session(session)
             setattr(custom_session, "dates", [date.json() for date in dates])
-            return render_template('session.html', session=custom_session)
+            return render_template('session.html', session=custom_session, form=form)
     return redirect('/sessions')
 
 
