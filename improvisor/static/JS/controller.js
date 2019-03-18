@@ -103,7 +103,6 @@ function stopListening() {
 
 function setupPage() {
   localStorage.clear();
-  loadAssetsFromSession();
   stopListening();
 
   if (!localStorage.getItem('tabs')) {
@@ -112,6 +111,8 @@ function setupPage() {
   } else {
     renderTabs();
   }
+
+  loadAssetsFromSession();
 
   document.getElementById('addTabBtn').addEventListener(
     'click',

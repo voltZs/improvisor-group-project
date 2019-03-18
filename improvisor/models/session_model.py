@@ -21,7 +21,7 @@ class SessionModel(db.Model):
 
     def __init__(self):
         num = next_session_num()
-        self.sessionName = "Session " + str(num)
+        self.sessionName = "Untitled Session " + str(num)
         self.sessionNumber = num
         self.user_id = current_user.get_id()
         self.active = 1
