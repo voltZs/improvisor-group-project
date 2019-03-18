@@ -20,7 +20,7 @@
                     Guest User
                 {% endif %}
             </div>
-            
+
         </a>
         <div class="sideBarButtonsDiv">
             <a href="/new_session">
@@ -47,11 +47,17 @@
                 </div>
             </a>
         </div>
+
+        <div class="floatingMic hidden" id="thumbnailTestMic">
+            <i class="fas fa-microphone-slash bubbleButton bubbleButtonDark rowsButton" id="microphoneIcon"
+              data-toggle="tooltip" title="" data-placement="top"></i>
+            <textarea id="tagSpeechOutput" class="hidden bubbleButton" type="text" disabled></textarea>
+        </div>
     </div>
 
     <div class="pageContainer">
         {% block page_content %}
         {% endblock page_content %}
     </div>
-    
+
 {% endblock main_content%}

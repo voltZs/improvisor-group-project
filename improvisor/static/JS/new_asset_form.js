@@ -1,3 +1,7 @@
+// shows the microphone button to test tags
+document.getElementById('thumbnailTestMic').classList.remove('hidden');
+
+
 var formsContainer = document.getElementById("assetFormsContainer");
 var firstFormClones = [];
 $("#linkUploadFields1").hide();

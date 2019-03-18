@@ -977,7 +977,9 @@ p.error {
 }
 
 #tagSpeechOutput{
-  width: 260px;
+  width: 255px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .sessions-list {
@@ -1029,4 +1031,9 @@ p.error {
 button {
     font-family: 'Nunito', sans-serif;
     background: white;
+}
+
+.floatingMic{
+  position: fixed;
+  bottom: 0;
 }
