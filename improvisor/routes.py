@@ -441,7 +441,8 @@ def asset_update(id=None):
 
         tag_array = form.tagArrayString.data
         tag_array = tag_array.split(',')
-        existing_tags =[item.tagname for item in asset.tags]
+        tag_array = [x.lower() for x in tag_array]
+        existing_tags =[item.lower() for item in asset.tags]
         for tag in tag_array:
             if len(tag) > 0:
                 if not tag in existing_tags: # if the tag does not exist in the asset add it

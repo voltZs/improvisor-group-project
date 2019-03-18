@@ -29,8 +29,13 @@ textInputFilter.addEventListener("keyup", function(event) {
 });
 
 function getTagFromInput(){
-    newTag = textInputFilter.value;
-    if(assetTags.indexOf(newTag) == -1){
+    var newTag = textInputFilter.value;
+    var inArray = false;
+    for(var i= 0; i< assetTags.length; i++){
+        if(assetTags[i].toLowerCase() == newTag.toLowerCase())
+            inArray = true;
+    }
+    if(!inArray){
         addTagElement(newTag);
     }
     textInputFilter.value = "";
