@@ -260,12 +260,7 @@ function addToCurrentTab(assetID) {
 
 function loadAssetsFromSession()
 {
-<<<<<<< HEAD
   var tabs = JSON.parse(localStorage.getItem('tabs'));
-
-
-
-=======
   var maxTab = 0;
   
   var tabs = {}
@@ -290,7 +285,6 @@ function loadAssetsFromSession()
   }
   localStorage.setItem('tabs', JSON.stringify(tabs));
   populateActiveTab();
->>>>>>> 1dda2a185b0032b2a088d635fe4fa7c33e391cc2
 }
 
 function fetch_active_session_assets() {
