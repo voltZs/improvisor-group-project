@@ -220,7 +220,7 @@ function createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButt
         $(nextButton).show();
         $(prevButton).show();
         showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton, id);
-    }else if (file.type ==='image/png') {
+    }else if (file.type ==='image/jpeg' || file.type ==='image/png') {
       createThumbnailFromImage(image.src, thumbnailSpace, hiddenField);
       $(nextButton).hide();
       $(prevButton).hide();
