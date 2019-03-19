@@ -80,17 +80,3 @@ function stopListening() {
 $(function(){
   $('[data-toggle="tooltip"]').tooltip()
 });
-
-
-$(function(){
-  if(isPressed){
-    $('[data-toggle="tooltip"]').click(function(){
-      $('[data-toggle="tooltip"]').tooltip("hide");
-    })
-  }else{
-    $('[data-toggle="tooltip"]').click(function(){
-      $('[data-toggle="tooltip"]').tooltip("show");
-    })
-  }
-
-});

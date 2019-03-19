@@ -94,6 +94,7 @@ function setEvents(number){
     var fileUploadFields = $("#fileUploadFields"+(number));
     var linkUploadFields = $("#linkUploadFields"+(number));
     var assetLinkInput = document.getElementById("assetLink"+(number));
+    var assetName = document.getElementById("assetName"+(number));
     var file;
     // PDF page buttons
     var prevButton =  document.getElementById('prevButton' + (number));
@@ -177,14 +178,24 @@ function setEvents(number){
         }
     });
 
+    // function that updates the thumbnail if it is the name of the asses and
+    // when it has been updated
+    assetName.addEventListener('change', function(){
+      var isChecked = document.getElementById('thumbnailNameCheckbox' + (number))
+      .children[0].checked;
+      // checks if the "use name as thumbnail" checkbox has been ticked before
+      // updating the thumbnail
+      if(isChecked){
+        $(nextButton).parent().hide();
+        var name = document.getElementById('assetName' + (number)).value;
+        thumbnailFromAssetName(name, thumbnailSpace, hiddenField);
+      }
+    });
+
     thumbnailNameCheckbox.addEventListener('change', function(){
       if(this.checked == true){
         console.log('The checkbox has been ticked');
         $(nextButton).parent().hide();
-        //gets the text from the asset name text input
-        //######################
-        //#  assetname         #
-        //######################
         var name = document.getElementById('assetName' + (number)).value;
         thumbnailFromAssetName(name, thumbnailSpace, hiddenField);
       }else{
