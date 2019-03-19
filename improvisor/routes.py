@@ -236,6 +236,9 @@ def new_session():
         new_session.save_to_db()
         return render_template('enter_session.html', mode="new")
     else:
+        session.remove_from_db()
+        new_session = SessionModel()
+        new_session.save_to_db()
         return render_template('enter_session.html', mode="empty")
 
 @app.route('/continue_session', methods=['GET'])
