@@ -1,6 +1,7 @@
 // shows the microphone button to test tags
-document.getElementById('thumbnailTestMic').classList.remove('hidden');
-var isPressed = false;
+var micIcon = document.getElementById('thumbnailTestMic');
+micIcon.classList.remove('hidden');
+
 
 
 // Annyang for checking tags
@@ -28,18 +29,20 @@ if (annyang) {
   });
   // Start listening. You can call this here, or attach this call to an event, button, etc.
 
-  microphoneToggle.addEventListener('click', function () {
-    if (listening) {
-      stopListening();
-      isPressed = false;
-    } else {
-      startListening();
-      isPressed = true;
-
-    }
-  });
 
 }
+var microphone = document.getElementById("microphoneIcon");
+microphoneToggle.addEventListener('click', function () {
+  if (listening) {
+    stopListening();
+    microphone.setAttribute('data-original-title', " Test speech recognition for better tag selection");
+  } else {
+    startListening();
+    $("[data-toggle='tooltip']").tooltip('hide');
+    microphone.setAttribute('data-original-title', "");
+
+  }
+});
 
 function startListening() {
   //noSleep.enable();
@@ -73,7 +76,7 @@ function stopListening() {
 }
 
 
-var isPressed = false;
+
 $(function(){
   $('[data-toggle="tooltip"]').tooltip()
 });
