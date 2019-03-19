@@ -1,5 +1,6 @@
 // shows the microphone button to test tags
 document.getElementById('thumbnailTestMic').classList.remove('hidden');
+var isPressed = false;
 
 
 // Annyang for checking tags
@@ -30,11 +31,11 @@ if (annyang) {
   microphoneToggle.addEventListener('click', function () {
     if (listening) {
       stopListening();
-      console.log('listening is set to:' + listening);
+      isPressed = false;
     } else {
-      console.log('listening is set to:' + listening);
       startListening();
-      console.log('listening is set to:' + listening);
+      isPressed = true;
+
     }
   });
 
@@ -71,6 +72,22 @@ function stopListening() {
   listening = false;
 }
 
+
+var isPressed = false;
 $(function(){
   $('[data-toggle="tooltip"]').tooltip()
+});
+
+
+$(function(){
+  if(isPressed){
+    $('[data-toggle="tooltip"]').click(function(){
+      $('[data-toggle="tooltip"]').tooltip("hide");
+    })
+  }else{
+    $('[data-toggle="tooltip"]').click(function(){
+      $('[data-toggle="tooltip"]').tooltip("show");
+    })
+  }
+
 });
