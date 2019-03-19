@@ -22,6 +22,11 @@
             <a href="/sessions/{{session.sessionNumber}}">
                 <div class="session darkText">
                     <p class="darkText text20 boldText">{{session.sessionName}}</p>
+                    {% if session.active == 1 %}
+                        <p><span class="circleGreen"></span> Active</p>
+                    {% else %}
+                        <p>Finished</p>
+                    {% endif %}
                     <p class="blackText boldText labelText">ID: {{session.sessionNumber}}</p>
                     <p class="blackText boldText labelText">{{session.dateCreated.strftime('%d-%m-%Y')}}</p>
                 </div>
