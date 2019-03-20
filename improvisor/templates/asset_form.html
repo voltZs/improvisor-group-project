@@ -35,30 +35,32 @@
                         </div>
                     </div>
                 </div>
-                <!-- hidden input for uploading own thumbnail img  -->
-                {{form.assetThumbnail(id="thumbUploadHidden1")}}
-
-                <!-- hidden input for sending thumbnail's base64 to server -->
-                <input type="submit" class="hiddenSubmit">
-                {{form.assetAutomaticThumbnail(id="thumbHidden1")}}
-
-                {{ form.hidden_tag() }}
-                <!-- buttons for selecting page of pdf -->
-
-                <div id="thumbnailSpace1" class="thumbnailSpace">
-                  <!-- container for thumbnail -->
-                </div>
-                <div class="midScreen">
-                  <div class="bubbleButton bubbleButtonDark rowsButton" id="prevButton1">Previous</div>
-                  <div class="bubbleButton bubbleButtonDark rowsButton" id="nextButton1">Next</div>
-                </div>
-                <div id="thumbnailNameCheckbox1" class="midScreen">
-                    <input type="checkbox" id="thumbnailNameCheckbox1">
-                    <span class="text18">Use name as thumbnail</span>
-                </div>
             </div>
+
             <div id="linkUploadFields1" class="inputSection">
                 {{render_field(form.assetLink, placeholder="www.example.com/url", class="bubbleButton growText", minlength="2", maxlength="50")}}
+            </div>
+            
+            <!-- hidden input for uploading own thumbnail img  -->
+            {{form.assetThumbnail(id="thumbUploadHidden1")}}
+
+            <!-- hidden input for sending thumbnail's base64 to server -->
+            <input type="submit" class="hiddenSubmit">
+            {{form.assetAutomaticThumbnail(id="thumbHidden1")}}
+
+            {{ form.hidden_tag() }}
+            <!-- buttons for selecting page of pdf -->
+
+            <div id="thumbnailSpace1" class="thumbnailSpace">
+              <!-- container for thumbnail -->
+            </div>
+            <div class="midScreen">
+              <div class="bubbleButton bubbleButtonDark rowsButton" id="prevButton1">Previous</div>
+              <div class="bubbleButton bubbleButtonDark rowsButton" id="nextButton1">Next</div>
+            </div>
+            <div id="thumbnailNameCheckbox1" class="midScreen">
+                <input type="checkbox" id="thumbnailNameCheckbox1">
+                <span class="text18">Use name as thumbnail</span>
             </div>
         </form>
 

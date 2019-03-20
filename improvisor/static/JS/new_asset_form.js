@@ -11,6 +11,8 @@ var addAssetBtn = document.getElementById("addAssetBtn");
 var submit = document.getElementById("submitButton");
 var numOfForms = 1;
 
+var currentAssetType = "file";
+
 var lastClickedPDF;
 // CREDIT TO USEFUL ANGLE
 // source : http://usefulangle.com/post/20/pdfjs-tutorial-1-preview-pdf-during-upload-wih-next-prev-buttons
@@ -131,6 +133,7 @@ function setEvents(number){
 
         fileHiddenButton.required = true;
         assetLinkInput.removeAttribute("required");
+        currentAssetType = "file";
     });
 
     linkButton.click(function(){
@@ -142,7 +145,15 @@ function setEvents(number){
 
         fileHiddenButton.removeAttribute("required");
         assetLinkInput.required = true;
+        currentAssetType = "link";
     });
+
+    assetLinkInput.addEventListener("change", function(){
+        if(thumbnailNameCheckbox.checked == false){
+            thumbnailFromAssetName(assetLinkInput.value, thumbnailSpace, hiddenField);
+            $(thumbnailNameCheckboxCont).show();
+        }
+    })
 
     fileHiddenButton.addEventListener("change", function(){
         file = fileHiddenButton.files[0];
@@ -181,11 +192,9 @@ function setEvents(number){
     // function that updates the thumbnail if it is the name of the asses and
     // when it has been updated
     assetName.addEventListener('change', function(){
-      var isChecked = document.getElementById('thumbnailNameCheckbox' + (number))
-      .children[0].checked;
       // checks if the "use name as thumbnail" checkbox has been ticked before
       // updating the thumbnail
-      if(isChecked){
+      if(thumbnailNameCheckbox.checked){
         $(nextButton).parent().hide();
         var name = document.getElementById('assetName' + (number)).value;
         thumbnailFromAssetName(name, thumbnailSpace, hiddenField);
@@ -202,7 +211,10 @@ function setEvents(number){
         console.log('The checkbox has been unticked');
         $(nextButton).parent().show();
         thumbnailSpace.innerHTML= "";
-        createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton);
+        if(currentAssetType == "file")
+            createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton);
+        else
+            thumbnailFromAssetName(assetLinkInput.value, thumbnailSpace, hiddenField);
       }
     });
 }

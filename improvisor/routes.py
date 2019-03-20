@@ -116,43 +116,23 @@ def addAsset():
     form = FormAsset()
     if request.method == "POST" and form.validate():
         print(f'Valid form submitted Asset-name is : {form.assetname.data}')
-
-        asset = AssetModel.find_by_assetName(form.assetname.data) #tries to retrieve asset from database
-        if asset:
-            if form.tagname.data: #if the asset already exists then try to add a tag to it
-                tags = form.tagname.data.split(",")
-                print (tags)
-                for tag in tags:
-                    # Remove extra white space
-                    tag = " ".join(tag.split())
-                    if len(tag) > 0:
-                        tag_obj = TagModel.find_by_tagName(tag)
-                        print(f'tag found {tag_obj.json()}')
-                        if tag_obj is None: #then tag currently does not exist and needs to be added
-                            tag_obj = TagModel(tag, current_user.get_id())
-                            tag_obj.save_to_db()
-                            asset.tags.append(tag_obj)
-
-            else:
-                print("asset already exists") #if no tag is entered then there is nothing to update
-                flash("Asset already exists", "warning")
-                return render_template("asset_form.html", form=form)
-        else:
-            asset = AssetModel(form.assetname.data, current_user.get_id())
-            tags = form.tagname.data.split(",")
-            print (tags)
-            for tag in tags:
-                # Remove extra white space
-                tag = " ".join(tag.split())
-                if len(tag) > 0:
-                    tag_obj = TagModel.find_by_tagName(tag)
-                    if tag_obj is None: #then tag currently does not exist and needs to be added
-                        tag_obj = TagModel(tag, current_user.get_id())
-                        tag_obj.save_to_db()
-                    asset.tags.append(tag_obj)
+        asset = AssetModel(form.assetname.data, current_user.get_id())
+        tags = form.tagname.data.split(",")
+        asset_type = form.assettype.data
+        print(asset_type)
+        print (tags)
+        for tag in tags:
+            # Remove extra white space
+            tag = " ".join(tag.split())
+            if len(tag) > 0:
+                tag_obj = TagModel.find_by_tagName(tag)
+                if tag_obj is None: #then tag currently does not exist and needs to be added
+                    tag_obj = TagModel(tag, current_user.get_id())
+                    tag_obj.save_to_db()
+                asset.tags.append(tag_obj)
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
-            upload(asset, form.assetResource.data, form.assetAutomaticThumbnail.data, form.assetThumbnail.data)
+            upload(asset, asset_type, form.assetResource.data, form.assetLink.data, form.assetAutomaticThumbnail.data, form.assetThumbnail.data)
         except Exception as e:
             print(e)
             flash("Error uploading file", "danger")
@@ -169,7 +149,7 @@ def addAsset():
     return render_template("asset_form.html", form=form)
 
 
-def upload(asset, assetResource, thumbBase64, assetThumbnail = None ):
+def upload(asset, asset_type, assetResource, asset_link, thumbBase64, assetThumbnail = None ):
     print ("saving upload")
     full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) +"/"+ asset.assetname
     relative_path = url_for('static', filename='resources/uploadedFiles/')
@@ -446,7 +426,7 @@ def asset_update(id=None):
         tag_array = form.tagArrayString.data
         tag_array = tag_array.split(',')
         tag_array = [x.lower() for x in tag_array]
-        existing_tags =[item.lower() for item in asset.tags]
+        existing_tags =[item.tagname.lower() for item in asset.tags]
         for tag in tag_array:
             if len(tag) > 0:
                 if not tag in existing_tags: # if the tag does not exist in the asset add it
