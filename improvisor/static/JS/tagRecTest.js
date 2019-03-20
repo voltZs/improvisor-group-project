@@ -1,6 +1,5 @@
 // shows the microphone button to test tags
-var micIcon = document.getElementById('thumbnailTestMic');
-micIcon.classList.remove('hidden');
+$("#thumbnailTestMic").show();
 
 
 

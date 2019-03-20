@@ -1,3 +1,5 @@
+$("body").css("display", "block");
+
 var currentResults = document.getElementById("currentRow");
 var frequentResults = document.getElementById("frequentRow");
 var storageBool = storageAvailable('localStorage');
@@ -263,7 +265,7 @@ function loadAssetsFromSession()
 {
   var tabs = JSON.parse(localStorage.getItem('tabs'));
   var maxTab = 0;
-  
+
   var tabs = {}
   // Find the maximum tab
   for (var i = 0; i < assets.length; i++)
