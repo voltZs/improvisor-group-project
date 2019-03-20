@@ -4,50 +4,51 @@
 {% block main_content%}
 
     <div class="rightContainer">
-        <a href="/user_settings">
-            <div class="rightContItem whiteText" id="user_field">
-                <div class="rightContItem">
+        <div class="rightContainerOptions">
+            <a href="/user_settings">
+                <div class="rightContItem whiteText" id="user_field">
+                    <div class="rightContItem">
+                        {% if current_user.is_authenticated %}
+                            <img class="avatarImg" src='{{current_user.profileImageLocation}}' width=120px height=120px/>
+                        {% else %}
+                            <img src="https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="
+                            class="avatarImg" alt="" width="120px" height="120px">
+                        {% endif %}
+                    </div>
                     {% if current_user.is_authenticated %}
-                        <img class="avatarImg" src='{{current_user.profileImageLocation}}' width=120px height=120px/>
+                        {{current_user.firstname}} {{current_user.lastname}}
                     {% else %}
-                        <img src="https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="
-                        class="avatarImg" alt="" width="120px" height="120px">
+                        Guest User
                     {% endif %}
                 </div>
-                {% if current_user.is_authenticated %}
-                    {{current_user.firstname}} {{current_user.lastname}}
-                {% else %}
-                    Guest User
-                {% endif %}
-            </div>
 
-        </a>
-        <div class="sideBarButtonsDiv">
-            <a href="/new_session">
-                <div class="rightContItem bubbleButton bubbleButtonDark" id="newSessionOption">
-                    New Session
-                </div>
             </a>
-            {% if active is not none %}
-                <a href="/continue_session">
+            <div class="sideBarButtonsDiv">
+                <a href="/new_session">
                     <div class="rightContItem bubbleButton bubbleButtonDark" id="newSessionOption">
-                        Continue Session
+                        New Session
                     </div>
                 </a>
-            {% endif %}
-            <br>
-            <a href="/sessions">
-                <div class="rightContItem bubbleButton bubbleButtonDark" id="prevSessionOption">
-                    Previous Sessions
-                </div>
-            </a>
-            <a href="/assets">
-                <div class="rightContItem bubbleButton bubbleButtonDark" id="assetPoolOption">
-                    Asset Pool
-                </div>
-            </a>
+                {% if active is not none %}
+                    <a href="/continue_session">
+                        <div class="rightContItem bubbleButton bubbleButtonDark" id="newSessionOption">
+                            Continue Session
+                        </div>
+                    </a>
+                {% endif %}
+                <br>
+                <a href="/sessions">
+                    <div class="rightContItem bubbleButton bubbleButtonDark" id="prevSessionOption">
+                        Previous Sessions
+                    </div>
+                </a>
+                <a href="/assets">
+                    <div class="rightContItem bubbleButton bubbleButtonDark" id="assetPoolOption">
+                        Asset Pool
+                    </div>
+                </a>
+            </div>
         </div>
-
         <div class="floatingMicCont">
             <div class="hidden floatingMic rowsButton floatingShadow" id="thumbnailTestMic">
                 <div>
@@ -55,7 +56,7 @@
                         <i  class="fas fa-microphone-slash " id="microphoneIcon"></i>
                     </button>
                     <span class="darkText text18">
-                        Test tag recognition
+                        Test recognition
                     </span>
                 </div>
                 <textarea id="tagSpeechOutput" class="hidden bubbleButton" type="text" disabled></textarea>

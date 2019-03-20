@@ -127,6 +127,35 @@ body {
     cursor: pointer;
 }
 
+
+.floatingMicCont{
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    align-items: flex-end;
+}
+
+.floatingMic{
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+}
+
+.floatingMic div{
+    display: inline-flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+.floatingMic textarea{
+    font-size: 20px;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
 @media screen and (max-width: 749px) {
     .mainContainer {
         padding-left: 5px;
@@ -143,11 +172,18 @@ body {
     }
 
     .rightContainer {
-        flex-direction: row;
+        margin-left: 0;
+        flex-direction: column;
         padding: 0 25px 0 25px;
         width: 100%;
-        justify-content: space-around;
         align-items: center;
+    }
+
+    .rightContainerOptions{
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        margin-bottom: 10px;
     }
 
     #user_field {
@@ -161,6 +197,16 @@ body {
         display: inline-block;
         min-width: 50%;
     }
+
+    .floatingMicCont{
+        position: relative;
+        bottom: 10px;
+        width:50%;
+        box-sizing: border-box;
+        flex-grow: 1;
+        align-items: flex-end;
+    }
+
 }
 
 .rightSpan {
@@ -1092,30 +1138,4 @@ p.error {
 button {
     font-family: 'Nunito', sans-serif;
     background: white;
-}
-
-.floatingMicCont{
-    display: flex;
-    width: 100%;
-    flex-grow: 1;
-    align-items: flex-end;
-}
-
-.floatingMic{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    border-radius: 10px;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 5px;
-}
-
-.floatingMic div{
-    max-width: 100%;
-}
-.floatingMic textarea{
-    font-size: 20px;
-    box-sizing: border-box;
-    max-width: 100%;
 }
