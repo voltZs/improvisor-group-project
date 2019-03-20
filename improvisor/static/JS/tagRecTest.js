@@ -32,7 +32,7 @@ if (annyang) {
 
 }
 var microphone = document.getElementById("microphoneIcon");
-microphoneToggle.addEventListener('click', function () {
+microphoneToggle.parentNode.addEventListener('click', function () {
   if (listening) {
     stopListening();
     microphone.setAttribute('data-original-title', " Test speech recognition for better tag selection");

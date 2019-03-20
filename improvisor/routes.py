@@ -440,8 +440,8 @@ def asset_update(id=None):
         form = FormUpdateAsset(request.form)
         asset = AssetModel.find_by_assetId(id)
 
-        if form.validate() == False:
-            print(form.errors)
+        if form.validate():
+            print("validated form update")
 
         tag_array = form.tagArrayString.data
         tag_array = tag_array.split(',')

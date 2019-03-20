@@ -1,18 +1,15 @@
 html {
-    width: 100%;
     margin: 0;
     padding: 0;
+    height: none;
     min-height: 100%;
     position: relative;
-    /* background: radial-gradient(ellipse at center, #ff8011 15%,#ff5d00 76%); */
-    /* background-color: rgb(38, 100, 201); */
-    /* background: #2664c9; */
     /* Old browsers */
     background: -moz-linear-gradient(-55deg, #2664c9 0%, #7db9e8 100%, #4b89ed 100%);
     /* FF3.6-15 */
     background: -webkit-linear-gradient(-55deg, #2664c9 0%, #7db9e8 100%, #4b89ed 100%);
     /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(145deg, #2664c9 0%, #7db9e8 100%, #4b89ed 100%);
+    /* background: linear-gradient(145deg, #2664c9 0%, #7db9e8 100%, #4b89ed 100%); */
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2664c9', endColorstr='#4b89ed', GradientType=1);
     /* IE6-9 fallback on horizontal gradient */
@@ -23,7 +20,7 @@ html {
 }
 
 body {
-    height: 100vh;
+    min-height: 100vh;
     font-family: 'Nunito', sans-serif;
     margin: 0;
     background: none;
@@ -65,17 +62,24 @@ body {
     margin: 0 auto;
 }
 
+.sideBySideFlex{
+    display:flex;
+    flex-direction: row-reverse;
+}
+
 @media screen and (min-width: 750px) and (max-width: 970px) {
     .mainContainer {
         width: 100%;
         padding-left: 30px;
         padding-right: 30px;
+        box-sizing: border-box;
     }
 }
 
 @media screen and (max-width: 749px) {
     .mainContainer {
         width: 100%;
+        box-sizing: border-box;
     }
 
     .topSpace {
@@ -84,10 +88,6 @@ body {
 }
 
 .pageContainer {
-    position: relative;
-    box-sizing: border-box;
-    display: inline-block;
-    float: left;
     width: 68%;
     padding: 20px;
     background-color: rgb(255, 255, 255, 0.9);
@@ -96,9 +96,11 @@ body {
 }
 
 .rightContainer {
+    flex-grow: 1;
     box-sizing: border-box;
-    display: inline-block;
-    float: right;
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
     width: 30%;
 }
 
@@ -131,11 +133,16 @@ body {
 
     .pageContainer {
         width: 100%;
+        box-sizing: border-box;
+    }
+
+    .sideBySideFlex{
+        flex-direction: column;
     }
 
     .rightContainer {
+        flex-direction: row;
         padding: 0 25px 0 25px;
-        display: flex;
         width: 100%;
         justify-content: space-around;
         align-items: center;
@@ -194,6 +201,9 @@ body {
     background-color: #2664c9;
 }
 
+.padding5{
+    padding: 5px;
+}
 .centerFlex {
     display: flex;
     width: 100%;
@@ -228,6 +238,15 @@ input.hiddenSubmit {
     border-radius: 5px;
     line-height: 30px;
     padding: 0 10px;
+}
+
+.miniBubbleButton {
+    border-radius: 6px;
+    line-height: 15px;
+    padding: 2px 5px;
+}
+.miniBubbleButton:hover {
+    cursor: pointer!important;
 }
 
 .toggleButton {
@@ -1058,7 +1077,28 @@ button {
     background: white;
 }
 
+.floatingMicCont{
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    align-items: flex-end;
+}
+
 .floatingMic{
-  position: fixed;
-  bottom: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+}
+
+.floatingMic div{
+    max-width: 100%;
+}
+.floatingMic textarea{
+    font-size: 20px;
+    box-sizing: border-box;
+    max-width: 100%;
 }

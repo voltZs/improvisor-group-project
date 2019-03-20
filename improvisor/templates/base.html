@@ -21,7 +21,6 @@
 {%- endblock %}
 
 {% block styles -%}
-<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='libraries/magnific-popup/magnific-popup.css')}}">
@@ -72,13 +71,15 @@
 {% block content %}
 <div class="mainContainer">
   <div class="topSpace"></div>
-  {% block main_content %}
+  <div class= "sideBySideFlex">
+      {% block main_content %}
 
-  <div class="pageContainer">
-    {% block page_content %}
-    {% endblock page_content %}
+      <div class="pageContainer">
+        {% block page_content %}
+        {% endblock page_content %}
+      </div>
+      {% endblock main_content %}
   </div>
-  {% endblock main_content %}
 </div>
 {% endblock content %}
 

@@ -48,10 +48,18 @@
             </a>
         </div>
 
-        <div class="floatingMic hidden" id="thumbnailTestMic">
-            <i  class="fas fa-microphone-slash bubbleButton bubbleButtonDark rowsButton" id="microphoneIcon"
-              data-toggle="tooltip" title=" Test speech recognition for better tag selection" data-placement="right"></i>
-            <textarea id="tagSpeechOutput" class="hidden bubbleButton" type="text" disabled></textarea>
+        <div class="floatingMicCont">
+            <div class="hidden floatingMic rowsButton floatingShadow" id="thumbnailTestMic">
+                <div>
+                    <button class="miniBubbleButton bubbleButtonDark" >
+                        <i  class="fas fa-microphone-slash " id="microphoneIcon"></i>
+                    </button>
+                    <span class="darkText text18">
+                        Test tag recognition
+                    </span>
+                </div>
+                <textarea id="tagSpeechOutput" class="hidden bubbleButton" type="text" disabled></textarea>
+            </div>
         </div>
     </div>
 

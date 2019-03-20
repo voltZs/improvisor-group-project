@@ -59,6 +59,15 @@
 </div>
 {% endblock page_content %}
 
+{% block in_right_bar %}
+<div class="floatingMic bubbleButton whiteContainer floatingShadow" id="thumbnailTestMic">
+    <i  class="fas fa-microphone-slash bubbleButton bubbleButtonDark rowsButton" id="microphoneIcon"
+      data-toggle="tooltip" title=" Test speech recognition for better tag selection" data-placement="right"></i>
+    <textarea id="tagSpeechOutput" class="hidden bubbleButton" type="text" disabled></textarea>
+</div>
+{% endblock in_right_bar %}
+
+
 {% block end_body %}
 <script>
     document.getElementById('assetPoolOption').classList.add('selected');
