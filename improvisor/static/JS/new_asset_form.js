@@ -41,7 +41,7 @@ addAssetBtn.addEventListener("click", function(){
     // $(firstFormClones[numOfForms-1]).find("#thumbUploadVisible1").attr("id", "thumbUploadVisible"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#fileUploadFields1").attr("id", "fileUploadFields"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#linkUploadFields1").attr("id", "linkUploadFields"+(numOfForms+1));
-    $(firstFormClones[numOfForms-1]).find("#assetLink").attr("id", "assetLink"+(numOfForms+1));
+    $(firstFormClones[numOfForms-1]).find("#assetLink1").attr("id", "assetLink"+(numOfForms+1));
 
     // chunk elowe prevents radio buttons from conflicting (label for : referst to input id)
     $(firstFormClones[numOfForms-1]).find("#assettype-0").parent().children().eq(1).attr("for", "#assettype-0-"+(numOfForms+1))

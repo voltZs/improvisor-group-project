@@ -405,7 +405,13 @@ h3 {
     height: 40px;
     background-color: #2664c9;
     max-width: 100%;
+    margin-top: 0px;
     /* min-width: 640px; */
+}
+
+.hiddenNavigbar{
+    margin-top: -40px;
+    transition: 1s;
 }
 
 .flexnavig {
@@ -709,18 +715,27 @@ input.assetTitle{
 }
 
 .presenter-view {
-    margin-top: 60px;
+    padding-top: 40px;
     width: 100%;
     height: 100vh;
+    box-sizing: border-box;
 }
 
-.presenter-view #display {
+embed{
+    position: absolute;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* .presenter-view #display {
     display: block;
     max-width: 100%;
     height: auto;
     margin: auto;
     background: none;
-}
+} */
 
 .hidden {
     display: none;

@@ -10,12 +10,14 @@ class AssetModel(db.Model):
     __tablename__ = "assets"
 
     id = db.Column(db.Integer, primary_key=True)
+    assettype = db.Column(db.String(10))
     assetname = db.Column(db.String(200))
     assetLocation = db.Column(db.String(200), nullable = True)
+    assetLink = db.Column(db.String(200), nullable = True)
     thumbnailLocation = db.Column(db.String(200), nullable=True)
     dateCreated = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    
+
 
 
     user = db.relationship("UserModel")
@@ -24,14 +26,17 @@ class AssetModel(db.Model):
     tags = db.relationship("TagModel",secondary=asset_tags, lazy="subquery", backref=db.backref("assets", lazy=True))
     sessionDates = db.relationship("DateModel", lazy = "dynamic")
     def json(self):
-        return {"id": self.id, "asset": self.assetname, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated.__str__(), "sessions": [session.id for session in self.sessions]}
+        return {"id": self.id, "asset": self.assetname, "assettype": self.assettype, "tags" : [tag.tagname for tag in self.tags],"user": self.user_id, "assetLocation" : self.assetLocation, "assetLink": self.assetLink, "thumbnailLocation" : self.thumbnailLocation, "date-created" : self.dateCreated.__str__(), "sessions": [session.id for session in self.sessions]}
 
-    def __init__(self, assetname, user_id, assetLocation = None, thumbnailLocation = None, dateCreated = datetime.now()):
+    def __init__(self, assetname, user_id, assettype, assetLocation = None, assetLink = None, thumbnailLocation = None, dateCreated = datetime.now()):
         self.assetname = assetname
+        self.assettype = assettype
         self.user_id = user_id
         self.assetLocation = assetLocation
+        self.assetLink = assetLink
         self.thumbnailLocation = thumbnailLocation
         self.dateCreated = dateCreated
+
 
     def save_to_db(self):
         db.session.add(self)
@@ -41,7 +46,7 @@ class AssetModel(db.Model):
         date = DateModel(self.id, session_id, self.user_id, tab)
         self.sessionDates.append(date)
         db.session.commit()
-    
+
     def get_dates_for_session(self, session_id):
         actual_session_id = SessionModel.find_by_sessionNumber(session_id)
         datesForSession = [date for date in self.sessionDates if date.session_id == actual_session_id.id]

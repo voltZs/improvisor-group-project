@@ -45,7 +45,7 @@ class FormAsset(FlaskForm):
 
     assetLink = StringField('assetlink',validators=[
         validators.Optional(True),
-        validators.URL()
+        validators.Length(min=2, max=200)
     ])
 
     assetThumbnail = FileField("UPLOAD ASSET THUMBNAIL:", validators=[

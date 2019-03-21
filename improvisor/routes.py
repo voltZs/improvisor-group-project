@@ -116,10 +116,9 @@ def addAsset():
     form = FormAsset()
     if request.method == "POST" and form.validate():
         print(f'Valid form submitted Asset-name is : {form.assetname.data}')
-        asset = AssetModel(form.assetname.data, current_user.get_id())
+        asset = AssetModel(form.assetname.data, current_user.get_id(), form.assettype.data)
         tags = form.tagname.data.split(",")
-        asset_type = form.assettype.data
-        print(asset_type)
+        print(f'assettype is {form.assettype.data}')
         print (tags)
         for tag in tags:
             # Remove extra white space
@@ -130,9 +129,10 @@ def addAsset():
                     tag_obj = TagModel(tag, current_user.get_id())
                     tag_obj.save_to_db()
                 asset.tags.append(tag_obj)
+        asset.assetLink =  form.assetLink.data
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
-            upload(asset, asset_type, form.assetResource.data, form.assetLink.data, form.assetAutomaticThumbnail.data, form.assetThumbnail.data)
+            upload(asset, form.assetResource.data, form.assetAutomaticThumbnail.data, form.assetThumbnail.data)
         except Exception as e:
             print(e)
             flash("Error uploading file", "danger")
@@ -149,21 +149,22 @@ def addAsset():
     return render_template("asset_form.html", form=form)
 
 
-def upload(asset, asset_type, assetResource, asset_link, thumbBase64, assetThumbnail = None ):
+def upload(asset, assetResource, thumbBase64, assetThumbnail = None ):
     print ("saving upload")
     full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) +"/"+ asset.assetname
     relative_path = url_for('static', filename='resources/uploadedFiles/')
     relative_path = relative_path + "user_" + str(current_user.get_id()) + "/" + asset.assetname
     print (f'assetResource is {assetResource}')
-    if assetResource:
-        print("saving asset Resource")
-        save_location = full_path + "/" + assetResource.filename
-        print (f'saving to {save_location}')
-        if not os.path.exists(full_path):
-            print("Making directory: " + full_path)
-            os.makedirs(full_path)
-        assetResource.save(save_location)
-        asset.assetLocation = relative_path + "/" + assetResource.filename
+    if asset.assettype == "file":
+        if assetResource:
+            print("saving asset Resource")
+            save_location = full_path + "/" + assetResource.filename
+            print (f'saving to {save_location}')
+            if not os.path.exists(full_path):
+                print("Making directory: " + full_path)
+                os.makedirs(full_path)
+            assetResource.save(save_location)
+            asset.assetLocation = relative_path + "/" + assetResource.filename
     if assetThumbnail:
         save_location = full_path + "/" + assetThumbnail.filename
         assetThumbnail.save(save_location)

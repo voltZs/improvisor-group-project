@@ -38,9 +38,9 @@
             </div>
 
             <div id="linkUploadFields1" class="inputSection">
-                {{render_field(form.assetLink, placeholder="www.example.com/url", class="bubbleButton growText", minlength="2", maxlength="50")}}
+                {{render_field(form.assetLink, id="assetLink1", placeholder="www.example.com/url", class="bubbleButton growText", minlength="2", maxlength="50")}}
             </div>
-            
+
             <!-- hidden input for uploading own thumbnail img  -->
             {{form.assetThumbnail(id="thumbUploadHidden1")}}
 
