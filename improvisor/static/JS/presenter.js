@@ -1,9 +1,13 @@
 var asset;
 
 var navigBar = document.getElementById("navigBar");
+var presenterView = document.getElementById("presenterView")
+emptyViews();
 
 var timer = 0;
 var timePassed = 0;
+
+var textFormats = ["txt", "csv"];
 
 
 document.addEventListener("mousemove", function(){
@@ -25,12 +29,25 @@ $(document).ready(function () {
         var temp = directory.split(".");
         var extension = temp[temp.length-1].toLowerCase();
 
-        if(extension == "pdf"){
-            $('#embed_display').attr('src', directory);
-        } else {
+        emptyViews();
 
+        if(extension == "pdf"){
+            $('#embed_display').show();
+            $('#embed_display').attr('src', directory);
+        } else if (textFormats.includes(extension)) {
+            $('#object_display').show();
+            $('#object_display').attr('data', directory);
+        } else if (imageFormats.includes(extension)) {
+            $('#img_display').show();
+            $('#img_display').attr('src', directory);
         }
 
-        $('#display').attr('src', directory);
+
     });
 });
+
+function emptyViews(){
+    $(presenterView.children).attr("src", "");
+    $(presenterView.children).attr("data", "");
+    $(presenterView.children).hide();
+}
