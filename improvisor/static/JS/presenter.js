@@ -30,24 +30,27 @@ $(document).ready(function () {
         var extension = temp[temp.length-1].toLowerCase();
 
         emptyViews();
-
-        if(extension == "pdf"){
-            $('#embed_display').show();
-            $('#embed_display').attr('src', directory);
-        } else if (textFormats.includes(extension)) {
-            $('#object_display').show();
-            $('#object_display').attr('data', directory);
-        } else if (imageFormats.includes(extension)) {
-            $('#img_display').show();
-            $('#img_display').attr('src', directory);
+        if (receivedData['assettype'] == "file"){
+            if(extension == "pdf"){
+                $('#embed_display').show();
+                $('#embed_display').attr('src', directory);
+            } else if (textFormats.includes(extension)) {
+                $('#object_display').show();
+                $('#object_display').attr('data', directory);
+            } else if (imageFormats.includes(extension)) {
+                $('#img_display').show();
+                $('#img_display').attr('src', directory);
+            }
+        } else if(receivedData['assettype'] == "link"){
+            $('#link_display').show();
+            $('#link_display').html(receivedData['assetLink']);
         }
-
-
     });
 });
 
 function emptyViews(){
     $(presenterView.children).attr("src", "");
     $(presenterView.children).attr("data", "");
+    $(presenterView.children).html("");
     $(presenterView.children).hide();
 }
