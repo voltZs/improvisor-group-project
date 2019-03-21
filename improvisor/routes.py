@@ -4,7 +4,7 @@ from db import db
 import os, json, copy, bcrypt
 import base64
 from os.path import join
-from improvisor.forms import FormSession, FormTag, FormSignup, FormAsset, FormLogin, FormProfilePicture, FormUpdateAsset
+from improvisor.forms import FormSession, FormTag, FormSignup, FormAsset, FormLogin, FormUpdateAsset, FormUpdateSettings
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
@@ -63,51 +63,12 @@ def allAssets():
     return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
 
 
-#API: adds user profile picture to databas
-@app.route ('/api/profile_picture', methods =["GET", "POST"])
-@login_required
-def addPicture():
-    print (os.getcwd())
-    form = FormProfilePicture()
-    if request.method == "POST" and form.validate() and current_user.is_authenticated:
-        relative_path = url_for('static', filename='resources/uploadedFiles/')
-        relative_path = relative_path + "user_" + str(current_user.get_id())
-        full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id())
-        save_location = full_path + "/" + form.userPicture.data.filename
+# #API: adds user profile picture to databas
+# @app.route ('/api/profile_picture', methods =["GET", "POST"])
+# @login_required
 
 
-        #form.userPicture.data.save(save_location)
-
-        filename = form.userPicture.data.filename
-        print(type(filename))
-        image_user = Image.open(form.userPicture.data)
-
-        #looks at image metadata to check for a camera orientation and then rotates it appropriately so it appears the right way round in html display
-        try:
-            for orientation in ExifTags.TAGS.keys():
-                if ExifTags.TAGS[orientation]=='Orientation':
-                    break
-            exif=dict(image_user._getexif().items())
-            print(exif[orientation])
-            if exif[orientation] == 3 :
-                image_user2=image_user.rotate(180, expand=True)
-            elif exif[orientation] == 6 :
-                image_user2=image_user.rotate(270, expand=True)
-            elif exif[orientation] == 8 :
-                print("rotating")
-                image_user2=image_user2.rotate(90, expand=True)
-
-        except Exception as e:
-            print(e)
-
-
-        image_user2 = image_user.resize((120,120), Image.ANTIALIAS )
-        image_user2.save(save_location)
-        current_user.profileImageLocation = relative_path + "/" + filename
-        db.session.commit()
-
-
-    return render_template("user_profile.html", form = form)
+#     return render_template("user_profile.html", form = form)
 
 #API: inserts asset into database and allows tags to be added to asset
 @app.route('/assets/new', methods=["GET", "POST"])
@@ -246,25 +207,12 @@ def controller_view():
     else:
         return redirect('/new_session')
 
-@app.route('/api/test1')
-def test1():
-    #With a database that contained one session and 2 assets I used this test two add the 1 of the assets twice and the other once to the session
-    session = current_user.activeSession
-    asset = AssetModel.find_by_assetId(1)
-    asset2 = AssetModel.find_by_assetId(2)
-    print(session)
-    session.add_asset(asset, 1)
-    session.add_asset(asset2, 1)
-    session.add_asset(asset, 1)
-    return dumps([])
-
 @app.route('/fetch_active_session_assets', methods=['GET'])
 @login_required
 def fetch_active_session_assets():
     session = SessionModel.find_active_session()
     if session:
         dates = get_full_session(session)
-        # Need to return the full list of the assets in the session
         return jsonify({"assets" : [date.json() for date in dates]})
     else:
         return dumps([])
@@ -272,7 +220,57 @@ def fetch_active_session_assets():
 @app.route('/user_settings', methods=['GET', 'POST'])
 @login_required
 def user_settings_view():
-    return render_template('user_settings.html')
+    form = FormUpdateSettings()
+    if form.validate() and request.method == "POST" and current_user.is_authenticated:
+        print("form valid")
+        if form.userPicture.data:
+            addPicture(form)
+        if form.passwordUpdate.data:
+            hashpass = bcrypt.hashpw(form.passwordUpdate.data.encode('utf-8'), bcrypt.gensalt())
+            current_user.password = hashpass
+            current_user.save_to_db()
+        if form.emailUpdate.data:
+            current_user.email = form.emailUpdate.data
+            current_user.save_to_db()
+    return render_template('user_settings.html', form = form)
+
+
+def addPicture(settingsForm):
+    print (os.getcwd())
+    form = settingsForm
+    relative_path = url_for('static', filename='resources/uploadedFiles/')
+    relative_path = relative_path + "user_" + str(current_user.get_id())
+    full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id())
+    save_location = full_path + "/" + form.userPicture.data.filename
+    filename = form.userPicture.data.filename
+    print(type(filename))
+    image_user = Image.open(form.userPicture.data)
+
+    #looks at image metadata to check for a camera orientation and then rotates it appropriately so it appears the right way round in html display
+    try:
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation]=='Orientation':
+                break
+        exif=dict(image_user._getexif().items())
+        print(exif[orientation])
+        if exif[orientation] == 3 :
+            image_user2=image_user.rotate(180, expand=True)
+        elif exif[orientation] == 6 :
+            image_user2=image_user.rotate(270, expand=True)
+        elif exif[orientation] == 8 :
+            print("rotating")
+            image_user = image_user.resize((120,120), Image.ANTIALIAS )
+            image_user.show()
+            image_user2=image_user.rotate(90, expand=True)
+            image_user2.show()
+            
+
+    except Exception as e:
+        print(e)
+
+    image_user2.save(save_location)
+    current_user.profileImageLocation = relative_path + "/" + filename
+    db.session.commit()
 
 @app.route('/sessions', methods=['GET'])
 @login_required
@@ -297,7 +295,6 @@ def session_page(id=None):
 
 # Returns a session with ALL occurences of the assets in it, including duplicates
 def get_full_session(session):
-    # Make a deep copy of the session to ensure the session is not altered
     dateList = []
     for asset in session.assets:
         for dateObj in asset.get_dates_for_session(session.sessionNumber):

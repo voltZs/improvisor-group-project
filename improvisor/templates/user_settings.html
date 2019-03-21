@@ -4,4 +4,11 @@
 
 {% block page_content %}
     <h2 class="darkText">User Settings</h2>
+    <form method="POST" action="/user_settings" enctype="multipart/form-data">
+        {{form.csrf_token}}
+        {{form.userPicture.label}}{{form.userPicture}}<br/>
+        {{form.passwordUpdate.label}} {{form.passwordUpdate}}<br/>
+        {{form.emailUpdate.label}}{{form.emailUpdate}}
+        <input type ="submit" value = "Submit">
+    </form>
 {% endblock page_content %}

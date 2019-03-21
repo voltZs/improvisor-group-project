@@ -61,16 +61,12 @@ class FormUpdateAsset(FlaskForm):
     assetname = StringField('assetname', validators=[
         validators.DataRequired(),
         validators.length(min=2, max =200)
-    ]);
+    ])
 
     tagArrayString = StringField('tagArrayString', validators=[
         validators.DataRequired()
-    ]);
-    # tagname = StringField('tagname', validators=[
-    #     validators.DataRequired(),
-    #     validators.Length(min=2, max=200)
-    # ])
-    # operation = RadioField("Delete or Add", choices =[("delete", "Delete Tag"), ("add", "Add Tag")])
+    ])
+    
 
 
 class FormLogin(FlaskForm):
@@ -80,22 +76,22 @@ class FormLogin(FlaskForm):
 		validators.Length(min=8, max=50)
 	])
 
-class FormProfilePicture(FlaskForm):
-    userPicture = FileField("UPLOAD PROFILE IMAGE:", validators=[
-        FileRequired(),
-        FileAllowed(['jpg', 'png'])
-    ])
-    password = PasswordField('password', validators=[
-		validators.Length(min=8, max=50),
-        validators.Optional(True)
-	])
-    email = StringField('email', validators= [
-        validators.Email(),
-        validators.Optional(True)
-    ])
-
 class FormSession(FlaskForm):
     sessionname = StringField('sessionname', validators= [
         validators.Length(min=1, max=50),
         validators.Regexp('/[A-Za-z]+$/', message="Session name must contain at least one character (A-Z)")
+    ])
+
+class FormUpdateSettings(FlaskForm):
+    userPicture = FileField("UPLOAD PROFILE IMAGE:", validators=[
+        validators.Optional(True),
+        FileAllowed(['jpg', 'png'])
+    ])
+    passwordUpdate = PasswordField('Update Password', validators=[
+		validators.Length(min=8, max=50),
+        validators.Optional(True)
+	])
+    emailUpdate = StringField('Update Email', validators= [
+        validators.Email(),
+        validators.Optional(True)
     ])
