@@ -236,14 +236,12 @@ def user_settings_view():
 
 
 def addPicture(settingsForm):
-    print (os.getcwd())
     form = settingsForm
     relative_path = url_for('static', filename='resources/uploadedFiles/')
     relative_path = relative_path + "user_" + str(current_user.get_id())
     full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id())
     save_location = full_path + "/" + form.userPicture.data.filename
     filename = form.userPicture.data.filename
-    print(type(filename))
     image_user = Image.open(form.userPicture.data)
 
     #looks at image metadata to check for a camera orientation and then rotates it appropriately so it appears the right way round in html display
@@ -254,21 +252,21 @@ def addPicture(settingsForm):
         exif=dict(image_user._getexif().items())
         print(exif[orientation])
         if exif[orientation] == 3 :
-            image_user2=image_user.rotate(180, expand=True)
+            image_user2 = image_user.resize((120,120), Image.ANTIALIAS )
+            image_user2.rotate(180, expand=True).save(save_location)
         elif exif[orientation] == 6 :
-            image_user2=image_user.rotate(270, expand=True)
+            image_user2 = image_user.resize((120,120), Image.ANTIALIAS )
+            image_user2.rotate(270, expand=True).save(save_location)
         elif exif[orientation] == 8 :
-            print("rotating")
-            image_user = image_user.resize((120,120), Image.ANTIALIAS )
-            image_user.show()
-            image_user2=image_user.rotate(90, expand=True)
-            image_user2.show()
+            image_user2 = image_user.resize((120,120), Image.ANTIALIAS )
+            image_user2.rotate(90, expand=True).save(save_location)
             
 
     except Exception as e:
         print(e)
-
-    image_user2.save(save_location)
+        image_user.save(save_location)
+    if (current_user.profileImageLocation != "https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="):
+        os.remove("improvisor" + current_user.profileImageLocation)
     current_user.profileImageLocation = relative_path + "/" + filename
     db.session.commit()
 
