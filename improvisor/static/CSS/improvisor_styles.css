@@ -808,7 +808,8 @@ div.presenter-view object{
 .register .inputs .footer button {
     height: 40px;
     border-radius: 20px;
-    width: 150px;
+    min-width: 130px;
+    padding: 0 10px!important;
     background: #0044ff;
     font-size: 18px;
     border: none;
@@ -1169,4 +1170,10 @@ p.error {
 button {
     font-family: 'Nunito', sans-serif;
     background: white;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }

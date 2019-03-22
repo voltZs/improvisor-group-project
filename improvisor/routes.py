@@ -4,7 +4,7 @@ from db import db
 import os, json, copy, bcrypt
 import base64
 from os.path import join
-from improvisor.forms import FormSession, FormTag, FormSignup, FormAsset, FormLogin, FormUpdateAsset, FormUpdateSettings
+from improvisor.forms import FormSession, FormTag, FormSignup, FormAsset, FormLogin, FormUpdateAsset, FormUpdateSettings, FormRequestPasswordReset, FormResetPassword
 from improvisor.models.tag_model import TagModel
 from improvisor.models.user_model import UserModel
 from improvisor.models.asset_model import AssetModel
@@ -14,13 +14,15 @@ from improvisor.models.associationTable_tag_asset import asset_tags
 from improvisor.models.associationTable_session_asset import session_asset
 from sqlalchemy import desc, asc
 from flask import Flask, render_template, request, redirect, jsonify, session, abort, flash, url_for
-from improvisor import app, login_manager
+from improvisor import app, login_manager, mail
 from operator import itemgetter
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from PIL import Image, ExifTags
 from datetime import datetime, date
 import time
 from json import dumps
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask_mail import Message
 
 
 @app.context_processor
@@ -440,7 +442,7 @@ def asset_update(id=None):
                 print("deleted tag " + existing_tag)
             #if existing tag is present in the new tag_array keep it
 
-    return redirect(url_for('asset', id=id));
+    return redirect(url_for('asset', id=id))
 
 
 
@@ -451,8 +453,10 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect('/')
+    
     form = FormLogin(request.form)
-
     if request.method == "POST" and form.validate():
         user = UserModel.find_by_email(form.email.data)
 
@@ -523,7 +527,80 @@ def addDirectory(user_id):
         print("error making directory")
 
 
-@app.route('/compare_phrases', methods=['POST', "GET"])
+# Generate a password reset token that lasts 30 minutes
+def get_reset_token(self, expires_sec=1800):
+	s = Serializer(app.secret_key, expires_sec)
+	return s.dumps({'_id' : str(self.id)}).decode('utf-8')
+
+
+# Send an email containing the password reset token
+def send_reset_email(user):
+	token = get_reset_token(user)
+	reset_url = url_for('reset_token', token=token, _external=True)
+
+	subject = 'Improvisor | Password Reset Request'
+	template = render_template('email.html', reset_url=reset_url, user=user)
+	msg = Message(
+		subject,
+		sender='noreply.improvisor@gmail.com',
+		recipients=[user.email],
+		html = template)
+
+	mail.send(msg)
+
+
+# Verify the password reset token is valid
+def verify_reset_token(token):
+    s = Serializer(app.secret_key)
+    try:
+        user_id = s.loads(token)['_id']
+    except:
+        return None
+    return UserModel.find_by_id(user_id)
+
+
+@app.route('/reset_password', methods=['POST', 'GET'])
+def reset_password():
+    form = FormRequestPasswordReset()
+    if request.method == 'POST' and form.validate():
+        email = form.email.data
+        user = UserModel.find_by_email(email)
+
+        if user is None:
+            error = "wrong_email"
+            return render_template('password_reset_request.html', form=form, error=error)
+        else:
+            print("Request password reset for ", email)
+            send_reset_email(user)
+            flash('Password reset email has been sent!', 'info')
+            return redirect(url_for('login'))
+
+    return render_template('password_reset_request.html', form=form)
+
+
+@app.route('/reset_password/<token>', methods=['POST', 'GET'])
+def reset_token(token):
+	user = verify_reset_token(token)
+	if user is None:
+		flash('Invalid or expired reset token.', 'danger')
+		return redirect(url_for('reset_request'))
+	else:
+		form = FormResetPassword()
+		if request.method == 'POST' and form.validate():
+
+			hashpass = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
+			# Update the current user password
+			user.password = hashpass
+			user.save_to_db()
+			
+			print("INFO: Password Reset for", user.email)
+			flash('Password has been reset!', 'success')
+			return redirect(url_for('login'))
+
+		return render_template('password_reset_form.html', form=form)
+
+
+@app.route('/compare_phrases', methods=['POST', 'GET'])
 def compare_phrases():
     assets = [asset.json() for asset in current_user.assets.all()]
     recognised_tags = json.loads(request.form.get('recognisedTags'))

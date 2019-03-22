@@ -5,6 +5,7 @@ from flask_cors import CORS
 from flask_bootstrap import Bootstrap
 from flask_socketio import SocketIO
 from flask_login import LoginManager
+from flask_mail import Mail
 
 app = Flask(__name__)
 app.debug = True
@@ -13,6 +14,9 @@ app.debug = True
 app.config.from_pyfile("config/defaults.py")
 # Setup server using config variables
 app.secret_key = app.config['SECRET_KEY']
+
+# Connect to the mail server
+mail = Mail(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

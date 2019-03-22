@@ -95,3 +95,14 @@ class FormUpdateSettings(FlaskForm):
         validators.Email(),
         validators.Optional(True)
     ])
+
+class FormRequestPasswordReset(FlaskForm):
+	email = StringField('email', [validators.Email()])
+
+class FormResetPassword(FlaskForm):
+	password = PasswordField('password', [
+		validators.DataRequired(),
+		validators.Length(min=8, max=50),
+		validators.EqualTo('confirm', message='Passwords do not match')
+	])
+	confirm = PasswordField('confirm')
