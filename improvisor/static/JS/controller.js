@@ -393,6 +393,8 @@ function applyGestureControls() {
     } else {
       element.addClass("gestures-added");
     }
+    
+
     // Add animation class if not already added (addClass checks first)
     element.addClass("animated");
     element.addClass("faster");
@@ -417,6 +419,12 @@ function applyGestureControls() {
               if (popupImage.hasClass("gestures-added")) {
                 return true;
               } else {
+                
+                // Identify assets that are swiped from the tab view
+                if (element.parent().attr('id') == "currentTabRow")
+                {
+                  popupImage.addClass("fromTabs");
+                }
                 popupImage.addClass("gestures-added");
                 popupImage.addClass("animated");
                 popupImage.addClass("faster");
@@ -430,7 +438,7 @@ function applyGestureControls() {
                 threshold: 1,
                 velocity: 0.1
               });
-
+              
               // listen to events...
               popupGestures.on("swipeup", function (ev) {
                 // Swipe up gesture
@@ -439,11 +447,22 @@ function applyGestureControls() {
                   var assetID = element.attr('data-id');
                   var data = {
                     id: assetID,
-                    tab: selectedTab
+                    tab: selectedTab,
+                    fromTabs: false,
+                  }
+
+                  // Check if the asset was swiped from the tab history
+                  if (popupImage.hasClass("fromTabs"))
+                  {
+                    data['fromTabs'] = true;
+                  }
+                  else
+                  {
+                    addToCurrentTab(assetID);
+                    flushRecentTags();
                   }
                   socket.emit('event', data);
-                  addToCurrentTab(assetID);
-                  flushRecentTags();
+                  
                   console.log("sent ID " + assetID + " to socketIO");
                   setTimeout(function () {
                     var magnificPopup = $.magnificPopup.instance;

@@ -21,18 +21,20 @@ def on_leave():
 @socketio.on('event')
 def handleMessage(data):
     session = SessionModel.find_active_session()
-    print(session.active)
+    #print(session.active)
+    fromTabs = data['fromTabs']
     asset_id = data['id']
     tab = int(data['tab'])
-    print("Tab: " + str(tab))
+    print("ID: " + asset_id + " Tab: " + str(tab))
     asset = {}
-    if id is not None:
+    if asset_id is not None:
         asset = AssetModel.find_by_assetId(asset_id).json()
         asset.pop('date-created')
-    socketio.emit('presenter', asset, room=str(current_user.get_id()))
-
-    asset = AssetModel.find_by_assetId(asset_id)
-    if (session):
-        session.add_asset(asset, tab)
-    else:
-        print("No active session")
+        socketio.emit('presenter', asset, room=str(current_user.get_id()))
+    
+    if (not fromTabs):
+        asset = AssetModel.find_by_assetId(asset_id)
+        if (session):
+            session.add_asset(asset, tab)
+        else:
+            print("No active session")
