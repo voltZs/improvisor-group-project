@@ -1,6 +1,7 @@
 aniso8601==4.1.0
 astroid==2.1.0
 bcrypt==3.1.6
+blinker==1.4
 cffi==1.12.1
 Click==7.0
 colorama==0.4.1
@@ -13,6 +14,7 @@ Flask-Bootstrap==3.3.7.1
 Flask-Cors==3.0.7
 Flask-JWT==0.3.2
 Flask-Login==0.4.1
+Flask-Mail==0.9.1
 Flask-RESTful==0.3.7
 Flask-SocketIO==3.2.1
 Flask-SQLAlchemy==2.3.2
