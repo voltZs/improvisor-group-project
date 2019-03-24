@@ -420,27 +420,30 @@ def asset_update(id=None):
 
         if form.validate():
             print("validated form update")
+            tag_array = form.tagArrayString.data
+            tag_array = tag_array.split(',')
+            tag_array = [x.lower() for x in tag_array]
+            existing_tags =[item.tagname.lower() for item in asset.tags]
+            for tag in tag_array:
+                if len(tag) > 0:
+                    if not tag in existing_tags: # if the tag does not exist in the asset add it
+                        new_tag = TagModel.add_tag(tag)
+                        asset.tags.append(new_tag);
+                        print("added tag " + tag)
+                        asset.save_to_db()
+                # if tag already exists in the asset, do nothing
 
-        tag_array = form.tagArrayString.data
-        tag_array = tag_array.split(',')
-        tag_array = [x.lower() for x in tag_array]
-        existing_tags =[item.tagname.lower() for item in asset.tags]
-        for tag in tag_array:
-            if len(tag) > 0:
-                if not tag in existing_tags: # if the tag does not exist in the asset add it
-                    new_tag = TagModel.add_tag(tag)
-                    asset.tags.append(new_tag);
+            for existing_tag in existing_tags:
+                if not existing_tag in tag_array: #if existing tag is not in the new tag_array, delete it
+                    tag_to_delete = TagModel.add_tag(existing_tag)
+                    asset.tags.remove(tag_to_delete)
+                    print("deleted tag " + existing_tag)
                     asset.save_to_db()
-                    print("added tag " + tag)
-            # if tag already exists in the asset, do nothing
-
-        for existing_tag in existing_tags:
-            if not existing_tag in tag_array: #if existing tag is not in the new tag_array, delete it
-                tag_to_delete = TagModel.add_tag(existing_tag)
-                asset.tags.remove(tag_to_delete)
+                #if existing tag is present in the new tag_array keep it
+            if form.thumbnailLocation.data:
+                asset.thumbnailLocation = form.thumbnailLocation.data;
                 asset.save_to_db()
-                print("deleted tag " + existing_tag)
-            #if existing tag is present in the new tag_array keep it
+            
 
     return redirect(url_for('asset', id=id))
 

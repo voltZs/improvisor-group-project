@@ -38,10 +38,7 @@ class FormAsset(FlaskForm):
         ('link','Link')],
     default='file')
 
-    assetResource = FileField("UPLOAD ASSET FILE:", validators=[
-        # if we want to be able to upload a link this should probably be optional
-        # FileRequired()
-    ])
+    assetResource = FileField("UPLOAD ASSET FILE:")
 
     assetLink = StringField('assetlink',validators=[
         validators.Optional(True),
@@ -66,8 +63,11 @@ class FormUpdateAsset(FlaskForm):
     tagArrayString = StringField('tagArrayString', validators=[
         validators.DataRequired()
     ])
-    
 
+    assetThumbnail = FileField("UPLOAD ASSET FILE:")
+    assetAutomaticThumbnail = HiddenField("This field should be hidden", validators=[
+        validators.Optional(True)
+    ])
 
 class FormLogin(FlaskForm):
     email = StringField('email', validators= [validators.Email()])

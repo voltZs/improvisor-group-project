@@ -628,7 +628,7 @@ input.fileInputHidden {
 }
 
 input.fileInputHidden:hover {
-    cursor: pointer !important;
+    cursor: default !important;
 }
 
 .fileNameLabelVisible {
@@ -661,7 +661,7 @@ input[type=checkbox]:checked{
 }
 
 .thumbnailSpace{
-    margin: 20px 0 10px 0;
+    margin: 20px 0 5px 0;
 }
 .thumbnailSpace:hover{
     cursor: pointer;
@@ -675,11 +675,13 @@ input[type=checkbox]:checked{
     width: 100%;
     justify-content: center;
     align-items: center;
+    margin-bottom: 15px;
 }
 
 .assetPageLeft{
     display: inline-flex;
     flex-direction: column;
+    align-items: center;
     margin-right: 10px;
 }
 .assetPageRight{

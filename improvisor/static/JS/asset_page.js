@@ -13,6 +13,16 @@ var saveButton = document.getElementById("asset-save");
 var assetID = parseInt($("#hidden-id-data").attr("data"));
 document.getElementById("inputTagArray").hidden = true;
 
+var thumbnailSpace = document.getElementById('thumbnailSpace');
+var hiddenField = document.getElementById('thumbHidden');
+var file;
+var thumbnailImage = document.getElementById("thumbnailImg");
+var thumbnailUploadHidden = document.getElementById("thumbUploadHidden");
+var prevButton =  document.getElementById('prevButton');
+var nextButton =  document.getElementById('nextButton');
+var thumbnailNameCheckboxCont = document.getElementById('thumbnailNameCheckbox');
+var thumbnailNameCheckbox = thumbnailNameCheckboxCont.children[0];
+
 $(".hidden-tags-data").each(function(){
     var tag =$(this).attr("data");
     addTagElement(tag);
@@ -65,6 +75,71 @@ function addTagElement(newTag){
     })
     assetTagsContainter.appendChild(tagButton);
 }
+
+$(nextButton).hide();
+$(prevButton).hide();
+thumbnailSpace.addEventListener("click", function(){
+    thumbnailUploadHidden.click();
+})
+
+thumbnailUploadHidden.addEventListener("change", function(){
+    file = thumbnailUploadHidden.files[0];
+    createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton, 1);
+    $(thumbnailNameCheckboxCont).show();
+});
+
+prevButton.addEventListener('click', function(event) {
+    if(lastClickedPDF != 1){
+        showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton, 1);
+    } else {
+        if(__CURRENT_PAGE > 0){
+            showPage(--__CURRENT_PAGE, thumbnailSpace, hiddenField, nextButton, prevButton, 1);
+            createThumbnailPDF(thumbnailSpace, hiddenField);
+        }
+    }
+});
+
+nextButton.addEventListener('click', function() {
+    if(lastClickedPDF != 1){
+        showPDF(URL.createObjectURL(file), thumbnailSpace, hiddenField, nextButton, prevButton);
+    } else {
+        if(__CURRENT_PAGE <= __TOTAL_PAGES){
+            showPage(++__CURRENT_PAGE, thumbnailSpace, hiddenField, nextButton, prevButton);
+            createThumbnailPDF(thumbnailSpace, hiddenField);
+        }
+    }
+});
+
+// function that updates the thumbnail if it is the name of the asses and
+// when it has been updated
+assetNameInput.addEventListener('change', function(){
+  // checks if the "use name as thumbnail" checkbox has been ticked before
+  // updating the thumbnail
+  if(thumbnailNameCheckbox.checked){
+    $(nextButton).parent().hide();
+    var name = assetNameInput.value;
+    thumbnailFromAssetName(name, thumbnailSpace, hiddenField);
+  }
+});
+
+thumbnailNameCheckbox.addEventListener('change', function(){
+  if(this.checked == true){
+    console.log('The checkbox has been ticked');
+    $(nextButton).parent().hide();
+    var name = assetNameInput.value;
+    thumbnailFromAssetName(name, thumbnailSpace, hiddenField);
+  }else{
+    console.log('The checkbox has been unticked');
+    $(nextButton).parent().show();
+    thumbnailSpace.innerHTML= "";
+    createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton);
+
+  }
+});
+
+
+
+
 
 deleteButton.addEventListener("click", function(){
     $.ajax({

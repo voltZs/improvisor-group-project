@@ -17,23 +17,49 @@
     {{ asset.assetname }}
 </h2>
 
+<div id="assetData"
+    data-id="{{asset.id}}"
+    data-assettype ="{{asset.assettype}}"
+    data-assetname="{{asset.assetname}}"
+    data-assetLocation="{{asset.assetLocation}}"
+    data-assetLink="{{asset.assetLink}}"
+    data-thumbnailLocation="{{asset.thumbnailLocation}}"
+    data-dateCreated="{{asset.dateCreated}}"
+    data-user_id="{{asset.user_id}}"
+></div>
+
+
 <div class="whiteContainer">
     <form id="formUpdate" class="flexContVertical" method="POST" action="/assets/{{asset.id}}/update" enctype="multipart/form-data">
-
+    <span class="rightSpan darkText">
+        <i class="fas fa-info-circle"></i>
+        Click field to edit
+    </span>
     <div class="assetPageTop">
-        <div class="assetPageLeft">
 
-                {% if asset.thumbnailLocation != None %}
-                    <img class="assetThumbnail" src="{{asset.thumbnailLocation}}">
-                {% else %}
-                    <!-- Placeholder until we get a default asset thumbnail -->
-                    <div class="thumbnail-placeholder">Placeholder</div>
-                {% endif %}
+        <div class="assetPageLeft">
+                {{form.assetThumbnail(class="fileInputHidden", id="thumbUploadHidden")}}
+                {{form.assetAutomaticThumbnail(id="thumbHidden")}}
+                <div id="thumbnailSpace" class="thumbnailSpace">
+                    {% if asset.thumbnailLocation != None %}
+                        <img class="assetThumbnail" src="{{asset.thumbnailLocation}}" id="thumbnailImg"">
+                    {% endif %}
+                </div>
+                <div class="midScreen">
+                  <div class="bubbleButton bubbleButtonDark rowsButton" id="prevButton">Previous</div>
+                  <div class="bubbleButton bubbleButtonDark rowsButton" id="nextButton">Next</div>
+                </div>
+                <div id="thumbnailNameCheckbox" class="midScreen">
+                    <input type="checkbox" id="thumbnailNameCheckbox">
+                    <span class="text18">Use name as thumbnail</span>
+                </div>
         </div>
         <div class="assetPageRight">
             {{form.assetname(class="assetTitle darkText boldText", id="assetNameInput", data=asset.assetname, value=asset.assetname )}}
             {{ form.hidden_tag() }}
-            <div class="assetLabel darkText boldText">{{ asset.dateCreated }} </div>
+            {% set locationList = asset.assetLocation.split('/') %}
+            <div class="assetLabel darkText boldText">{{locationList[locationList|length-1]}}</div>
+            <div class="assetLabel darkText boldText">{{ asset.dateCreated.strftime('%d-%m-%Y') }} </div>
         </div>
     </div>
 
@@ -63,6 +89,7 @@
 <script>
     document.getElementById('assetPoolOption').classList.add('selected');
 </script>
+<script type="text/javascript" src="{{url_for('static', filename='JS/thumbnail_generation.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='JS/asset_page.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='JS/tagRecTest.js')}}"></script>
 {% endblock end_body %}
