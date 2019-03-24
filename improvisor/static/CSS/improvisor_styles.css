@@ -646,7 +646,7 @@ input.fileInputHidden:hover {
 
 input[type=checkbox]{
     -webkit-appearance:none;
-    width: 18px;
+    min-width: 18px;
     height: 18px;
     border: none;
     border-radius: 5px;
