@@ -101,10 +101,11 @@ def addAsset():
             flash("Error uploading file", "danger")
             return render_template("asset_form.html", form=form)
         try:
+            #if the files related to the asset have successfully been saved to file system, update the asset in the db now that it has those file locations
             asset.save_to_db()
         except:
-            error = "Error while saving asset to db"
-            return render_template("asset_form.html", form=form, error=error)
+            flash("Error while saving asset to db")
+            return render_template("asset_form.html", form=form)
         flash("Successfully added asset", "success")
         return redirect('/assets/new')
     else:
@@ -113,10 +114,15 @@ def addAsset():
 
 
 def upload(asset, assetResource, thumbBase64):
+    try:
+        asset.save_to_db() #adds the asset to db so it has a unique id to be used when saving the upload file 
+    except Exception as e:
+        print(e)
+        flash("Error saving asset to db")
     print ("saving upload")
-    full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) +"/"+ asset.assetname
+    full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) +"/asset_"+ str(asset.id)
     relative_path = url_for('static', filename='resources/uploadedFiles/')
-    relative_path = relative_path + "user_" + str(current_user.get_id()) + "/" + asset.assetname
+    relative_path = relative_path + "user_" + str(current_user.get_id()) + "/asset_"+ str(asset.id)
     print (f'assetResource is {assetResource}')
     if asset.assettype == "file":
         if assetResource:
