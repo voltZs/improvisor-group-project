@@ -262,7 +262,7 @@ def addPicture(settingsForm):
         elif exif[orientation] == 8 :
             image_user2 = image_user.resize((120,120), Image.ANTIALIAS )
             image_user2.rotate(90, expand=True).save(save_location)
-            
+
 
     except Exception as e:
         print(e)
@@ -455,7 +455,7 @@ def load_user(user_id):
 def login():
     if current_user.is_authenticated:
         return redirect('/')
-    
+
     form = FormLogin(request.form)
     if request.method == "POST" and form.validate():
         user = UserModel.find_by_email(form.email.data)
@@ -592,7 +592,7 @@ def reset_token(token):
 			# Update the current user password
 			user.password = hashpass
 			user.save_to_db()
-			
+
 			print("INFO: Password Reset for", user.email)
 			flash('Password has been reset!', 'success')
 			return redirect(url_for('login'))

@@ -2,6 +2,7 @@
 
 
 {% block main_content%}
+    {% if current_user.is_authenticated %}
 
     <div class="rightContainer">
         <div class="rightContainerOptions">
@@ -63,6 +64,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
     <div class="pageContainer">
         {% block page_content %}
@@ -72,5 +74,6 @@
     <script>
         $("#thumbnailTestMic").hide();
     </script>
+    
 
 {% endblock main_content%}

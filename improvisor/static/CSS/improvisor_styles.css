@@ -92,7 +92,16 @@ body {
 }
 
 .pageContainer {
-    width: 68%;
+    flex-grow: 1;
+    padding: 20px;
+    background-color: rgb(255, 255, 255, 0.9);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.promptContainer {
+    min-width: 320px;
+    width: 30vw;
     padding: 20px;
     background-color: rgb(255, 255, 255, 0.9);
     border-radius: 12px;
@@ -105,7 +114,8 @@ body {
     display: flex;
     flex-direction: column;
     margin-left: 15px;
-    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
 }
 
 .avatarImg {
@@ -177,7 +187,8 @@ body {
         margin-left: 0;
         flex-direction: column;
         padding: 0 25px 0 25px;
-        width: 100%;
+        width: 100% !important;
+        min-width: 100%;
         align-items: center;
     }
 
@@ -546,12 +557,12 @@ input.growText {
 
 .labelDiv {
     display: inline-block;
-    min-width: 100px;
-    font-size: 16px;
+    min-width: 110px;
+    font-size: 18px;
 }
 
 input[type="text"] {
-    /* background-color: rgba(38, 100, 201, 1); */
+    font-size: 17px;
 }
 
 input.bubbleButton {
