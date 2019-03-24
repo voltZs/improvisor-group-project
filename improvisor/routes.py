@@ -95,7 +95,7 @@ def addAsset():
         asset.assetLink =  form.assetLink.data
         try:
             print(f'asset resource in addAsset is {form.assetResource.data}')
-            upload(asset, form.assetResource.data, form.assetAutomaticThumbnail.data, form.assetThumbnail.data)
+            upload(asset, form.assetResource.data, form.assetAutomaticThumbnail.data)
         except Exception as e:
             print(e)
             flash("Error uploading file", "danger")
@@ -112,7 +112,7 @@ def addAsset():
     return render_template("asset_form.html", form=form)
 
 
-def upload(asset, assetResource, thumbBase64, assetThumbnail = None ):
+def upload(asset, assetResource, thumbBase64):
     print ("saving upload")
     full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) +"/"+ asset.assetname
     relative_path = url_for('static', filename='resources/uploadedFiles/')
@@ -128,19 +128,21 @@ def upload(asset, assetResource, thumbBase64, assetThumbnail = None ):
                 os.makedirs(full_path)
             assetResource.save(save_location)
             asset.assetLocation = relative_path + "/" + assetResource.filename
-    if assetThumbnail:
-        save_location = full_path + "/" + assetThumbnail.filename
-        assetThumbnail.save(save_location)
-        asset.thumbnailLocation = relative_path + "/" + assetThumbnail.filename
-    elif thumbBase64:
+    else:
+        if asset.assetLink:
+            print("making directory for link")
+            if not os.path.exists(full_path):
+                print(f'making directory: {full_path}')
+                os.makedirs(full_path)
+    if thumbBase64:
         print("In thumbase64")
-        save_location = full_path + "/Thumb" + assetResource.filename
+        save_location = full_path + "/Thumbnail.png"
         #removes the description from the string
         thumbBase64 = thumbBase64.replace("data:image/png;base64,", '')
         image = base64.b64decode(thumbBase64 + "==")
         with open(save_location, 'wb') as f:
             f.write(image)
-        asset.thumbnailLocation = relative_path + "/Thumb" + assetResource.filename
+        asset.thumbnailLocation = relative_path + "/Thumbnail.png"
 
 
 
@@ -440,10 +442,14 @@ def asset_update(id=None):
                     print("deleted tag " + existing_tag)
                     asset.save_to_db()
                 #if existing tag is present in the new tag_array keep it
-            if form.thumbnailLocation.data:
-                asset.thumbnailLocation = form.thumbnailLocation.data;
+            if form.assetname.data:
+                print(form.assetname.data)
+                asset.assetname = form.assetname.data
                 asset.save_to_db()
-            
+            if form.assetAutomaticThumbnail.data:
+	            upload(asset, None, form.assetAutomaticThumbnail.data)
+	            asset.save_to_db()
+
 
     return redirect(url_for('asset', id=id))
 

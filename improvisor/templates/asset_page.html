@@ -57,8 +57,12 @@
         <div class="assetPageRight">
             {{form.assetname(class="assetTitle darkText boldText", id="assetNameInput", data=asset.assetname, value=asset.assetname )}}
             {{ form.hidden_tag() }}
-            {% set locationList = asset.assetLocation.split('/') %}
-            <div class="assetLabel darkText boldText">{{locationList[locationList|length-1]}}</div>
+            {% if asset.assettype == 'file' %}
+              {% set locationList = asset.assetLocation.split('/') %}
+              <div class="assetLabel darkText boldText">{{locationList[locationList|length-1]}}</div>
+            {% else %}
+              <div class="assetLabel darkText boldText">{{asset.assetLink}}</div>
+            {% endif %}
             <div class="assetLabel darkText boldText">{{ asset.dateCreated.strftime('%d-%m-%Y') }} </div>
         </div>
     </div>
