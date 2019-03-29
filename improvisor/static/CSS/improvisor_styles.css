@@ -89,9 +89,19 @@ body {
     .topSpace {
         height: 7vh;
     }
+
+    .pageContainer {
+        max-width: 100% !important;
+    }
+
+    .session-page-controls {
+        flex-direction: column;
+        justify-content: center;
+    }
 }
 
 .pageContainer {
+    max-width: 70%;
     flex-grow: 1;
     padding: 20px;
     background-color: rgb(255, 255, 255, 0.9);
@@ -1179,6 +1189,12 @@ p.error {
 
 .sessions .session:hover {
     background-color: rgba(255, 255, 255, 1);
+}
+
+.session-page-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 button {

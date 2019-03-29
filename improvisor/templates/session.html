@@ -19,9 +19,9 @@
             {% endfor %}
         {% endif %}
     </div>
+    <h3 class="blackText">Session Assets:</h3>
     {% if session.dates|length > 0 %}
         <div class="currentBlock">
-            <h3 class="blackText">Session Assets:</h3>
             <div class="imageRow style-2" id="currentRow">
                 {% for asset in session.dates %}
                     <img src="{{asset.asset.thumbnailLocation}}" data-id="{{asset.asset.id}}" title="{{asset.asset.assetname}}" class="assetThumbnail" style="touch-action: pan-x; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
@@ -33,8 +33,10 @@
     {% endif %}
 </div>
 
-<button id="session-export" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonGreenHover">Export Session</button>
-<button id="session-delete" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonRedHover rightSpan">Delete Session</button>
+<div class="session-page-controls">
+    <button id="session-export" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonGreenHover">Export Session</button>
+    <button id="session-delete" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonRedHover">Delete Session</button>
+</div>
 
 <br />
 <div class="flashes">

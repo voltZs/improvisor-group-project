@@ -110,7 +110,7 @@ nextButton.addEventListener('click', function() {
     }
 });
 
-// function that updates the thumbnail if it is the name of the asses and
+// function that updates the thumbnail if it is the name of the assets and
 // when it has been updated
 assetNameInput.addEventListener('change', function(){
   // checks if the "use name as thumbnail" checkbox has been ticked before
