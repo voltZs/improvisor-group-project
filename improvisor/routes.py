@@ -107,7 +107,7 @@ def addAsset():
         flash("Successfully added asset", "success")
         return redirect('/assets/new')
     else:
-    return render_template("asset_form.html", form=form)
+        return render_template("asset_form.html", form=form)
 
 
 def upload(asset, assetResource, thumbBase64):
