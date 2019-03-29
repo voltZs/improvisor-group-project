@@ -318,6 +318,8 @@ def session_page(id=None):
             form = FormSession()
             custom_session = copy.deepcopy(session)
             dates = get_full_session(session)
+            for current in dates:
+                print(current.asset.assetname)
             setattr(custom_session, "dates", [date.json() for date in dates])
             return render_template('session.html', session=custom_session, form=form)
     return redirect('/sessions')
