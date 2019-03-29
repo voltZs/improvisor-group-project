@@ -3,6 +3,7 @@ from flask_wtf.file import FileField
 from db import db
 import os, json, copy, bcrypt
 import base64
+import colour
 from os.path import join
 from improvisor.forms import FormSession, FormTag, FormSignup, FormAsset, FormLogin, FormUpdateAsset, FormUpdateSettings, FormRequestPasswordReset, FormResetPassword
 from improvisor.models.tag_model import TagModel
@@ -252,6 +253,8 @@ def user_settings_view():
         if form.lastnameUpdate.data:
             current_user.lastname = form.lastnameUpdate.data
             change = True
+        if form.colour.data:
+            print(type(form.colour.data))
     if change == True:
         current_user.save_to_db()
     return render_template('user_settings.html', form = form)

@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, IntegerField, HiddenField, validators, PasswordField, RadioField
+from wtforms_components import ColorField
+from colour import Color 
 
 
 class FormTag(FlaskForm):
@@ -107,6 +109,9 @@ class FormUpdateSettings(FlaskForm):
 		validators.Regexp('^\\w+$', message="Last name may only contain letters"),
         validators.Optional(True)
 	])
+    colour = ColorField()
+    
+
 
 class FormRequestPasswordReset(FlaskForm):
 	email = StringField('email', [validators.Email()])
