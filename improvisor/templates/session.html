@@ -16,9 +16,7 @@
     <div class="session-title">
         {{form.sessionname(class="assetTitle darkText boldText", id="sessionNameInput", data=session.sessionName, value=session.sessionName )}}
         {% if form.sessionname.errors %}
-            {% for error in form.sessionname.errors %}
-                <p class="error">{{ error }}</p>
-            {% endfor %}
+            <p class="error">{{ form.sessionname.errors[0] }}</p>
         {% endif %}
     </div>
     <h3 class="blackText">Session Assets:</h3>
