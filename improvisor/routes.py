@@ -234,6 +234,7 @@ def fetch_active_session_assets():
 @login_required
 def user_settings_view():
     form = FormUpdateSettings()
+    change = False
     if form.validate() and request.method == "POST" and current_user.is_authenticated:
         print("form valid")
         if form.userPicture.data:
@@ -241,10 +242,18 @@ def user_settings_view():
         if form.passwordUpdate.data:
             hashpass = bcrypt.hashpw(form.passwordUpdate.data.encode('utf-8'), bcrypt.gensalt())
             current_user.password = hashpass
-            current_user.save_to_db()
+            change = True
         if form.emailUpdate.data:
             current_user.email = form.emailUpdate.data
-            current_user.save_to_db()
+            change = True
+        if form.firstnameUpdate.data:
+            current_user.firstname = form.firstnameUpdate.data
+            change = True
+        if form.lastnameUpdate.data:
+            current_user.lastname = form.lastnameUpdate.data
+            change = True
+    if change == True:
+        current_user.save_to_db()
     return render_template('user_settings.html', form = form)
 
 

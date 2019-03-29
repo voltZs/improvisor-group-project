@@ -7,8 +7,15 @@
     <form method="POST" action="/user_settings" enctype="multipart/form-data">
         {{form.csrf_token}}
         {{form.userPicture.label}}{{form.userPicture}}<br/>
-        {{form.passwordUpdate.label}} {{form.passwordUpdate}}<br/>
-        {{form.emailUpdate.label}}{{form.emailUpdate}}
+        {{form.passwordUpdate.label}} {{form.passwordUpdate}} 
+        {{form.confirmUpdate.label}} {{form.confirmUpdate}}<br/>
+        {{form.emailUpdate.label}}{{form.emailUpdate}}<br/>
+        {{form.firstnameUpdate.label}} {{form.firstnameUpdate}}<br/>
+        {{form.lastnameUpdate.label}} {{form.lastnameUpdate}} <br/>
+
         <input type ="submit" value = "Submit">
     </form>
+    <div class="flashes">
+        {% include 'includes/_messages.html' %}
+    </div>
 {% endblock page_content %}

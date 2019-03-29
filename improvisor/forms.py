@@ -89,12 +89,24 @@ class FormUpdateSettings(FlaskForm):
     ])
     passwordUpdate = PasswordField('Update Password', validators=[
 		validators.Length(min=8, max=50),
-        validators.Optional(True)
+        validators.Optional(True),
+        validators.EqualTo("confirmUpdate", message="Passwords do not match")
 	])
+    confirmUpdate = PasswordField("Confirm")
     emailUpdate = StringField('Update Email', validators= [
         validators.Email(),
         validators.Optional(True)
     ])
+    firstnameUpdate = StringField('firstname',validators= [
+	    validators.Length(min=2, max=50),
+		validators.Regexp('^\\w+$', message="First name may only contain letters"),
+        validators.Optional(True)
+	])
+    lastnameUpdate = StringField('lastname', validators=[
+        validators.Length(min=2, max=50),
+		validators.Regexp('^\\w+$', message="Last name may only contain letters"),
+        validators.Optional(True)
+	])
 
 class FormRequestPasswordReset(FlaskForm):
 	email = StringField('email', [validators.Email()])
