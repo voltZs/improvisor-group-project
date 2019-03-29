@@ -206,6 +206,9 @@ def continue_session():
 @app.route('/presenter', methods=['GET'])
 @login_required
 def presenter_view():
+    session = SessionModel.find_active_session()
+    if session == None:
+        return redirect('/new_session')
     return render_template('presenter.html')
 
 @app.route('/controller', methods=['GET'])
