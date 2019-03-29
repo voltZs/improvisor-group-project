@@ -106,15 +106,13 @@ function stopListening() {
 function setupPage() {
   localStorage.clear();
   stopListening();
-
+  loadAssetsFromSession();
   if (!localStorage.getItem('tabs')) {
     localStorage.setItem('tabs', '{}');
     addTab();
   } else {
     renderTabs();
-  }
-
-  loadAssetsFromSession();
+  } 
 
   document.getElementById('addTabBtn').addEventListener(
     'click',
@@ -255,8 +253,10 @@ function renderTabs() {
 
 function addToCurrentTab(assetID) {
   var tabs = JSON.parse(localStorage.getItem('tabs'));
+
   var asset = getAsset(assetID);
-  tabs[selectedTab].push(asset);
+  var tab = parseInt(selectedTab);
+  tabs[tab].push(asset);
   localStorage.setItem('tabs', JSON.stringify(tabs));
   populateActiveTab();
 }
@@ -266,7 +266,9 @@ function loadAssetsFromSession()
   var tabs = JSON.parse(localStorage.getItem('tabs'));
   var maxTab = 0;
 
-  var tabs = {}
+  var tabs = {
+    '1' : []
+  }
   // Find the maximum tab
   for (var i = 0; i < assets.length; i++)
   {
