@@ -1,6 +1,7 @@
 from db import db
 from datetime import datetime
 from improvisor.models.associationTable_session_asset import session_asset
+#from improvisor.models.asset_model import AssetModel
 from flask_login import current_user
 
 class SessionModel(db.Model):
@@ -40,6 +41,9 @@ class SessionModel(db.Model):
         db.session.commit()
     
     def remove_from_db(self):
+        for asset in self.assets:
+            for date in asset.get_dates_for_session(self.id):
+                db.session.delete(date) 
         db.session.delete(self)
         db.session.commit()
     
