@@ -79,11 +79,8 @@ def allAssets():
 def addAsset():
     form = FormAsset()
     if request.method == "POST" and form.validate():
-        print(f'Valid form submitted Asset-name is : {form.assetname.data}')
         asset = AssetModel(form.assetname.data, current_user.get_id(), form.assettype.data)
         tags = form.tagname.data.split(",")
-        print(f'assettype is {form.assettype.data}')
-        print (tags)
         for tag in tags:
             # Remove extra white space
             tag = " ".join(tag.split())
@@ -110,7 +107,6 @@ def addAsset():
         flash("Successfully added asset", "success")
         return redirect('/assets/new')
     else:
-        print("Not a form")
     return render_template("asset_form.html", form=form)
 
 
@@ -120,29 +116,21 @@ def upload(asset, assetResource, thumbBase64):
     except Exception as e:
         print(e)
         flash("Error saving asset to db")
-    print ("saving upload")
     full_path = "improvisor/static/resources/uploadedFiles/user_" + str(current_user.get_id()) +"/asset_"+ str(asset.id)
     relative_path = url_for('static', filename='resources/uploadedFiles/')
     relative_path = relative_path + "user_" + str(current_user.get_id()) + "/asset_"+ str(asset.id)
-    print (f'assetResource is {assetResource}')
     if asset.assettype == "file":
         if assetResource:
-            print("saving asset Resource")
             save_location = full_path + "/" + assetResource.filename
-            print (f'saving to {save_location}')
             if not os.path.exists(full_path):
-                print("Making directory: " + full_path)
                 os.makedirs(full_path)
             assetResource.save(save_location)
             asset.assetLocation = relative_path + "/" + assetResource.filename
     else:
         if asset.assetLink:
-            print("making directory for link")
             if not os.path.exists(full_path):
-                print(f'making directory: {full_path}')
                 os.makedirs(full_path)
     if thumbBase64:
-        print("In thumbase64")
         save_location = full_path + "/Thumbnail.png"
         #removes the description from the string
         thumbBase64 = thumbBase64.replace("data:image/png;base64,", '')
@@ -238,7 +226,6 @@ def user_settings_view():
     change = False
     if request.method == "POST":
         if form.validate():
-            print("user settings form valid")
             if form.userPicture.data:
                 addPicture(form)
             if form.passwordUpdate.data:
@@ -262,7 +249,6 @@ def user_settings_view():
                 flash("Your account has been updated", "success")
                 return redirect('/user_settings')
         else:
-            print("user settings form invalid")
             return render_template('user_settings.html', form=form)
     elif request.method == "GET":
         form.emailUpdate.data = current_user.email
@@ -424,7 +410,6 @@ def assets_select():
                     # move on to next asset
                     break
     else:
-        print("here")
         filtered = unfiltered
 
     sorted_assets = []
@@ -475,7 +460,6 @@ def asset_update(id=None):
         asset = AssetModel.find_by_assetId(id)
 
         if form.validate():
-            print("validated form update")
             tag_array = form.tagArrayString.data
             tag_array = tag_array.split(',')
             tag_array = [x.lower() for x in tag_array]
@@ -484,8 +468,7 @@ def asset_update(id=None):
                 if len(tag) > 0:
                     if not tag in existing_tags: # if the tag does not exist in the asset add it
                         new_tag = TagModel.add_tag(tag)
-                        asset.tags.append(new_tag);
-                        print("added tag " + tag)
+                        asset.tags.append(new_tag)
                         asset.save_to_db()
                 # if tag already exists in the asset, do nothing
 
@@ -493,11 +476,9 @@ def asset_update(id=None):
                 if not existing_tag in tag_array: #if existing tag is not in the new tag_array, delete it
                     tag_to_delete = TagModel.add_tag(existing_tag)
                     asset.tags.remove(tag_to_delete)
-                    print("deleted tag " + existing_tag)
                     asset.save_to_db()
                 #if existing tag is present in the new tag_array keep it
             if form.assetname.data:
-                print(form.assetname.data)
                 asset.assetname = form.assetname.data
                 asset.save_to_db()
             if form.assetAutomaticThumbnail.data:
@@ -558,7 +539,6 @@ def signup_view():
         last_name = last_name_first_letter + last_name_remaining_letters
 
         email = form.email.data
-        print(email, first_name, last_name)
 
         # Check if the email address already exists
         # (Need to make sure this is not case sensitive)
@@ -633,7 +613,6 @@ def reset_password():
             error = "wrong_email"
             return render_template('password_reset_request.html', form=form, error=error)
         else:
-            print("Request password reset for ", email)
             send_reset_email(user)
             flash('Password reset email has been sent!', 'info')
             return redirect(url_for('login'))
@@ -655,8 +634,6 @@ def reset_token(token):
 			# Update the current user password
 			user.password = hashpass
 			user.save_to_db()
-
-			print("INFO: Password Reset for", user.email)
 			flash('Password has been reset!', 'success')
 			return redirect(url_for('login'))
 
@@ -695,15 +672,12 @@ def compare_phrases():
         recent_tags = mentioned_tags.get('recent')
         if not all_tags.get(word):
             mentioned_tags['all'][word] = {'mentions' : 0}
-            print("Initialised mentioned_tags['all']['" + word + "]")
         if not recent_tags.get(word):
             mentioned_tags['recent'][word] = {'mentions' : 0}
-            print("Initialised mentioned_tags['recent']['" + word + "]")
 
         # ADD THE NEW TAG TO THE MENTIONED_TAGS OBJ
         mentioned_tags['all'][word]['mentions'] += 1
         mentioned_tags['recent'][word]['mentions'] += 1
-        print("Adding mention to " + word + " in  RECENT")
     # recent_tags = sortingObj.get(mentionedTags).get('recent')
     # session['recent']
     # sesssion['frequent']
@@ -716,7 +690,6 @@ def compare_phrases():
     # MANAGE ADDING asset_selection
     for asset in assets:
         # asset.pop('date-created', None)
-        print(asset)
         ###### FOR ALL -> FREQUENT
         mentioned_all = mentioned_tags['all'].keys()
         asset['weight'] = 0

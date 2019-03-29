@@ -3,6 +3,8 @@ var saveButton = document.getElementById("session-save");
 var deleteButton = document.getElementById("session-delete");
 var sessionID = parseInt($(".session-page").attr("id"));
 
+applyGestureControls();
+
 // function that updates the thumbnail if it is the name of the assets and
 // when it has been updated
 sessionNameInput.addEventListener('change', function(){
@@ -36,3 +38,36 @@ deleteButton.addEventListener("click", function(){
         e.preventDefault();
     }
 });
+
+
+function applyGestureControls() {
+    $('.assetThumbnail').each(function () {
+      var element = $(this);
+      // Make sure this method not applied to a thumbnail more than once
+      if (element.hasClass("gestures-added")) {
+        return true;
+      } else {
+        element.addClass("gestures-added");
+      }
+      
+  
+      // Add animation class if not already added (addClass checks first)
+      element.addClass("animated");
+      element.addClass("faster");
+      var gestures = new Hammer(this, {
+        touchAction: "pan-x"
+      });
+  
+      // listen for a tap event...
+      gestures.on("tap", function (ev) {
+        // Load the image popup
+        element.magnificPopup({
+          items: {
+            src: element.attr('src'),
+            title: element.attr('title'),
+            type: 'image'
+          }
+        });
+      });
+    });
+  }
