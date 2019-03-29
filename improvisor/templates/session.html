@@ -11,6 +11,8 @@
 </h2>
 
 <div id="{{session.sessionNumber}}" class="session-page whiteContainer">
+    <form id="formUpdate" class="flexContVertical" method="POST" action="/sessions/{{session.sessionNumber}}/update" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
     <div class="session-title">
         {{form.sessionname(class="assetTitle darkText boldText", id="sessionNameInput", data=session.sessionName, value=session.sessionName )}}
         {% if form.sessionname.errors %}
@@ -35,6 +37,7 @@
 
 <div class="session-page-controls">
     <button id="session-export" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonGreenHover">Export Session</button>
+    <button id="session-save" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonGreenHover">Save Changes</button>
     <button id="session-delete" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonRedHover">Delete Session</button>
 </div>
 

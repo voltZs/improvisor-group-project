@@ -301,6 +301,27 @@ def session_page(id=None):
     return redirect('/sessions')
 
 
+@app.route('/sessions/<id>/update', methods=['GET', 'POST'])
+@login_required
+def session_update(id=None):
+    if id != None:
+        session = SessionModel.find_by_sessionNumber(id)
+        if session != None:
+            if request.method == 'POST':
+                form = FormSession(request.form)
+                if form.validate():
+                    session.update_name(form.sessionname.data)
+                    return redirect(url_for('session_page', id=id))
+                else:
+                    custom_session = copy.deepcopy(session)
+                    dates = get_full_session(session)
+                    setattr(custom_session, "dates", [date.json() for date in dates])
+                    return render_template('session.html', session=custom_session, form=form)
+            else:
+                return redirect(url_for('session_page', id=id)) 
+    return redirect('/sessions')
+
+
 # Returns a session with ALL occurences of the assets in it, including duplicates
 def get_full_session(session):
     dateList = []

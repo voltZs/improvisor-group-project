@@ -95,8 +95,8 @@ body {
     }
 
     .session-page-controls {
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: column !important;
+        justify-content: center !important;
     }
 }
 
@@ -1148,7 +1148,8 @@ p.error {
 .session-page .session-title {
     display: flex;
     justify-content: center;
-    flex-direction: row;
+    align-items: center;
+    flex-direction: column;
 }
 
 .sessions-item {
@@ -1196,6 +1197,7 @@ p.error {
     flex-direction: row;
     justify-content: space-between;
 }
+
 
 button {
     font-family: 'Nunito', sans-serif;

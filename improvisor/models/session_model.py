@@ -34,6 +34,11 @@ class SessionModel(db.Model):
         db.session.add(self)
         db.session.commit()
     
+    def update_name(self, name):
+        self.sessionName = name
+        db.session.add(self)
+        db.session.commit()
+    
     def remove_from_db(self):
         db.session.delete(self)
         db.session.commit()
