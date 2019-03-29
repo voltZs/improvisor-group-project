@@ -236,28 +236,36 @@ def fetch_active_session_assets():
 def user_settings_view():
     form = FormUpdateSettings()
     change = False
-    if form.validate() and request.method == "POST" and current_user.is_authenticated:
-        print("form valid")
-        if form.userPicture.data:
-            addPicture(form)
-        if form.passwordUpdate.data:
-            hashpass = bcrypt.hashpw(form.passwordUpdate.data.encode('utf-8'), bcrypt.gensalt())
-            current_user.password = hashpass
-            change = True
-        if form.emailUpdate.data:
-            current_user.email = form.emailUpdate.data
-            change = True
-        if form.firstnameUpdate.data:
-            current_user.firstname = form.firstnameUpdate.data
-            change = True
-        if form.lastnameUpdate.data:
-            current_user.lastname = form.lastnameUpdate.data
-            change = True
-        if form.colour.data:
-            print(type(form.colour.data))
-    if change == True:
-        current_user.save_to_db()
-    return render_template('user_settings.html', form = form)
+    if request.method == "POST":
+        if form.validate():
+            print("user settings form valid")
+            if form.userPicture.data:
+                addPicture(form)
+            if form.passwordUpdate.data:
+                hashpass = bcrypt.hashpw(form.passwordUpdate.data.encode('utf-8'), bcrypt.gensalt())
+                current_user.password = hashpass
+                change = True
+            if form.emailUpdate.data:
+                current_user.email = form.emailUpdate.data
+                change = True
+            if form.firstnameUpdate.data:
+                current_user.firstname = form.firstnameUpdate.data
+                change = True
+            if form.lastnameUpdate.data:
+                current_user.lastname = form.lastnameUpdate.data
+                change = True
+            if change == True:
+                current_user.save_to_db()
+                flash("Your account has been updated", "success")
+                return redirect('/user_settings')
+        else:
+            print("user settings form invalid")
+            return render_template('user_settings.html', form=form)
+    elif request.method == "GET":
+        form.emailUpdate.data = current_user.email
+        form.firstnameUpdate.data = current_user.firstname
+        form.lastnameUpdate.data = current_user.lastname
+    return render_template('user_settings.html', form=form)
 
 
 def addPicture(settingsForm):

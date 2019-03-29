@@ -4,17 +4,46 @@
 
 {% block page_content %}
     <h2 class="darkText">User Settings</h2>
+    {% from "includes/_formhelpers.html" import render_field %}
     <form method="POST" action="/user_settings" enctype="multipart/form-data">
         {{form.csrf_token}}
-        {{form.userPicture.label}}{{form.userPicture}}<br/>
-        {{form.passwordUpdate.label}} {{form.passwordUpdate}} 
-        {{form.confirmUpdate.label}} {{form.confirmUpdate}}<br/>
-        {{form.emailUpdate.label}}{{form.emailUpdate}}<br/>
-        {{form.firstnameUpdate.label}} {{form.firstnameUpdate}}<br/>
-        {{form.lastnameUpdate.label}} {{form.lastnameUpdate}} <br/>
-        {{form.colour}}
+        <div class="inputSection">
+            {{form.userPicture.label()}}
+            {{form.userPicture(class="")}}
+            {% if form.userPicture.errors %}
+                {% for error in form.userPicture.errors %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
 
-        <input type ="submit" value = "Submit">
+        <div class="inputSection">
+            <p class="darkText boldText labelDiv">Email:</p>
+            {{render_field(form.emailUpdate, autocomplete="email", class="bubbleButton")}}
+        </div>
+
+        <div class="inputSection">
+            <p class="darkText boldText labelDiv">First Name:</p>
+            {{render_field(form.firstnameUpdate, autocomplete="given-name", class="bubbleButton")}}
+        </div>
+
+        <div class="inputSection">
+            <p class="darkText boldText labelDiv">Last Name:</p>
+            {{render_field(form.lastnameUpdate, autocomplete="family-name", class="bubbleButton")}}
+        </div>
+
+        <div class="inputSection">
+            <p class="darkText boldText labelDiv">Update Password:</p>
+            {{render_field(form.passwordUpdate, autocomplete="new-password", class="bubbleButton")}}
+        </div>
+
+        <div class="inputSection">
+            <p class="darkText boldText labelDiv">Confirm Password:</p>
+            {{render_field(form.confirmUpdate, autocomplete="new-password", class="bubbleButton")}}
+        </div>
+        
+        {{ form.hidden_tag() }}
+        <button id="save" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonGreenHover">Save Changes</button>
     </form>
     <div class="flashes">
         {% include 'includes/_messages.html' %}
