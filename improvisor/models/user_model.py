@@ -24,7 +24,7 @@ class UserModel(UserMixin, db.Model):
     def json(self):
         return {"email":self.email, "tags" : [tag.json() for tag in self.tags.all()], "assets" : [asset.json() for asset in self.assets.all()], "id" : self.id, "imageLocation" : self.profileImageLocation, "sessions" : [session.json() for session in self.sessions]}
 
-    def __init__(self, firstname, lastname, email, password , profileImageLocation = defaultImage, backgroundColour = Color(rgb=(38/256,100/256,201/256))):
+    def __init__(self, firstname, lastname, email, password , profileImageLocation = defaultImage, backgroundColour = Color(rgb=(38/255,100/255,201/255))):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email

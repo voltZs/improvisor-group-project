@@ -254,6 +254,9 @@ def user_settings_view():
             if form.lastnameUpdate.data:
                 current_user.lastname = form.lastnameUpdate.data
                 change = True
+            if form.colour.data != current_user.backgroundColour:
+                current_user.backgroundColour = form.colour.data
+                change = True
             if change == True:
                 current_user.save_to_db()
                 flash("Your account has been updated", "success")
@@ -265,6 +268,8 @@ def user_settings_view():
         form.emailUpdate.data = current_user.email
         form.firstnameUpdate.data = current_user.firstname
         form.lastnameUpdate.data = current_user.lastname
+        form.colour.data = current_user.backgroundColour
+        #print(current_user.backgroundColour.rgb)
     return render_template('user_settings.html', form=form)
 
 

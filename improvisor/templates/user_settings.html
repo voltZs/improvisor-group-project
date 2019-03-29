@@ -16,7 +16,7 @@
                 {% endfor %}
             {% endif %}
         </div>
-
+        
         <div class="inputSection">
             <p class="darkText boldText labelDiv">Email:</p>
             {{render_field(form.emailUpdate, autocomplete="email", class="bubbleButton")}}
@@ -41,7 +41,7 @@
             <p class="darkText boldText labelDiv">Confirm Password:</p>
             {{render_field(form.confirmUpdate, autocomplete="new-password", class="bubbleButton")}}
         </div>
-        
+        {{form.colour}} <br/>
         {{ form.hidden_tag() }}
         <button id="save" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonGreenHover">Save Changes</button>
     </form>
