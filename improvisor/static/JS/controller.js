@@ -1,4 +1,41 @@
 $("body").css("display", "block");
+//####### search #########
+//var searchButton = document.getElementById('searchIcon');
+
+
+
+//----------------
+// MODAL
+//----------------
+
+
+
+var modal = document.getElementById('myModal');
+
+// gets the link to the modal
+var link = document.getElementById("searchIcon");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the link, open the modal
+link.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+//####### search #########
 
 var currentResults = document.getElementById("currentRow");
 var frequentResults = document.getElementById("frequentRow");
@@ -112,7 +149,7 @@ function setupPage() {
     addTab();
   } else {
     renderTabs();
-  } 
+  }
 
   document.getElementById('addTabBtn').addEventListener(
     'click',
@@ -395,7 +432,7 @@ function applyGestureControls() {
     } else {
       element.addClass("gestures-added");
     }
-    
+
 
     // Add animation class if not already added (addClass checks first)
     element.addClass("animated");
@@ -421,7 +458,7 @@ function applyGestureControls() {
               if (popupImage.hasClass("gestures-added")) {
                 return true;
               } else {
-                
+
                 // Identify assets that are swiped from the tab view
                 if (element.parent().attr('id') == "currentTabRow")
                 {
@@ -440,7 +477,7 @@ function applyGestureControls() {
                 threshold: 1,
                 velocity: 0.1
               });
-              
+
               // listen to events...
               popupGestures.on("swipeup", function (ev) {
                 // Swipe up gesture
@@ -464,7 +501,7 @@ function applyGestureControls() {
                     flushRecentTags();
                   }
                   socket.emit('event', data);
-                  
+
                   console.log("sent ID " + assetID + " to socketIO");
                   setTimeout(function () {
                     var magnificPopup = $.magnificPopup.instance;

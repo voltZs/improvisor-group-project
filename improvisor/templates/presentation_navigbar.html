@@ -1,24 +1,30 @@
 {% extends "base.html" %}
 
 {% block navigbar %}
-    <div class="navigbar floatingShadow flexnavig" id="navigBar">
-        <a href="/sessions">
-            <div class="navigbarItem" id="backNavigButton">
-              <i class="fas fa-arrow-left"></i>
-            </div>
-        </a>
+<div class="navigbar floatingShadow flexnavig" id="navigBar">
+  <a href="/sessions">
+    <div class="navigbarItem" id="backNavigButton">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+  </a>
+  {% block navigbar_search %}
+  <div class="whiteText navigbarItem " id="searchToggle">
+    <i class="fas fa-search" id="searchIcon"></i>
+  </div>
+  {% endblock navigbar_search %}
 
-        <a href="/controller">
-            <div class="navigbarItem navigbarItemMid" id="controllerMode">
-              Controller
-            </div>
-        </a>
+  <a href="/controller">
+    <div class="navigbarItem navigbarItemMid" id="controllerMode">
+      Controller
+    </div>
+  </a>
 
         <a href="/presenter">
             <div class="navigbarItem navigbarItemMid" id="presenterMode">
                 Presenter
             </div>
         </a>
+
         {% block navigbar_microphone %}
         <div class="whiteText navigbarItem" id="microphoneToggle">
             <i class="fas fa-microphone" id="microphoneIcon"></i>
