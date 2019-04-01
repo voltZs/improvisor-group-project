@@ -109,7 +109,7 @@ class FormUpdateSettings(FlaskForm):
 		validators.Regexp('^\\w+$', message="Last name may only contain letters"),
         validators.Optional(True)
 	])
-    colour = ColorField()
+    colourSetting = ColorField()
     
 
 

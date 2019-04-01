@@ -241,8 +241,8 @@ def user_settings_view():
             if form.lastnameUpdate.data:
                 current_user.lastname = form.lastnameUpdate.data
                 change = True
-            if form.colour.data != current_user.backgroundColour:
-                current_user.backgroundColour = form.colour.data
+            if form.colourSetting.data != current_user.backgroundColour:
+                current_user.backgroundColour = form.colourSetting.data
                 change = True
             if change == True:
                 current_user.save_to_db()
@@ -254,10 +254,23 @@ def user_settings_view():
         form.emailUpdate.data = current_user.email
         form.firstnameUpdate.data = current_user.firstname
         form.lastnameUpdate.data = current_user.lastname
-        form.colour.data = current_user.backgroundColour
-        #print(current_user.backgroundColour.rgb)
+        form.colourSetting.data = current_user.backgroundColour
+        form.colourSetting.data.rgb = rgbValueCorrection(current_user.backgroundColour)
     return render_template('user_settings.html', form=form)
 
+#wtforms' ColorField uses a widget called ColorInput
+#when setting these rgb values there is an issue any value that is a 1, 0 or a float with many values after the decimal point 
+#this function solves that issue
+def rgbValueCorrection(colourObj):
+    rgb = [0,0,0]
+    for c, rgbValue in enumerate(colourObj.rgb):
+        if rgbValue < 0.01:
+            rgb[c] = 0
+        if rgbValue > 0.99:
+            rgb[c] = 0.99
+        else:
+            rgb[c] = round(rgbValue,2)
+    return tuple(rgb)
 
 def addPicture(settingsForm):
     form = settingsForm
