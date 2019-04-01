@@ -1,41 +1,11 @@
 $("body").css("display", "block");
-//####### search #########
-//var searchButton = document.getElementById('searchIcon');
 
 
 
-//----------------
-// MODAL
-//----------------
 
 
 
-var modal = document.getElementById('myModal');
-
-// gets the link to the modal
-var link = document.getElementById("searchIcon");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the link, open the modal
-link.onclick = function() {
-  modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-//####### search #########
+//####### SEARCH MODAL #########
 
 var currentResults = document.getElementById("currentRow");
 var frequentResults = document.getElementById("frequentRow");
@@ -527,3 +497,53 @@ if (isAndroid) {
     return false;
   };
 }
+
+
+
+//####### SEARCH MODAL #########
+
+
+var modal = document.getElementById('myModal');
+
+// gets the link to the modal
+var link = document.getElementById("searchIcon");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the link, open the modal
+link.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+var tags = fetchTagset();
+// var options = $('#dataList1');
+var options = document.getElementById('dataList1');
+tags.forEach(function(tag){
+  var option = document.createElement('option');
+  option.value = tag;
+  options.appendChild(option);
+});
+console.log(tags);
+
+var textInp = document.getElementById('searchInput');
+$('#searchButton').click(function(){
+  if(jQuery.inArray (textInp.value, tags) != -1){
+    console.log('Is in the tagest');
+    textInp.value = "";
+  }else{
+    console.log('Is NOT in the tagest');
+  }
+});

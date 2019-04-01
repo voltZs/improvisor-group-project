@@ -27,7 +27,20 @@
     <div id="myModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <h1>Search stuff will go here</h1>
+        <h1>Search for a tag</h1>
+        <input class="bubbleButton growText text18" type="text" id="searchInput" list="dataList1">
+        <datalist id="dataList1">
+<!--           <option value="wind">
+<option value="rose">
+<option value="hello">
+<option value="elos"> -->
+        </datalist>
+        <button id="searchButton" class="bubbleButton bubbleButtonDark">Go</button>
+
+        <div class="currentBlock">
+            <h3 class="whiteText">Found Assets</h3>
+            <div class="imageRow" id="currentRow"></div>
+        </div>
 
       </div>
     </div>

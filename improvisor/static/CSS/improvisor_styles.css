@@ -1244,7 +1244,8 @@ button {
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
+  /* background-color: #fefefe; */
+  background-color: rgb(255, 255, 255, 0.9);
   color: black;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
