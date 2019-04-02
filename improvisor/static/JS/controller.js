@@ -9,6 +9,7 @@ $("body").css("display", "block");
 
 var currentResults = document.getElementById("currentRow");
 var frequentResults = document.getElementById("frequentRow");
+var searchResults = document.getElementById("searchRow");
 var storageBool = storageAvailable('localStorage');
 // Get the assets from the active session
 var assets = fetch_active_session_assets();
@@ -61,6 +62,7 @@ if (annyang) {
 
     // this will also empty what's currently in the recognised tags
     if (recognisedTags) {
+      console.log(recognisedTags);
       makeAjaxRequest();
       recognisedTagsUsed = recognisedTagsUsed.concat(recognisedTags);
       recognisedTags = [];
@@ -137,10 +139,14 @@ function setupPage() {
 function makeAjaxRequest() {
   //only works if local storage is a available in the browser
   if (storageBool) {
-    //console.log("localStorage available");
+    console.log("localStorage available");
 
     var mentionedTags = localStorage.getItem('mentionedTags');
+    console.log('mentionedTags: ');
+    console.log(mentionedTags);
     if (mentionedTags) {
+      console.log('mentionedTags: ');
+      console.log(mentionedTags);
       $.ajax({
         type: "POST",
         url: "/compare_phrases",
@@ -160,6 +166,8 @@ function makeAjaxRequest() {
         }
       });
     } else {
+      console.log('in else of makeAjaxRequest');
+      console.log(recognisedTags);
       $.ajax({
         type: "POST",
         url: "/compare_phrases",
@@ -518,6 +526,7 @@ link.onclick = function() {
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
+  searchResults.innerHTML = "";
   modal.style.display = "none";
 }
 
@@ -529,7 +538,6 @@ window.onclick = function(event) {
 }
 
 var tags = fetchTagset();
-// var options = $('#dataList1');
 var options = document.getElementById('dataList1');
 tags.forEach(function(tag){
   var option = document.createElement('option');
@@ -540,10 +548,46 @@ console.log(tags);
 
 var textInp = document.getElementById('searchInput');
 $('#searchButton').click(function(){
-  if(jQuery.inArray (textInp.value, tags) != -1){
-    console.log('Is in the tagest');
-    textInp.value = "";
-  }else{
-    console.log('Is NOT in the tagest');
-  }
+  recognisedTags =[];
+  recognisedTags.push(textInp.value);
+  console.log(recognisedTags);
+  console.log(textInp.value);
+  //updateSearchResults();
+  makeAjaxRequest();
+  $.ajax({
+    type: "POST",
+    url: "/compare_phrases",
+    data: {
+      'recognisedTags': JSON.stringify(recognisedTags),
+    },
+    timeout: 60000,
+    success: function (data) {
+      var retrieved = JSON.parse(data);
+      updateSearchResults(retrieved['assetResults']);
+    }
+  });
+
+  recognisedTags =[];
+
 });
+
+function updateSearchResults(assets) {
+  searchResults.innerHTML = "";
+  for (asset in assets['frequent']) {
+    var image = document.createElement("IMG");
+    var thumbnail = assets['frequent'][asset]['thumbnailLocation'];
+    if (thumbnail != null) {
+      image.src = thumbnail;
+    } else {
+      image.src = "https://i.imgur.com/5NqcCVN.png";
+    }
+    image.setAttribute("data-id", assets['frequent'][asset]['id']);
+    image.setAttribute("title", assets['frequent'][asset]['asset']);
+    image.classList.add("assetThumbnail");
+    image.classList.add("animated");
+    image.classList.add("faster");
+    searchResults.appendChild(image);
+  }
+
+  applyGestureControls();
+}
