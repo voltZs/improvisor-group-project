@@ -62,7 +62,7 @@ if (annyang) {
 
     // this will also empty what's currently in the recognised tags
     if (recognisedTags) {
-      console.log(recognisedTags);
+      //console.log(recognisedTags);
       makeAjaxRequest();
       recognisedTagsUsed = recognisedTagsUsed.concat(recognisedTags);
       recognisedTags = [];
@@ -139,14 +139,10 @@ function setupPage() {
 function makeAjaxRequest() {
   //only works if local storage is a available in the browser
   if (storageBool) {
-    console.log("localStorage available");
+    //console.log("localStorage available");
 
     var mentionedTags = localStorage.getItem('mentionedTags');
-    console.log('mentionedTags: ');
-    console.log(mentionedTags);
     if (mentionedTags) {
-      console.log('mentionedTags: ');
-      console.log(mentionedTags);
       $.ajax({
         type: "POST",
         url: "/compare_phrases",
@@ -166,8 +162,6 @@ function makeAjaxRequest() {
         }
       });
     } else {
-      console.log('in else of makeAjaxRequest');
-      console.log(recognisedTags);
       $.ajax({
         type: "POST",
         url: "/compare_phrases",
@@ -519,6 +513,9 @@ var link = document.getElementById("searchIcon");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
+// text input for searched tag
+var textInp = document.getElementById('searchInput');
+
 // When the user clicks on the link, open the modal
 link.onclick = function() {
   modal.style.display = "block";
@@ -527,6 +524,7 @@ link.onclick = function() {
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   searchResults.innerHTML = "";
+  textInp.value = "";
   modal.style.display = "none";
 }
 
@@ -538,15 +536,16 @@ window.onclick = function(event) {
 }
 
 var tags = fetchTagset();
+// populate each tag in the datalist
 var options = document.getElementById('dataList1');
 tags.forEach(function(tag){
   var option = document.createElement('option');
   option.value = tag;
   options.appendChild(option);
 });
-console.log(tags);
 
-var textInp = document.getElementById('searchInput');
+
+
 $('#searchButton').click(function(){
   recognisedTags =[];
   recognisedTags.push(textInp.value);
@@ -566,9 +565,8 @@ $('#searchButton').click(function(){
       updateSearchResults(retrieved['assetResults']);
     }
   });
-
   recognisedTags =[];
-
+  textInp.value = "";
 });
 
 function updateSearchResults(assets) {
