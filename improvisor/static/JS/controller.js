@@ -552,19 +552,21 @@ $('#searchButton').click(function(){
   console.log(recognisedTags);
   console.log(textInp.value);
   //updateSearchResults();
-  makeAjaxRequest();
-  $.ajax({
-    type: "POST",
-    url: "/compare_phrases",
-    data: {
-      'recognisedTags': JSON.stringify(recognisedTags),
-    },
-    timeout: 60000,
-    success: function (data) {
-      var retrieved = JSON.parse(data);
-      updateSearchResults(retrieved['assetResults']);
-    }
-  });
+  // makeAjaxRequest();
+  // $.ajax({
+  //   type: "POST",
+  //   url: "/compare_phrases",
+  //   data: {
+  //     'recognisedTags': JSON.stringify(recognisedTags),
+  //   },
+  //   timeout: 60000,
+  //   success: function (data) {
+  //     var retrieved = JSON.parse(data);
+  //     updateSearchResults(retrieved['assetResults']);
+  //   }
+  // });
+  makeAjaxRequestTagSearch();
+
   recognisedTags =[];
   textInp.value = "";
 });
@@ -588,4 +590,51 @@ function updateSearchResults(assets) {
   }
 
   applyGestureControls();
+}
+
+function makeAjaxRequestTagSearch() {
+  //only works if local storage is a available in the browser
+  if (storageBool) {
+    //console.log("localStorage available");
+
+    var mentionedTags = localStorage.getItem('mentionedTags');
+    if (mentionedTags) {
+      $.ajax({
+        type: "POST",
+        url: "/compare_phrases",
+        data: {
+          'recognisedTags': JSON.stringify(recognisedTags),
+          'mentionedTags': mentionedTags
+        },
+        timeout: 60000,
+        success: function (data) {
+          var retrieved = JSON.parse(data);
+          //console.log(retrieved);
+          updateSearchResults(retrieved['assetResults']);
+          localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
+            'mentionedTags']));
+          localStorage.setItem('lastAssets', JSON.stringify(retrieved[
+            'assetResults']));
+        }
+      });
+    } else {
+      $.ajax({
+        type: "POST",
+        url: "/compare_phrases",
+        data: {
+          'recognisedTags': JSON.stringify(recognisedTags),
+        },
+        timeout: 60000,
+        success: function (data) {
+          var retrieved = JSON.parse(data);
+          //console.log(retrieved);
+          updateSearchResults(retrieved['assetResults']);
+          localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
+            'mentionedTags']));
+          localStorage.setItem('lastAssets', JSON.stringify(retrieved[
+            'assetResults']));
+        }
+      });
+    }
+  }
 }
