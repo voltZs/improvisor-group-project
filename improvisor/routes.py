@@ -37,6 +37,8 @@ def inject_active_session():
     else:
         return dict(active=None)
 
+
+
 @app.route('/api/session')
 @login_required
 def json_session():
@@ -112,7 +114,7 @@ def addAsset():
 
 def upload(asset, assetResource, thumbBase64):
     try:
-        asset.save_to_db() #adds the asset to db so it has a unique id to be used when saving the upload file 
+        asset.save_to_db() #adds the asset to db so it has a unique id to be used when saving the upload file
     except Exception as e:
         print(e)
         flash("Error saving asset to db")
@@ -146,6 +148,10 @@ def upload(asset, assetResource, thumbBase64):
 @app.route('/', methods=['GET'])
 def index():
 	return render_template('index.html')
+
+@app.route('/manual')
+def manual():
+    return render_template("manual.html")
 
 @app.route('/fetch_tagset', methods=['GET'])
 @login_required
@@ -259,7 +265,7 @@ def user_settings_view():
     return render_template('user_settings.html', form=form)
 
 #wtforms' ColorField uses a widget called ColorInput
-#when setting these rgb values there is an issue any value that is a 1, 0 or a float with many values after the decimal point 
+#when setting these rgb values there is an issue any value that is a 1, 0 or a float with many values after the decimal point
 #this function solves that issue
 def rgbValueCorrection(colourObj):
     rgb = [0,0,0]
@@ -345,7 +351,7 @@ def session_update(id=None):
                     setattr(custom_session, "dates", [date.json() for date in dates])
                     return render_template('session.html', session=custom_session, form=form)
             else:
-                return redirect(url_for('session_page', id=id)) 
+                return redirect(url_for('session_page', id=id))
     return redirect('/sessions')
 
 
