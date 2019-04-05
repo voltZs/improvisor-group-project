@@ -19,6 +19,13 @@ html {
     background: none;
 }
 
+.manual-container {
+  margin: 7%;
+  background-color: rgb(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 2%;
+}
+
 body {
     display: flex;
     flex-direction: column;
