@@ -536,7 +536,7 @@ window.onclick = function(event) {
 }
 
 var tags = fetchTagset();
-// populate each tag in the datalist
+// populate each tag in the datalist to allow easier manual tag search
 var options = document.getElementById('dataList1');
 tags.forEach(function(tag){
   var option = document.createElement('option');
@@ -545,32 +545,19 @@ tags.forEach(function(tag){
 });
 
 
-
+// button logic. fetches thumbnails for asset under the selected tag, displays
+// them in the modal and updates local storage data
 $('#searchButton').click(function(){
   recognisedTags =[];
   recognisedTags.push(textInp.value);
   console.log(recognisedTags);
   console.log(textInp.value);
-  //updateSearchResults();
-  // makeAjaxRequest();
-  // $.ajax({
-  //   type: "POST",
-  //   url: "/compare_phrases",
-  //   data: {
-  //     'recognisedTags': JSON.stringify(recognisedTags),
-  //   },
-  //   timeout: 60000,
-  //   success: function (data) {
-  //     var retrieved = JSON.parse(data);
-  //     updateSearchResults(retrieved['assetResults']);
-  //   }
-  // });
   makeAjaxRequestTagSearch();
-
   recognisedTags =[];
   textInp.value = "";
 });
 
+// creates a thumbnail image and displays it in the modal
 function updateSearchResults(assets) {
   searchResults.innerHTML = "";
   for (asset in assets['frequent']) {
@@ -592,10 +579,10 @@ function updateSearchResults(assets) {
   applyGestureControls();
 }
 
+// updates local storage
 function makeAjaxRequestTagSearch() {
   //only works if local storage is a available in the browser
   if (storageBool) {
-    //console.log("localStorage available");
 
     var mentionedTags = localStorage.getItem('mentionedTags');
     if (mentionedTags) {
@@ -609,7 +596,6 @@ function makeAjaxRequestTagSearch() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          //console.log(retrieved);
           updateSearchResults(retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));
@@ -627,7 +613,6 @@ function makeAjaxRequestTagSearch() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          //console.log(retrieved);
           updateSearchResults(retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));
