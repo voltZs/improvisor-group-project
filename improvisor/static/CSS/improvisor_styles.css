@@ -1274,3 +1274,8 @@ button {
   text-decoration: none;
   cursor: pointer;
 }
+
+
+#authentication{
+  margin-top: 10px;
+}
