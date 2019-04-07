@@ -1279,3 +1279,9 @@ button {
 #authentication{
   margin-top: 10px;
 }
+
+.manualImg{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -67,21 +67,30 @@
     <h1>Assets</h1>
     <p>Assets are any png, jpeg, text files and links, that the user wants to use in their presentation. Added assets
       are stored on the server and are ready to be used in any presentation. You can access the assets page by clicking
-      on the 'Asset Pool' button on the right-hand side of the main page. </p>
-    <img src="{{url_for('static', filename='resources/manual/assets_main.png')}}" alt="Asset page"
+      on the 'Asset Pool' button (1) on the right-hand side of the main page. </p>
+    <img class="manualImg" src="{{url_for('static', filename='resources/manual/asset_pool.png')}}" alt="Asset page"
       style="max-width: 90%;">
     <ul>
       <li>
         <h3 id="addNew">Adding New Assets</h3>
-        <p>To be able to use Improvisor, the user needs to sigh up for account. This will enable the user to download
-          their own assets that will not be available to other users. The registration process is straightforward and
-          only require the full name, email address and a password. </p>
+        <p>
+          To add a new asset go to the 'Asset Pool' page and click the 'Add' button that is situated in the right
+          top corner. In the next page enter the asset name (2) and asset tags (3) that will be associated with it. Next you can choose if you want the asset to be a file (pdf, jpeg, png) or a link (4). As default is is set to file. Then choose a file or enter http(s) address of the link. Once the file has been selected, or link entered, a default thumbnail will be displayed. If you want the name of the asset to be used as a thumbnail tick the 'Use nama as thumbnail' checkbox (5). Alternatively, you can click on the displayed image and select a different file that will be used as a thumbnail.
+        </p>
+        <img class="manualImg" src="{{url_for('static', filename='resources/manual/add_asset.png')}}" alt="Asset page"
+          style="max-width: 90%;">
+        <p>
+          To make sure that the selected tags will be recognised by speech recognition, you can test them by clicking on the
+          'Test Recognition' button (6) in the bottom right corner of the screen. Then say a sentence containing your tag and
+          see if the output contains the tag that you want to use.
+        </p>
+        <img class="manualImg" src="{{url_for('static', filename='resources/manual/tag_test.png')}}" alt="Asset page"
+          style="max-width: 90%;">
       </li>
       <li>
         <h3 id="edit">Editing Assets</h3>
         <p>
-          To log into the account the user requires the email address and password that were used in the registration
-          process.
+
         </p>
       </li>
 
