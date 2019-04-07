@@ -68,7 +68,7 @@ function resizeUsingCanvas(image) {
 
   // encode image to data-uri with base64 version of compressed image
   thumbnail = new Image();
-  thumbnail.src = canvas.toDataURL('image/peg', 2);
+  thumbnail.src = canvas.toDataURL('image/png', 2);
 
 
   return thumbnail;

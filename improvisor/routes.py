@@ -334,6 +334,33 @@ def session_page(id=None):
     return redirect('/sessions')
 
 
+@app.route('/sessions/<id>/assets', methods=['GET'])
+@login_required
+def session_page_assets(id=None):
+    if id != None:
+        session = SessionModel.find_by_sessionNumber(id)
+        if session != None:
+            custom_session = copy.deepcopy(session)
+            dates = get_full_session(session)
+            return jsonify([date.json() for date in dates])
+    return None
+
+
+@app.route('/sessions/<id>/info', methods=['GET'])
+@login_required
+def session_page_info(id=None):
+    if id != None:
+        session = SessionModel.find_by_sessionNumber(id)
+        if session != None:
+            info = {
+                'sessionName' : session.sessionName,
+                'sessionAuthor' : current_user.firstname + " " + current_user.lastname
+            }
+
+            return jsonify(info)
+    return None
+
+
 @app.route('/sessions/<id>/update', methods=['GET', 'POST'])
 @login_required
 def session_update(id=None):
