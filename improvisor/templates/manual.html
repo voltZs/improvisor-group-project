@@ -5,28 +5,30 @@
   <h1>Contents:</h1>
   <ol>
     <li>
-      <a href="#authentication"><h3>Authentication</h3></a>
+      <a href="#authentication">
+        <h3>Authentication</h3>
+      </a>
       <ul>
-        <li><a href="#registration">Registration</a></li>
-        <li> <a href="#login">Login</a></li>
-        <li><a href="#passReset">Password Reset</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="registration">Registration</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="login">Login</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="passReset">Password Reset</a></li>
       </ul>
     </li>
 
     <li>
-      <h3><a href="#assets">Assests</a></h3>
+      <h3><a href="javascript:void(0);" class="smooth" data-scroll="assets">Assests</a></h3>
       <ul>
-        <li><a href="#addNew">Adding New Assets</a></li>
-        <li><a href="#edit">Editing Assets</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="addNew">Adding New Assets</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="edit">Editing Assets</a></li>
       </ul>
     </li>
 
     <li>
-      <h3><a href="#sessions">Sessions</a></h3>
+      <h3><a href="javascript:void(0);" class="smooth" data-scroll="sessions">Sessions</a></h3>
       <ul>
-        <li><a href="">Active Session</a></li>
-        <li><a href="">Finished Session</a></li>
-        <li><a href="">Session Mode</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="">Active Session</a></li>
+        <li><a href="javascript:void(0);">Finished Session</a></li>
+        <li><a href="javascript:void(0);">Session Mode</a></li>
       </ul>
     </li>
 
@@ -38,18 +40,24 @@
     <ul>
       <li>
         <h3 id="registration">Registration</h3>
-        <p>To be able to use Improvisor, the user needs to sigh up for account. This will enable the user to download their own assets that will not be available to other users. The registration process is straightforward and only require the full name, email address and a password. </p>
+        <p>To be able to use Improvisor, the user needs to sigh up for account. This will enable the user to download
+          their own assets that will not be available to other users. The registration process is straightforward and
+          only require the full name, email address and a password. </p>
       </li>
       <li>
         <h3 id="login">Login</h3>
         <p>
-          To log into the account the user requires the email address and password that were used in the registration process.
+          To log into the account the user requires the email address and password that were used in the registration
+          process.
         </p>
       </li>
       <li>
         <h3 id="passReset">Password Reset</h3>
         <p>
-          If the user has forgotten ther password, it can be easily reset by clicking on the 'Forgot Your Password?' link on the Login page. Email address, under which the profile was registered, will need to be provided, to which a password reset link will be sent. By clicking on the link, the user will be asked to provide a new password.
+          If the user has forgotten ther password, it can be easily reset by clicking on the 'Forgot Your Password?'
+          link on the Login page. Email address, under which the profile was registered, will need to be provided, to
+          which a password reset link will be sent. By clicking on the link, the user will be asked to provide a new
+          password.
         </p>
       </li>
     </ul>
@@ -57,25 +65,54 @@
 
   <section id="assets">
     <h1>Assets</h1>
-    <p>Assets are any png, jpeg, text files and links, that the user wants to use in their presentation. Added assets are stored on the server and are ready to be used in any presentation. You can access the assets page by clicking on the 'Asset Pool' button on the right-hand side of the main page. </p>
-    <img src="{{url_for('static', filename='resources/manualImgs/AssetsMain.png')}}" alt="Asset page">
+    <p>Assets are any png, jpeg, text files and links, that the user wants to use in their presentation. Added assets
+      are stored on the server and are ready to be used in any presentation. You can access the assets page by clicking
+      on the 'Asset Pool' button on the right-hand side of the main page. </p>
+    <img src="{{url_for('static', filename='resources/manual/assets_main.png')}}" alt="Asset page"
+      style="max-width: 90%;">
     <ul>
       <li>
         <h3 id="addNew">Adding New Assets</h3>
-        <p>To be able to use Improvisor, the user needs to sigh up for account. This will enable the user to download their own assets that will not be available to other users. The registration process is straightforward and only require the full name, email address and a password. </p>
+        <p>To be able to use Improvisor, the user needs to sigh up for account. This will enable the user to download
+          their own assets that will not be available to other users. The registration process is straightforward and
+          only require the full name, email address and a password. </p>
       </li>
       <li>
         <h3 id="edit">Editing Assets</h3>
         <p>
-          To log into the account the user requires the email address and password that were used in the registration process.
+          To log into the account the user requires the email address and password that were used in the registration
+          process.
         </p>
       </li>
 
     </ul>
   </section>
   <section id="sessions">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </section>
 </div>
+
+<script>
+  $('a').each(function () {
+    var element = $(this);
+    var section = $(this).data("scroll")
+    if (element.hasClass("smooth")) {
+      if (section != null && section != "") {
+        element.click(function () {
+          scrollTo(section);
+        });
+      } else {
+        element.click(function () {
+          alert(
+            "data-scroll attribute value not found - should be a valid div id\nAll anchors with class 'smooth' on this page use a smooth scroll function.\n For example:\n<a href='javascript:void(0);' class='smooth' data-scroll='registration'>Registration</a>"
+            );
+        });
+      }
+    }
+  });
+</script>
 
 {% endblock %}
