@@ -1218,12 +1218,11 @@ p.error {
     flex-direction: column;
     text-align: center;
     border-radius: 9px;
-    height: 120px;
+    min-height: 170px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 200px;
-    border: solid 1px #ccc;
+    max-width: 200px;
 }
 
 .session p {

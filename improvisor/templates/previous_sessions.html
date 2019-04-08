@@ -20,7 +20,7 @@
     <div class="sessions whiteContainer" id="assetPool">
         {% for session in sessions %}
             <a href="/sessions/{{session.sessionNumber}}">
-                <div class="session darkText">
+                <div class="session darkText whiteContainer">
                     <p class="darkText text20 boldText">{{session.sessionName}}</p>
                     {% if session.active == 1 %}
                         <p><span class="circleGreen"></span> Active</p>

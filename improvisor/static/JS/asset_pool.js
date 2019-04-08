@@ -235,9 +235,11 @@ function getAssets(tags, sorting, limit){
             p.classList.add("blackText");
             p.classList.add("boldText");
             p.classList.add("labelText");
-            p.innerHTML = data[i]["asset"]
-            div.appendChild(img);
-            div.appendChild(p);
+            p.innerHTML = data[i]["assetname"]
+            var innerDiv = document.createElement("DIV");
+            innerDiv.appendChild(img);
+            innerDiv.appendChild(p);
+            div.appendChild(innerDiv);
             link.appendChild(div);
             link.addEventListener("click", function(event){
                 if(selectionMode){
