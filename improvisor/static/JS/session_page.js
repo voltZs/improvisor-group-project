@@ -69,6 +69,10 @@ function convertImgToBase64(img, outputFormat) {
   return canvas.toDataURL("image/" + (outputFormat || "png"));
 }
 
+function getFileExtension(filename) {
+  return filename.split('.').pop();
+}
+
 function exportSlides(info, assets) {
   var doc = new jsPDF({
     orientation: 'landscape',
@@ -94,24 +98,41 @@ function exportSlides(info, assets) {
     var obj = new Image();
     obj.id = assets[i].asset_id;
     obj.assettype = assets[i].asset.assettype;
+    obj.assetname = assets[i].asset.assetname;
+    obj.thumbnail = assets[i].asset.thumbnailLocation;
     obj.link = assets[i].asset.assetLink;
     obj.date = assets[i].dateAdded
     obj.crossOrigin = "Anonymous";
     // Callback for when the source has loaded (obj.src = x)
     obj.onload = function () {
       if (this.assettype == "file") {
-        slides.push({
-          src: this.src,
-          asset_id: this.id,
-          assettype: this.assettype,
-          link: this.link,
-          dateAdded: this.date,
-          base64: convertImgToBase64(this),
-          width: this.width,
-          height: this.height
-        });
-      }
-      else if (this.assettype == "link") {
+        // If it is a PDF, show the thumbnail of the PDF on the slide
+        if (this.extension == "pdf") {
+          slides.push({
+            src: this.thumbnail,
+            asset_id: this.id,
+            assettype: this.assettype,
+            extension: this.extension,
+            assetname: this.assetname,
+            link: this.link,
+            dateAdded: this.date,
+            base64: convertImgToBase64(this),
+            width: this.width,
+            height: this.height
+          });
+        } else {
+          slides.push({
+            src: this.src,
+            asset_id: this.id,
+            assettype: this.assettype,
+            link: this.link,
+            dateAdded: this.date,
+            base64: convertImgToBase64(this),
+            width: this.width,
+            height: this.height
+          });
+        }
+      } else if (this.assettype == "link") {
         slides.push({
           asset_id: this.id,
           assettype: this.assettype,
@@ -131,8 +152,17 @@ function exportSlides(info, assets) {
         for (var j = 0; j < slides.length; j++) {
           doc.addPage();
           if (slides[j].assettype == "file") {
-            doc.addImage(slides[j].base64, 'png', 45, 45, 150, 100);
+            // If the current asset is a PDF
+            if (slides[j].extension == "pdf") {
+              // Add the asset name to the top of the slide and show the generated thumbnail
+              centeredText("(PDF) " + slides[j].assetname, 10);
+              doc.addImage(slides[j].base64, 'png', 45, 45, 150, 100);
+            } else {
+              // Display the image asset (all image assets are converted to png in base64 conversion)
+              doc.addImage(slides[j].base64, 'png', 45, 45, 150, 100);
+            }
           } else if (slides[j].assettype == "link") {
+            // Display the link in the center of the page
             doc.setTextColor(26, 13, 171);
             centeredText(slides[j].link, 100);
             doc.setTextColor(0, 0, 0);
@@ -143,10 +173,13 @@ function exportSlides(info, assets) {
       }
     };
     if (assets[i].asset.assettype == "file") {
-      obj.src = assets[i].asset.assetLocation;
-    }
-    else if (assets[i].asset.assettype == "link")
-    {
+      obj.extension = getFileExtension(assets[i].asset.assetLocation);
+      if (obj.extension == "pdf") {
+        obj.src = assets[i].asset.thumbnailLocation;
+      } else {
+        obj.src = assets[i].asset.assetLocation;
+      }
+    } else if (assets[i].asset.assettype == "link") {
       // This source does not get used anywhere because the asset type is a link
       // Only needed to satisfy the obj.onload callback (its an image object storing extra info)
       obj.src = "https://i.imgur.com/ZVYirCC.png";
