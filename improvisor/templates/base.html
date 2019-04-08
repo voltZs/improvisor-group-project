@@ -45,6 +45,11 @@
     </div>
   </a>
 
+  <a href="/manual">
+    <div class="navigbarItem navigbarItemRight">
+      Help
+    </div>
+  </a>
   {% if current_user.is_authenticated %}
   <a href="/logout">
     <div class="navigbarItem navigbarItemRight">
@@ -66,11 +71,7 @@
     </div>
   </a>
   {% endif %}
-  <a href="/manual">
-    <div class="navigbarItem navigbarItemRight">
-      Manual
-    </div>
-  </a>
+
 </div>
 {% endblock navigbar %}
 

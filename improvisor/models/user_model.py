@@ -4,8 +4,9 @@ from sqlalchemy import func
 from sqlalchemy_utils import ColorType
 from colour import Color
 
+
 class UserModel(UserMixin, db.Model):
-    defaultImage = "https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="
+    defaultImage = '/static/images/default_profile.png'
     __tablename__="users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -15,8 +16,8 @@ class UserModel(UserMixin, db.Model):
     password = db.Column(db.String(80))
     profileImageLocation = db.Column(db.String(500))
     backgroundColour = db.Column(ColorType)
-    
-    sessions = db.relationship("SessionModel", lazy="dynamic") 
+
+    sessions = db.relationship("SessionModel", lazy="dynamic")
     activeSession = db.relationship("SessionModel", uselist=False, primaryjoin ="and_(UserModel.id==SessionModel.user_id, "
                                                         "SessionModel.active=='1')")
     tags = db.relationship("TagModel", lazy="dynamic")
