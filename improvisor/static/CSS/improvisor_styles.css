@@ -559,7 +559,7 @@ h3 {
     object-fit: contain;
 }
 
-.assetFormsContainer {
+.verticalFormsContainer {
     display: flex;
     flex-direction: column;
 }
@@ -688,8 +688,19 @@ input[type=checkbox]:checked{
 }
 
 /* ===================== */
+#profileImgBtn{
+  align-self: center;
+}
+#profileImgBtn:hover{
+  cursor: pointer;
+}
 
+.userForm{
+  display: flex;
+  flex-direction: column;
+}
 
+/*================  */
 .assetPageTop{
     display: flex;
     width: 100%;
