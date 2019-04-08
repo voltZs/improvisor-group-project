@@ -56,9 +56,12 @@
       Log Out
     </div>
   </a>
-  <div class="navigbarItem navigbarItemRight" id="usernameNavigbar">
-    {{current_user.firstname}} {{current_user.lastname}}
-  </div>
+  <a href="/user_settings">
+    <div class="navigbarItem navigbarItemRight" id="usernameNavigbar">
+      {{current_user.firstname}} {{current_user.lastname}}
+    </div>
+  </a>
+
   {% else %}
   <a href="/login">
     <div class="navigbarItem navigbarItemRight">

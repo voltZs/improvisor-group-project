@@ -6,12 +6,13 @@
   <ol>
     <li>
       <a href="#authentication">
-        <h3>Authentication</h3>
+        <h3>Authentication & User Settings</h3>
       </a>
       <ul>
         <li><a href="javascript:void(0);" class="smooth" data-scroll="registration">Registration</a></li>
         <li><a href="javascript:void(0);" class="smooth" data-scroll="login">Login</a></li>
         <li><a href="javascript:void(0);" class="smooth" data-scroll="passReset">Password Reset</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="userSettings">User Settings</a></li>
       </ul>
     </li>
 
@@ -36,7 +37,7 @@
 
 
   <section id="authentication">
-    <h1>Authentication</h1>
+    <h1>Authentication & User Settings</h1>
     <ul>
       <li>
         <h3 id="registration">Registration</h3>
@@ -60,6 +61,12 @@
           password.
         </p>
       </li>
+      <li>
+        <h3 id="userSettings">User Settings</h3>
+        <p>
+          Once logged in, the user settings can be accessed by clicking either on the user name in the navigation bar, or on the user photo. Here email addres, name and password can be changed, as well as the colour of the presenter background.
+        </p>
+      </li>
     </ul>
   </section>
 
@@ -75,7 +82,10 @@
         <h3 id="addNew">Adding New Assets</h3>
         <p>
           To add a new asset go to the 'Asset Pool' page and click the 'Add' button that is situated in the right
-          top corner. In the next page enter the asset name (2) and asset tags (3) that will be associated with it. Next you can choose if you want the asset to be a file (pdf, jpeg, png) or a link (4). As default is is set to file. Then choose a file or enter http(s) address of the link. Once the file has been selected, or link entered, a default thumbnail will be displayed. If you want the name of the asset to be used as a thumbnail tick the 'Use nama as thumbnail' checkbox (5). Alternatively, you can click on the displayed image and select a different file that will be used as a thumbnail.
+          top corner. On the next page enter the asset name (2) and asset tags (3) that will be associated with it. Next you can choose if you want the asset to be a file (pdf, jpeg, png) or a link (4). As default, it is set to file. Then choose a file, or enter http(s) address of the link. Once the file has been selected, or link entered, a default thumbnail will be displayed. If you want the name of the asset to be used as a thumbnail tick the 'Use nama as thumbnail' checkbox (5). Alternatively, you can click on the displayed image and select a different file that will be used as a thumbnail.
+        </p>
+        <p>
+          If you would like to add multiple assets at once, you can click on '+ Add Asset' button which will display an additional form for the next asset. Once you have completed all fields for all assets, you can save them by clicking on 'Submit' button.
         </p>
         <img class="manualImg" src="{{url_for('static', filename='resources/manual/add_asset.png')}}" alt="Asset page"
           style="max-width: 90%;">
@@ -90,17 +100,22 @@
       <li>
         <h3 id="edit">Editing Assets</h3>
         <p>
-
+          Added assets can be deleted, or edited. To access this feature, go to 'Asset Pool' where all saved assets will be displayed. The assets can be sorted by when they were added ('Most Recent' or 'Oldest First'), or by relevance. To sort by relevance tags need to be provided in the 'Filter Tags:' input box. When more than one tag is provided, only assets that are linked to all tags will be displayed.
+        </p>
+        <p>
+          To delete an assets you can click on any asset, which will display asset details, and then click on 'Delete Asset'. Alternatively, click on 'Select' button, that is situated above the box that displays all assets, and then select an asset to delete. A 'Delete' button will appear next to the 'Select' button. Clicking on the 'Delete' button will delete the selected asset. By using the 'Select' button you can highlight multiple assets and delete all of them at the same time.
+        </p>
+        <p>
+          Clicking on a particular asset will open a page with the asset details, where changes can be applied. Here you can modify the thumbnail, by clicking on it and selecting a new thumbnail file, or ticking the 'Use name as thumbnail' check box. Additionally, the name can be updated (by clicking on it) and tags can be added or deleted.
         </p>
       </li>
 
     </ul>
   </section>
   <section id="sessions">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>
+
+    </p>
   </section>
 </div>
 
