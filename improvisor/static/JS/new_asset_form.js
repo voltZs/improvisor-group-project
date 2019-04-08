@@ -4,6 +4,7 @@
 var formsContainer = document.getElementById("assetFormsContainer");
 var firstFormClones = [];
 $("#linkUploadFields1").hide();
+$("#removeButton1").hide();
 $("#assetLink").attr("id", "assetLink1");
 
 firstFormClones.push(formsContainer.children[0].cloneNode(true));
@@ -41,6 +42,8 @@ addAssetBtn.addEventListener("click", function(){
     $(firstFormClones[numOfForms-1]).find("#prevButton1").attr("id", "prevButton"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#nextButton1").attr("id", "nextButton"+(numOfForms+1));
     $(firstFormClones[numOfForms-1]).find("#assetName1").attr("id", "assetName"+(numOfForms+1));
+
+    $(firstFormClones[numOfForms-1]).find("#removeButton1").attr("id", "removeButton"+(numOfForms+1));
 
     formsContainer.appendChild(firstFormClones[numOfForms-1]);
     numOfForms++;
@@ -88,6 +91,18 @@ function setEvents(number){
     var nextButton =  document.getElementById('nextButton' + (number));
     var thumbnailNameCheckboxCont = document.getElementById('thumbnailNameCheckbox' + (number));
     var thumbnailNameCheckbox = thumbnailNameCheckboxCont.children[0];
+    var removeButton = document.getElementById('removeButton' + (number));
+
+    $(removeButton).parent().hover(function(){
+      $(removeButton).show();
+    },
+    function(){
+      $(removeButton).hide();
+    })
+
+    removeButton.addEventListener("click", function(){
+      $(removeButton).parent().remove();
+    })
 
     $(thumbHiddenButton).hide();
     $(nextButton).hide();

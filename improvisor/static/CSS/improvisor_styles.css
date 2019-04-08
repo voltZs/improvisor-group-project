@@ -319,6 +319,7 @@ input.hiddenSubmit {
 }
 
 .miniBubbleButton {
+    display: inline-block;
     border-radius: 6px;
     line-height: 15px;
     padding: 2px 5px;
@@ -390,8 +391,8 @@ input.hiddenSubmit {
 
 .bubbleButtonRedHover:hover {
     cursor: pointer;
-    color: rgba(255, 255, 255, 0.9);
-    background-color: #c92641;
+    color: rgba(255, 255, 255, 0.9) !important;
+    background-color: #c92641 !important;
 }
 
 .bubbleButtonGreenHover:hover {
