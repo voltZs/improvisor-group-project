@@ -92,7 +92,7 @@ function exportSlides(info, assets) {
   doc.setFontSize(20);
   centeredText(info.sessionAuthor, 115);
   var slides = [];
-
+  var pdfs = [];
   for (var i = 0; i < assets.length; i++) {
     // Store the asset details in the image object (even if it is a link instead of a file)
     var obj = new Image();
@@ -108,20 +108,23 @@ function exportSlides(info, assets) {
       if (this.assettype == "file") {
         // If it is a PDF, show the thumbnail of the PDF on the slide
         if (this.extension == "pdf") {
-          slides.push({
+          var current = {
             src: this.thumbnail,
             asset_id: this.id,
             assettype: this.assettype,
             extension: this.extension,
+            pdf: this.pdf,
             assetname: this.assetname,
             link: this.link,
             dateAdded: this.date,
             base64: convertImgToBase64(this),
             width: this.width,
             height: this.height
-          });
+          };
+          slides.push(current);
+          pdfs.push(current);
         } else {
-          slides.push({
+          var current = {
             src: this.src,
             asset_id: this.id,
             assettype: this.assettype,
@@ -130,7 +133,8 @@ function exportSlides(info, assets) {
             base64: convertImgToBase64(this),
             width: this.width,
             height: this.height
-          });
+          };
+          slides.push(current);
         }
       } else if (this.assettype == "link") {
         slides.push({
@@ -170,11 +174,20 @@ function exportSlides(info, assets) {
         }
         // Save the PDF
         doc.save('output.pdf');
+        // Wait 4 seconds then prompt user to download any asset PDF files
+        setTimeout(function () {
+          for (var i = 0; i < pdfs.length; i++) {
+            console.log(pdfs[i].pdf)
+            downloadURI(pdfs[i].pdf, pdfs[i].assetname + ".pdf");
+          }
+        }, 4000);
+
       }
     };
     if (assets[i].asset.assettype == "file") {
       obj.extension = getFileExtension(assets[i].asset.assetLocation);
       if (obj.extension == "pdf") {
+        obj.pdf = assets[i].asset.assetLocation;
         obj.src = assets[i].asset.thumbnailLocation;
       } else {
         obj.src = assets[i].asset.assetLocation;
@@ -185,6 +198,13 @@ function exportSlides(info, assets) {
       obj.src = "https://i.imgur.com/ZVYirCC.png";
     }
   }
+}
+
+function downloadURI(uri, name) {
+  var link = document.createElement("a");
+  link.download = name;
+  link.href = uri;
+  link.click();
 }
 
 deleteButton.addEventListener("click", function () {
