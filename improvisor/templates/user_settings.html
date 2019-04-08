@@ -46,7 +46,8 @@
 
           <div>
             <p class="darkText boldText labelDiv">Presenter View Colour:</p>
-            {{form.colourSetting}}
+            {{render_field(form.colourSetting, id="colourSetting")}}
+            <p id="resetColor" class="darkText boldText labelDiv">Reset</p>
           </div>
           {{ form.hidden_tag() }}
           <button id="save" class="bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonGreenHover">Save Changes</button>

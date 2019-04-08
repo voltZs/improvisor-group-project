@@ -701,6 +701,10 @@ input[type=checkbox]:checked{
   flex-direction: column;
 }
 
+#resetColor:hover{
+  cursor: pointer;
+}
+
 /*================  */
 .assetPageTop{
     display: flex;
