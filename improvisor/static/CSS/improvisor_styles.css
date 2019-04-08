@@ -760,11 +760,27 @@ input.assetTitle{
 }
 
 .presenter-view {
-
+    display: flex;
+    align-content: center;
     padding-top: 40px;
     width: 100%;
     height: 100vh;
     box-sizing: border-box;
+}
+
+.presenter-view img{
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.presenter-view #link_display{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 5vh;
 }
 
 div.presenter-view embed{

@@ -8,6 +8,7 @@ var timer = 0;
 var timePassed = 0;
 
 var textFormats = ["txt", "csv"];
+var imageFormats = ["jpg", "jpeg", "png", "bmp", "tiff"];
 
 
 document.addEventListener("mousemove", function(){
@@ -25,12 +26,13 @@ $(document).ready(function () {
     socket.emit('join');
     socket.on('presenter', function (receivedData) {
         console.log(receivedData);
-        var directory = receivedData['assetLocation'];
-        var temp = directory.split(".");
-        var extension = temp[temp.length-1].toLowerCase();
 
         emptyViews();
         if (receivedData['assettype'] == "file"){
+            var directory = receivedData['assetLocation'];
+            var temp = directory.split(".");
+            var extension = temp[temp.length-1].toLowerCase();
+
             if(extension == "pdf"){
                 $('#embed_display').show();
                 $('#embed_display').attr('src', directory);
@@ -44,6 +46,7 @@ $(document).ready(function () {
         } else if(receivedData['assettype'] == "link"){
             $('#link_display').show();
             $('#link_display').html(receivedData['assetLink']);
+            $('#link_display').attr('href', receivedData['assetLink']);
         }
     });
 });
@@ -51,6 +54,7 @@ $(document).ready(function () {
 function emptyViews(){
     $(presenterView.children).attr("src", "");
     $(presenterView.children).attr("data", "");
+    $(presenterView.children).attr("href", "");
     $(presenterView.children).html("");
     $(presenterView.children).hide();
 }
