@@ -204,7 +204,8 @@ def presenter_view():
     session = SessionModel.find_active_session()
     if session == None:
         return redirect('/new_session')
-    return render_template('presenter.html')
+    bckgrnd = current_user.backgroundColour
+    return render_template('presenter.html', background_color=bckgrnd)
 
 @app.route('/controller', methods=['GET'])
 @login_required

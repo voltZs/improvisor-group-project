@@ -10,6 +10,11 @@ var timePassed = 0;
 var textFormats = ["txt", "csv"];
 var imageFormats = ["jpg", "jpeg", "png", "bmp", "tiff"];
 
+var bckgrnd_color = document.getElementById("data-color").getAttribute("data");
+
+console.log(bckgrnd_color);
+$("html").css("background", "none");
+$("html").css("background-color", bckgrnd_color );
 
 document.addEventListener("mousemove", function(){
     timer = 0;
