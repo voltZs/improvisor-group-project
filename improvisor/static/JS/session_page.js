@@ -74,10 +74,13 @@ function getFileExtension(filename) {
 }
 
 function exportSlides(info, assets) {
+  // jsPDF Library - format is currently set to 1920x1080 (in mm)
   var doc = new jsPDF({
     orientation: 'landscape',
-    format: 'a3'
+    unit: 'mm',
+    format: [508, 285.75]
   });
+
   doc.setFont("times");
   doc.setFontStyle("normal");
   doc.setFontSize(30);
@@ -88,9 +91,9 @@ function exportSlides(info, assets) {
     doc.text(textOffset, y, text);
   }
   // Display the session name and session author (first name + lastname)
-  centeredText(info.sessionName, 100);
+  centeredText(info.sessionName, 50);
   doc.setFontSize(20);
-  centeredText(info.sessionAuthor, 115);
+  centeredText(info.sessionAuthor, 60);
   var slides = [];
   var pdfs = [];
   for (var i = 0; i < assets.length; i++) {
@@ -160,27 +163,26 @@ function exportSlides(info, assets) {
             if (slides[j].extension == "pdf") {
               // Add the asset name to the top of the slide and show the generated thumbnail
               centeredText("(PDF) " + slides[j].assetname, 10);
-              doc.addImage(slides[j].base64, 'png', 45, 45, 150, 100);
+              doc.addImage(slides[j].base64, 'png', 20, 20, 90, 60);
             } else {
               // Display the image asset (all image assets are converted to png in base64 conversion)
-              doc.addImage(slides[j].base64, 'png', 45, 45, 150, 100);
+              doc.addImage(slides[j].base64, 'png', 20, 20, 90, 60);
             }
           } else if (slides[j].assettype == "link") {
             // Display the link in the center of the page
             doc.setTextColor(26, 13, 171);
-            centeredText(slides[j].link, 100);
+            centeredText(slides[j].link, 50);
             doc.setTextColor(0, 0, 0);
           }
         }
         // Save the PDF
-        doc.save('output.pdf');
-        // Wait 4 seconds then prompt user to download any asset PDF files
+        doc.save(info.sessionName + ".pdf");
+        // Wait 3 seconds then prompt user to download any asset PDF files
         setTimeout(function () {
           for (var i = 0; i < pdfs.length; i++) {
-            console.log(pdfs[i].pdf)
             downloadURI(pdfs[i].pdf, pdfs[i].assetname + ".pdf");
           }
-        }, 4000);
+        }, 3000);
 
       }
     };
@@ -200,6 +202,7 @@ function exportSlides(info, assets) {
   }
 }
 
+// Prompt the user to download a file from (uri) with the filename (name)
 function downloadURI(uri, name) {
   var link = document.createElement("a");
   link.download = name;
