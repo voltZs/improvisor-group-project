@@ -1,12 +1,6 @@
 $("body").css("display", "block");
 
 
-
-
-
-
-//####### SEARCH MODAL #########
-
 var currentResults = document.getElementById("currentRow");
 var frequentResults = document.getElementById("frequentRow");
 var searchResults = document.getElementById("searchRow");
@@ -547,11 +541,15 @@ tags.forEach(function(tag){
 
 // button logic. fetches thumbnails for asset under the selected tag, displays
 // them in the modal and updates local storage data
+
+var searchTag;
+// used to display only the tag that is searched for but local storage contains
+// all mentioned tags
 $('#searchButton').click(function(){
   recognisedTags =[];
   recognisedTags.push(textInp.value);
-  console.log(recognisedTags);
-  console.log(textInp.value);
+  searchTag = textInp.value;
+  console.log('recognised tags ' + recognisedTags);
   makeAjaxRequestTagSearch();
   recognisedTags =[];
   textInp.value = "";
@@ -561,19 +559,27 @@ $('#searchButton').click(function(){
 function updateSearchResults(assets) {
   searchResults.innerHTML = "";
   for (asset in assets['frequent']) {
-    var image = document.createElement("IMG");
-    var thumbnail = assets['frequent'][asset]['thumbnailLocation'];
-    if (thumbnail != null) {
-      image.src = thumbnail;
-    } else {
-      image.src = "https://i.imgur.com/5NqcCVN.png";
+
+    if(assets['frequent'][asset]['tags'].includes(searchTag)){
+      console.log('SearchTag found '+ searchTag);
+      var image = document.createElement("IMG");
+      var thumbnail = assets['frequent'][asset]['thumbnailLocation'];
+      if (thumbnail != null) {
+        image.src = thumbnail;
+      } else {
+        image.src = "https://i.imgur.com/5NqcCVN.png";
+      }
+      image.setAttribute("data-id", assets['frequent'][asset]['id']);
+      image.setAttribute("title", assets['frequent'][asset]['assetname']);
+      image.classList.add("assetThumbnail");
+      image.classList.add("animated");
+      image.classList.add("faster");
+      searchResults.appendChild(image);
+    }else {
+      console.log('SearchTag found NOT ');
     }
-    image.setAttribute("data-id", assets['frequent'][asset]['id']);
-    image.setAttribute("title", assets['frequent'][asset]['assetname']);
-    image.classList.add("assetThumbnail");
-    image.classList.add("animated");
-    image.classList.add("faster");
-    searchResults.appendChild(image);
+    console.log('asset tag:'+ assets['frequent'][asset]['tags']);
+
   }
 
   applyGestureControls();
@@ -585,6 +591,7 @@ function makeAjaxRequestTagSearch() {
   if (storageBool) {
 
     var mentionedTags = localStorage.getItem('mentionedTags');
+
     if (mentionedTags) {
       $.ajax({
         type: "POST",
@@ -596,11 +603,13 @@ function makeAjaxRequestTagSearch() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          updateSearchResults(retrieved['assetResults']);
+          console.log(retrieved['assetResults']);
+          //updateSearchResults('retreived assets results '+ retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));
           localStorage.setItem('lastAssets', JSON.stringify(retrieved[
             'assetResults']));
+          updateSearchResults(retrieved['assetResults']);
         }
       });
     } else {
@@ -613,11 +622,13 @@ function makeAjaxRequestTagSearch() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          updateSearchResults(retrieved['assetResults']);
+          console.log('retreived assets results '+retrieved['assetResults']);
+          //updateSearchResults(retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));
           localStorage.setItem('lastAssets', JSON.stringify(retrieved[
             'assetResults']));
+          updateSearchResults(retrieved['assetResults']);
         }
       });
     }

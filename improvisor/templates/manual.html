@@ -27,9 +27,10 @@
     <li>
       <h3><a href="javascript:void(0);" class="smooth" data-scroll="sessions">Sessions</a></h3>
       <ul>
-        <li><a href="javascript:void(0);" class="smooth" data-scroll="">Active Session</a></li>
-        <li><a href="javascript:void(0);">Finished Session</a></li>
-        <li><a href="javascript:void(0);">Session Mode</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="activeSession">Active Session</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="sessionMode">Session Mode</a></li>
+        <li><a href="javascript:void(0);" class="smooth" data-scroll="prevSessions">Previous Session</a></li>
+
       </ul>
     </li>
 
@@ -106,16 +107,45 @@
           To delete an assets you can click on any asset, which will display asset details, and then click on 'Delete Asset'. Alternatively, click on 'Select' button, that is situated above the box that displays all assets, and then select an asset to delete. A 'Delete' button will appear next to the 'Select' button. Clicking on the 'Delete' button will delete the selected asset. By using the 'Select' button you can highlight multiple assets and delete all of them at the same time.
         </p>
         <p>
-          Clicking on a particular asset will open a page with the asset details, where changes can be applied. Here you can modify the thumbnail, by clicking on it and selecting a new thumbnail file, or ticking the 'Use name as thumbnail' check box. Additionally, the name can be updated (by clicking on it) and tags can be added or deleted.
+          Clicking on a particular asset will open a page with the asset details, where changes can be applied. Here you can modify the thumbnail, by clicking on it and selecting a new thumbnail file, or ticking the 'Use name as thumbnail' check box. Additionally, the name can be updated (by clicking on it) and tags can be added or deleted. When adding new tags, you can test if they will be recognised properly, using the 'Test Recognition' in the bottom right corner of the sereen.
         </p>
       </li>
 
     </ul>
   </section>
   <section id="sessions">
-    <p>
+    <h1>Sessions</h1>
+    <ul>
+      <li>
+        <h3 id="activeSession">Active Session</h3>
+        <p>
+          A session represents one presentation. Once a session has been started it can be paused and then restarted at any time. The session will remain active until a new session is started. When a new profile is created, only a new session can be started by clicking on 'New Session' button in the main menu. If there are already previous sessions, an option to 'Continue Session' will become available. A particular session will remain active untill a new one is started.
+        </p>
+      </li>
+      <li>
+        <h3 id="sessionMode">Session Modes</h3>
+        <p>
+          When a new session is started, or an option to continue the previous session is selected, you will be given two mode choices: 'Presenter' and 'Controler'.
+        </p>
+        <p>
+          The 'Presenter' mode is the area where assets (slides) will be displayed. This mode should be open on the main display, that is dedicated for the audience.
+        </p>
+        <p>
+          The 'Controler' mode should be open on a mobile device, that will be used to control what is displayed for the audience. This is the main view that will be used during a presentation. When the mode is entered the speech recognition is by default switched off. To switch this feature on click on the microphone icon in the top right corner. Clicking the icon again will switch the recognition off.
 
-    </p>
+        </p>
+          In a case where the speech recognition is unable to recognize a tag, you can look for it manually. To do this click on the magnifying glass icon in the middle of the navigation bar. Pressing the button will open a modal with an input box and a button. First, enter the tag and then press the 'Go' button. Assets associated with the tag will be displayed in a list. Click a thumbnail of an asset you want to show to the audience and once it is highlited swipe it up.
+        <p>
+
+        </p>
+      </li>
+      <li>
+        <h3 id="prevSessions">Previous Sessions</h3>
+        <p>
+          Once logged in, the user settings can be accessed by clicking either on the user name in the navigation bar, or on the user photo. Here email addres, name and password can be changed, as well as the colour of the presenter background.
+        </p>
+      </li>
+    </ul>
   </section>
 </div>
 
