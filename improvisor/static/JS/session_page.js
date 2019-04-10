@@ -90,6 +90,12 @@ function exportSlides(info, assets) {
     var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
     doc.text(textOffset, y, text);
   }
+  // Horizontally center images on the PDF
+  var centeredImage = function (img, type, marginTop, width, height) {
+    var imageOffset = (doc.internal.pageSize.width - width) / 2;
+    doc.addImage(img, type, imageOffset, marginTop, width, height);
+  }
+
   // Display the session name and session author (first name + lastname)
   centeredText(info.sessionName, 50);
   doc.setFontSize(20);
@@ -159,14 +165,24 @@ function exportSlides(info, assets) {
         for (var j = 0; j < slides.length; j++) {
           doc.addPage();
           if (slides[j].assettype == "file") {
+            // Maximum width and height for asset output (in mm)
+            //var maxWidth = 482.6, maxHeight = 269.1;
+            var maxWidth = 158,
+              maxHeight = 82;
+            // Source width and height converted to mm (1px = 0.264583333mm)
+            var srcWidth = slides[j].width * 0.264583333,
+              srcHeight = slides[j].height * 0.264583333;
+            // Resize asset while keeping original aspect ratio
+            var scaled = calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight);
             // If the current asset is a PDF
+            console.log(scaled.width, scaled.height);
             if (slides[j].extension == "pdf") {
               // Add the asset name to the top of the slide and show the generated thumbnail
               centeredText("(PDF) " + slides[j].assetname, 10);
-              doc.addImage(slides[j].base64, 'png', 20, 20, 90, 60);
+              centeredImage(slides[j].base64, 'png', 20, scaled.width * 0.7, scaled.height * 0.7);
             } else {
               // Display the image asset (all image assets are converted to png in base64 conversion)
-              doc.addImage(slides[j].base64, 'png', 20, 20, 90, 60);
+              centeredImage(slides[j].base64, 'png', 10, scaled.width, scaled.height);
             }
           } else if (slides[j].assettype == "link") {
             // Display the link in the center of the page
@@ -200,6 +216,16 @@ function exportSlides(info, assets) {
       obj.src = "https://i.imgur.com/ZVYirCC.png";
     }
   }
+}
+
+// https://stackoverflow.com/a/14731922
+function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+  var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+  var scaled = {
+    width: srcWidth * ratio,
+    height: srcHeight * ratio
+  }
+  return scaled;
 }
 
 // Prompt the user to download a file from (uri) with the filename (name)
