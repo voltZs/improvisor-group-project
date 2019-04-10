@@ -135,6 +135,18 @@ body {
     max-width: 30%;
 }
 
+.midContainer {
+
+    flex-grow: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    /* margin-left: 15px;
+    margin-right: 15px; */
+    min-width: 30%;
+    max-width: 30%;
+}
+
 .avatarImg {
     border-radius: 50%;
 }
@@ -1312,7 +1324,9 @@ button {
 }
 
 .manualImg{
+  border-radius: 12px;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  max-width: 290px;
 }

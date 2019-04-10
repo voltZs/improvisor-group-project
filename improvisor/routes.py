@@ -151,6 +151,7 @@ def index():
 
 @app.route('/manual')
 def manual():
+
     return render_template("manual.html")
 
 @app.route('/fetch_tagset', methods=['GET'])
