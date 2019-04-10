@@ -1,7 +1,8 @@
 var asset;
 
 var navigBar = document.getElementById("navigBar");
-var presenterView = document.getElementById("presenterView")
+var presenterView = document.getElementById("presenterView");
+var defaultView = document.getElementById("presenterDefault");
 emptyViews();
 
 var timer = 0;
@@ -11,6 +12,17 @@ var textFormats = ["txt", "csv"];
 var imageFormats = ["jpg", "jpeg", "png", "bmp", "tiff"];
 
 var bckgrnd_color = document.getElementById("data-color").getAttribute("data");
+var lastAssetDiv = document.getElementById("data-lastAssetData");
+var lastAssetDivData = lastAssetDiv.getAttribute("data");
+if(lastAssetDivData){
+  $(defaultView).hide();
+  var lastAsset = JSON.parse(lastAssetDivData);
+  showAsset(lastAsset);
+} else {
+  $(presenterView).hide();
+}
+
+console.log(lastAsset);
 
 console.log(bckgrnd_color);
 $("html").css("background", "none");
@@ -29,32 +41,37 @@ setInterval(function(){
 $(document).ready(function () {
     var socket = io();
     socket.emit('join');
-    socket.on('presenter', function (receivedData) {
-        console.log(receivedData);
-
+    socket.on('presenter', function (data) {
+        $(presenterView).show();
+        $(defaultView).hide();
+        console.log(data);
         emptyViews();
-        if (receivedData['assettype'] == "file"){
-            var directory = receivedData['assetLocation'];
-            var temp = directory.split(".");
-            var extension = temp[temp.length-1].toLowerCase();
-
-            if(extension == "pdf"){
-                $('#embed_display').show();
-                $('#embed_display').attr('src', directory);
-            } else if (textFormats.includes(extension)) {
-                $('#object_display').show();
-                $('#object_display').attr('data', directory);
-            } else if (imageFormats.includes(extension)) {
-                $('#img_display').show();
-                $('#img_display').attr('src', directory);
-            }
-        } else if(receivedData['assettype'] == "link"){
-            $('#link_display').show();
-            $('#link_display').html(receivedData['assetLink']);
-            $('#link_display').attr('href', receivedData['assetLink']);
-        }
+        showAsset(data)
     });
 });
+
+function showAsset(receivedData){
+  if (receivedData['assettype'] == "file"){
+      var directory = receivedData['assetLocation'];
+      var temp = directory.split(".");
+      var extension = temp[temp.length-1].toLowerCase();
+
+      if(extension == "pdf"){
+          $('#embed_display').show();
+          $('#embed_display').attr('src', directory);
+      } else if (textFormats.includes(extension)) {
+          $('#object_display').show();
+          $('#object_display').attr('data', directory);
+      } else if (imageFormats.includes(extension)) {
+          $('#img_display').show();
+          $('#img_display').attr('src', directory);
+      }
+  } else if(receivedData['assettype'] == "link"){
+      $('#link_display').show();
+      $('#link_display').html(receivedData['assetLink']);
+      $('#link_display').attr('href', receivedData['assetLink']);
+  }
+}
 
 function emptyViews(){
     $(presenterView.children).attr("src", "");

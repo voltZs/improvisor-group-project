@@ -75,25 +75,52 @@ function getFileExtension(filename) {
 
 function exportSlides(info, assets) {
   // jsPDF Library - format is currently set to 1920x1080 (in mm)
+  var pageWidth = 508;
+  var pageHeight = 285.75;
   var doc = new jsPDF({
     orientation: 'landscape',
     unit: 'mm',
-    format: [508, 285.75]
+    format: [pageWidth, pageHeight]
   });
 
   doc.setFont("times");
   doc.setFontStyle("normal");
   doc.setFontSize(30);
+
+  // centeredText and centeredImage are sub-functions inside the export slides function
+  // in order to avoid referencing issues with 'doc' when adding text and images to the document
+
   // Horizontally center text on the PDF
-  var centeredText = function (text, y) {
-    var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-    var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
-    doc.text(textOffset, y, text);
+  var centeredText = function (text, y, link) {
+    if (link) {
+      var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+      var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+      doc.text(textOffset, y, text);
+    } else {
+      var splitTitle = doc.splitTextToSize(text, 158);
+      for (var i = 0; i < splitTitle.length; i++) {
+        var textWidth = doc.getStringUnitWidth(splitTitle[i]) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+        var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+        doc.text(textOffset, y + ((i + 1) * 10), splitTitle[i]);
+      }
+    }
   }
+  // Horizontally center images on the PDF
+  var centeredImage = function (img, type, marginTop, width, height) {
+    var imageOffset = (doc.internal.pageSize.width - width) / 2;
+    doc.addImage(img, type, imageOffset, marginTop, width, height);
+  }
+
   // Display the session name and session author (first name + lastname)
-  centeredText(info.sessionName, 50);
-  doc.setFontSize(20);
-  centeredText(info.sessionAuthor, 60);
+  centeredText(info.sessionName, 40, false);
+  doc.setFontSize(18);
+  // If the session name is too long for one line, increase the author offset from 50 to 60
+  if (info.sessionName.length > 35) {
+    centeredText("by " + info.sessionAuthor, 60, false);
+  } else {
+    centeredText("by " + info.sessionAuthor, 50, false);
+  }
+
   var slides = [];
   var pdfs = [];
   for (var i = 0; i < assets.length; i++) {
@@ -124,7 +151,9 @@ function exportSlides(info, assets) {
             width: this.width,
             height: this.height
           };
+          // Add to the list of slides that will show the assets
           slides.push(current);
+          // Also add to the list of seperate PDFs that will be prompted to download
           pdfs.push(current);
         } else {
           var current = {
@@ -159,19 +188,28 @@ function exportSlides(info, assets) {
         for (var j = 0; j < slides.length; j++) {
           doc.addPage();
           if (slides[j].assettype == "file") {
+            // Maximum width and height for asset output (in mm)
+            //var maxWidth = 482.6, maxHeight = 269.1;
+            var maxWidth = 158
+            var maxHeight = 82;
+            // Source width and height converted to mm (1px = 0.264583333mm)
+            var srcWidth = slides[j].width * 0.264583333,
+              srcHeight = slides[j].height * 0.264583333;
+            // Resize asset while keeping original aspect ratio
+            var scaled = calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight);
             // If the current asset is a PDF
             if (slides[j].extension == "pdf") {
               // Add the asset name to the top of the slide and show the generated thumbnail
-              centeredText("(PDF) " + slides[j].assetname, 10);
-              doc.addImage(slides[j].base64, 'png', 20, 20, 90, 60);
+              centeredText("(PDF) " + slides[j].assetname, 0, false);
+              centeredImage(slides[j].base64, 'png', 30, scaled.width * 0.7, scaled.height * 0.7);
             } else {
               // Display the image asset (all image assets are converted to png in base64 conversion)
-              doc.addImage(slides[j].base64, 'png', 20, 20, 90, 60);
+              centeredImage(slides[j].base64, 'png', 10, scaled.width, scaled.height);
             }
           } else if (slides[j].assettype == "link") {
             // Display the link in the center of the page
             doc.setTextColor(26, 13, 171);
-            centeredText(slides[j].link, 50);
+            centeredText(slides[j].link, 50, true);
             doc.setTextColor(0, 0, 0);
           }
         }
@@ -200,6 +238,16 @@ function exportSlides(info, assets) {
       obj.src = "https://i.imgur.com/ZVYirCC.png";
     }
   }
+}
+
+// Adapted from https://stackoverflow.com/a/14731922
+function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+  var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+  var scaled = {
+    width: srcWidth * ratio,
+    height: srcHeight * ratio
+  }
+  return scaled;
 }
 
 // Prompt the user to download a file from (uri) with the filename (name)

@@ -8,12 +8,21 @@
 
 {% block content %}
     <div data="{{background_color}}" id="data-color"></div>
+    <div class="text20 whiteText" id="presenterDefault">
+        <img class="avatarImg " src='{{current_user.profileImageLocation}}' width=120px height=120px/>
+        <h3>{{current_user.firstname}} {{current_user.lastname}}</h3>
+        <h1>
+          <i class="fas fa-spinner fa-pulse"></i>
+          Waiting for presenter
+        </h1>
+    </div>
     <div class="presenter-view" id="presenterView">
         <img id="img_display" src="">
         <embed id ="embed_display" type="application/pdf" width="100%" height="100%" src=""/>
         <object id="object_display" data=""></object>
         <a id="link_display"></a>
     </div>
+    <div id="data-lastAssetData" data="{% if lastAsset %}{{lastAsset}}{% endif %}"></div>
 {% endblock content %}
 
 {% block end_body %}
