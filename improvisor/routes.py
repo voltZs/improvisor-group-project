@@ -205,7 +205,12 @@ def presenter_view():
     if session == None:
         return redirect('/new_session')
     bckgrnd = current_user.backgroundColour
-    return render_template('presenter.html', background_color=bckgrnd)
+    if current_user.activeSession:
+        activeSession = get_full_session(current_user.activeSession)
+        lastAsset = {}
+        if(len(activeSession)):
+            lastAsset = json.dumps(activeSession[len(activeSession)-1].asset.json())
+    return render_template('presenter.html', background_color=bckgrnd, lastAsset=lastAsset)
 
 @app.route('/controller', methods=['GET'])
 @login_required
