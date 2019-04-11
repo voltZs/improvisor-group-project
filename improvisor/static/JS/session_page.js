@@ -283,7 +283,7 @@ function removeAsset(assetIndex) {
   // Send AJAX query to delete from session
   $.ajax({
     type: "POST",
-    url: "/sessions/" + sessionID + "/removeAsset/" + assetIndex,
+    url: "/sessions/" + sessionID + "/removeAsset",
     data: {
       'index': assetIndex
     },
