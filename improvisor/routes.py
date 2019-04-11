@@ -248,7 +248,7 @@ def user_settings_view():
                 change = True
             if form.emailUpdate.data:
                 user = UserModel.find_by_email(form.emailUpdate.data)
-                if user:
+                if user and user != current_user:
                     flash('Account already exists, no changes saved', 'danger')
                     return render_template('user_settings.html', form=form)
                 else:
