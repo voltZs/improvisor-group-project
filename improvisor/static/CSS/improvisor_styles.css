@@ -482,7 +482,7 @@ h3 {
     display: none;
     color: white;
     margin-right: 0px;
-    margin-top: 6px;
+    margin-top: 5px;
 }
 
 .hiddenNavigbar {
@@ -606,6 +606,7 @@ h3 {
         float: right;
         display: block;
         margin-right: 15px;
+        font-size: 22px;
     }
 }
 
@@ -621,7 +622,7 @@ h3 {
 
     .navigbar.responsive .icon {
         position: absolute;
-        right: 12px;
+        right: 63px;
         top: 0;
     }
 
