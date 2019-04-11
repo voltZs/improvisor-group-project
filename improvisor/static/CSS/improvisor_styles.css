@@ -649,7 +649,7 @@ div.fileInputVisible {
     font-size: 16px;
     position: relative;
     display: inline-block;
-    z-index: 2;
+    /* z-index: 2; */
 }
 
 div.fileInputVisible:hover {
@@ -1294,7 +1294,7 @@ button {
   height: 100%;
   overflow: auto;
   background-color: rgba(0,0,0,0.4);
-  transform: translateY(-11%);
+  /* transform: translateY(-11%); */
 }
 /* The Modal Example for design document */
 .modalExample {
@@ -1307,7 +1307,7 @@ button {
   height: 100%;
   overflow: auto;
   background-color: rgba(0,0,0,0.4);
-  transform: translateY(-11%);
+  /* transform: translateY(-11%); */
 }
 
 /* Modal Content/Box */
@@ -1349,7 +1349,7 @@ button {
   height: 100%;
   overflow: auto;
   background-color: rgba(0,0,0,0.4);
-  transform: translateY(-11%);
+  /* transform: translateY(-11%); */
 }
 /* The Modal Example for design document */
 .modalExampleHelp {
@@ -1362,7 +1362,7 @@ button {
   height: 100%;
   overflow: auto;
   background-color: rgba(0,0,0,0.4);
-  transform: translateY(-11%);
+  /* transform: translateY(-11%); */
 }
 
 /* Modal Content/Box */
