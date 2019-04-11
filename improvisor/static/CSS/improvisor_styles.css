@@ -472,7 +472,6 @@ h3 {
 /* NAV BAR START */
 
 .navigbar {
-    padding: 0 12px;
     z-index: 1;
     position: fixed;
     top: 0;
@@ -511,6 +510,10 @@ h3 {
     line-height: 24px;
     display: inline-block;
     padding: 0 10px;
+}
+
+.navigbar .navigbarItem:nth-of-type(1){
+  margin-left: 15px;
 }
 
 .navigbarItem:hover {
@@ -577,7 +580,6 @@ h3 {
         display: none;
     }
 
-
     .navigbar.responsive .icon {
         position: absolute;
         right: 63px;
@@ -590,8 +592,7 @@ h3 {
     }
 
     .navigbar.responsive .items a {
-        color: black !important;
-        border: 1px solid black;
+      color: rgb(28, 80, 165); !important;
     }
 
     .navigbar.responsive a.logo {
@@ -604,7 +605,8 @@ h3 {
         background: white;
         width: 100%;
         justify-content: center;
-        margin: 0;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
         overflow: hidden;
         text-align: center;
     }
