@@ -19,16 +19,21 @@
     </div>
   </a>
 
-        <a href="/presenter">
-            <div class="navigbarItem navigbarItemMid" id="presenterMode">
-                Presenter
-            </div>
-        </a>
-
-        {% block navigbar_microphone %}
-        <div class="whiteText navigbarItem" id="microphoneToggle">
-            <i class="fas fa-microphone" id="microphoneIcon"></i>
-        </div>
-        {% endblock navigbar_microphone %}
+  <a href="/presenter">
+    <div class="navigbarItem navigbarItemMid" id="presenterMode">
+      Presenter
     </div>
+  </a>
+
+  <div class="navigbarItem navigbarItemRight hidden" id="modalHelpIcon">
+    Help
+  </div>
+
+
+  {% block navigbar_microphone %}
+  <div class="whiteText navigbarItem" id="microphoneToggle">
+    <i class="fas fa-microphone" id="microphoneIcon"></i>
+  </div>
+  {% endblock navigbar_microphone %}
+</div>
 {% endblock navigbar %}

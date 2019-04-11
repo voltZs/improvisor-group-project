@@ -47,7 +47,7 @@
 
   <a href="/manual">
     <div class="navigbarItem navigbarItemRight">
-      Help
+      Guide
     </div>
   </a>
   {% if current_user.is_authenticated %}
@@ -75,6 +75,13 @@
   </a>
   {% endif %}
 
+
+  <div class="navigbarItem navigbarItemRight hidden" id="modalHelpIcon">
+    Help
+  </div>
+
+
+
 </div>
 {% endblock navigbar %}
 
@@ -93,9 +100,7 @@
   </div>
 </div>
 
-<div class="helpIcon hidden" id="modalHelpIcon">
-  <i class="fa fa-question-circle"></i>
-</div>
+
 {% endblock content %}
 
 {% block end_body %}
