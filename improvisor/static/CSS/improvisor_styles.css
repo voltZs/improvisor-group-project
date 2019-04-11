@@ -952,6 +952,8 @@ div.presenter-view object{
 }
 
 .error {
+  border-radius: 5px;
+  background-color: rgba(255, 0, 0, 0.1);
   width: 100%;
   margin-top: -5px;
   margin-bottom: 5px;
