@@ -55,7 +55,7 @@
                 </div>
         </div>
         <div class="assetPageRight">
-            {{form.assetname(class="assetTitle darkText boldText", id="assetNameInput", data=asset.assetname, value=asset.assetname )}}
+            {{form.assetname(class="assetTitle darkText boldText", id="assetNameInput", data=asset.assetname, value=asset.assetname, maxlength="30")}}
             {{ form.hidden_tag() }}
             {% if asset.assettype == 'file' %}
               {% set locationList = asset.assetLocation.split('/') %}
