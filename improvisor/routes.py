@@ -140,7 +140,6 @@ def upload(asset, assetResource, thumbBase64):
         save_location = full_path + "/Thumbnail_"+thumbBase64[-15:] +".png"
         #removes the description from the string
         thumbBase64 = thumbBase64.replace("data:image/png;base64,", '')
-        print(thumbBase64)
         image = base64.b64decode(thumbBase64 + "==")
         with open(save_location, 'wb') as f:
             f.write(image)
