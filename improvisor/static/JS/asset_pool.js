@@ -101,7 +101,6 @@ sortingDiv.addEventListener("mouseover", function(){
     if(!is_touch_device()){
         isExpanded = true;
     }
-    console.log(isExpanded);
     sortBtnRecent.hidden = false;
     sortBtnOld.hidden = false;
     sortBtnRelevant.hidden = false;
@@ -111,7 +110,6 @@ sortingDiv.addEventListener("click", function(){
     if(is_touch_device()){
         isExpanded = true;
     }
-    console.log(isExpanded);
     sortBtnRecent.hidden = false;
     sortBtnOld.hidden = false;
     sortBtnRelevant.hidden = false;
@@ -215,7 +213,6 @@ function getAssets(tags, sorting, limit){
       success: function (data) {
 
         data = JSON.parse(data);
-        console.log(data);
 
         assetPool.innerHTML = "";
         for(var i=0; i<data.length; i++){
@@ -243,7 +240,6 @@ function getAssets(tags, sorting, limit){
             link.addEventListener("click", function(event){
                 if(selectionMode){
                     event.preventDefault();
-                    console.log("Clicking button");
                 }
             })
             assetPool.appendChild(link);
