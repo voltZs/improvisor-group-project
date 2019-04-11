@@ -24,11 +24,10 @@ if(lastAssetDivData){
 } else {
   if(perc_bright>150){
     $(defaultView.children).css("color", "black");
+    $(presenterView.children).css("color", "black");
   } else {
-    $(defaultView.children).css("color", "white");
+    $(presenterView.children).css("color", "white");
   }
-
-
   $(presenterView).hide();
 }
 
