@@ -21,6 +21,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from PIL import Image, ExifTags
 from datetime import datetime, date
 import time
+import re
 from json import dumps
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_mail import Message
@@ -133,13 +134,17 @@ def upload(asset, assetResource, thumbBase64):
             if not os.path.exists(full_path):
                 os.makedirs(full_path)
     if thumbBase64:
-        save_location = full_path + "/Thumbnail.png"
+        #thumbBase64 automatic thumbnail has too long a code so take the last 15 characters to uniquely identify it and avoid browser cache problems 
+        if asset.thumbnailLocation:
+             os.remove("improvisor" + asset.thumbnailLocation)
+        save_location = full_path + "/Thumbnail_"+thumbBase64[-15:] +".png"
         #removes the description from the string
         thumbBase64 = thumbBase64.replace("data:image/png;base64,", '')
+        print(thumbBase64)
         image = base64.b64decode(thumbBase64 + "==")
         with open(save_location, 'wb') as f:
             f.write(image)
-        asset.thumbnailLocation = relative_path + "/Thumbnail.png"
+        asset.thumbnailLocation = relative_path + "/Thumbnail_"+thumbBase64[-15:] +".png"
 
 
 
@@ -243,6 +248,7 @@ def user_settings_view():
                 current_user.password = hashpass
                 change = True
             if form.emailUpdate.data:
+                user = UserModel.find_by_email(form.emailUpdate.data)
                 current_user.email = form.emailUpdate.data
                 change = True
             if form.firstnameUpdate.data:
@@ -528,6 +534,7 @@ def asset_delete(id=None):
 @app.route('/assets/<id>/update', methods=['GET', 'POST'])
 @login_required
 def asset_update(id=None):
+    
     if id is not None:
         form = FormUpdateAsset(request.form)
         asset = AssetModel.find_by_assetId(id)
@@ -555,8 +562,8 @@ def asset_update(id=None):
                 asset.assetname = form.assetname.data
                 asset.save_to_db()
             if form.assetAutomaticThumbnail.data:
-	            upload(asset, None, form.assetAutomaticThumbnail.data)
-	            asset.save_to_db()
+                upload(asset, None, form.assetAutomaticThumbnail.data)
+                asset.save_to_db()
 
 
     return redirect(url_for('asset', id=id))
