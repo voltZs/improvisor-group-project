@@ -73,6 +73,26 @@
         </div>
     </div>
 
+
+
+    <div id="helpModal" class="modal">
+      <div class="modal-content">
+        <span class="closeHelp">&times;</span>
+        <h1>Help</h1>
+        <p>
+          To add a new asset go to the 'Asset Pool' page and click the 'Add' button that is situated in the right
+          top corner.
+        </p>
+        <p>
+          Added assets can be deleted, or edited. To access this feature, go to 'Asset Pool' where all saved assets will be displayed. The assets can be sorted by when they were added ('Most Recent' or 'Oldest First'), or by relevance. To sort by relevance tags need to be provided in the 'Filter Tags:' input box. When more than one tag is provided, only assets that are linked to all tags will be displayed.
+        </p>
+        <p>
+          To delete an assets you can click on any asset, which will display asset details, and then click on 'Delete Asset'. Alternatively, click on 'Select' button, that is situated above the box that displays all assets, and then select an asset to delete. A 'Delete' button will appear next to the 'Select' button. Clicking on the 'Delete' button will delete the selected asset. By using the 'Select' button you can highlight multiple assets and delete all of them at the same time.
+        </p>
+
+      </div>
+    </div>
+
 {% endblock page_content %}
 
 {% block end_body %}
@@ -80,4 +100,5 @@
         document.getElementById('assetPoolOption').classList.add('selected');
     </script>
     <script type="text/javascript" src="{{url_for('static', filename='JS/asset_pool.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='JS/helpModal.js')}}"></script>
 {% endblock end_body %}
