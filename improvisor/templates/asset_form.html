@@ -85,10 +85,36 @@
     </div>
 
 
+    <!--
+    <div class="helpIcon" id="modalHelpIcon">
+      <i class="fa fa-question-circle"></i>
+    </div> -->
+
+    <div id="helpModal" class="modal">
+      <div class="modal-content">
+        <span class="closeHelp">&times;</span>
+        <h1>Help</h1>
+
+        <p>
+          The form on this page lets you add new assets. To do this, enter the asset name, tags associated with it and choose if you want the asset to be a file (pdf, jpeg, png) or a link. As default, it is set to file. Then choose a file, or enter http(s) address of the link. Once the file has been selected, or link entered, a default thumbnail will be displayed. If you want the name of the asset to be used as a thumbnail tick the 'Use nama as thumbnail' checkbox. Alternatively, you can click on the displayed image and select a different file that will be used as a thumbnail.
+        </p>
+        <p>
+          If you would like to add multiple assets at once, you can click on '+ Add Asset' button which will display an additional form for the next asset. Once you have completed all fields for all assets, you can save them by clicking on 'Submit' button.
+        </p>
+        <p>
+          To make sure that the selected tags will be recognised by speech recognition, you can test them by clicking on the
+          'Test Recognition' button in the bottom right corner of the screen. Then say a sentence containing your tag and
+          see if the output contains the tag that you want to use.
+        </p>
+
+      </div>
+    </div>
+
+
+
 
 
 {% endblock page_content %}
-
 
 {% block end_body %}
     <script>
@@ -97,5 +123,6 @@
     <script type="text/javascript" src="{{url_for('static', filename='JS/thumbnail_generation.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='JS/new_asset_form.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='JS/tagRecTest.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='JS/helpModal.js')}}"></script>
 
 {% endblock end_body %}

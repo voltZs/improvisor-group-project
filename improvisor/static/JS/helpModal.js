@@ -1,3 +1,5 @@
+$("#modalHelpIcon").show();
+
 var modal = document.getElementById('helpModal');
 
 // gets the link to the modal
