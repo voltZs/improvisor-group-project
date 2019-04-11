@@ -345,6 +345,7 @@ def previous_sessions_view():
 @login_required
 def session_page(id=None):
     if id != None:
+        form = FormSession() 
         custom_session = createDateList(id)
         if custom_session:  
             return render_template('session.html', session=custom_session, form=form)
@@ -355,7 +356,6 @@ def session_page(id=None):
 def createDateList(id):
     session = SessionModel.find_by_sessionNumber(id)
     if session != None:
-        form = FormSession() 
         custom_session = copy.deepcopy(session)
         dates = get_full_session(session) 
         setattr(custom_session, "dates", [date.json() for date in dates])
