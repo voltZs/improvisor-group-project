@@ -280,12 +280,23 @@ deleteButton.addEventListener("click", function (e) {
 
 function removeAsset(assetIndex) {
   console.log(assetIndex);
-  var assets = getSessionAssets();
-  console.log(assets);
-  //console.log(assets[assetIndex]);
   // Send AJAX query to delete from session
-
-  // refresh the page
+  $.ajax({
+    type: "POST",
+    url: "/sessions/" + sessionID + "/removeAsset/" + assetIndex,
+    data: {
+      'index': assetIndex
+    },
+    timeout: 60000,
+    success: function (data) {
+      var retrieved = JSON.parse(data);
+      if (retrieved['success']) {
+        window.location.replace("/sessions/" + sessionID);
+      } else {
+        console.log("Could not delete the asset at index " + assetIndex);
+      }
+    }
+  });
 }
 
 function applyGestureControls() {
