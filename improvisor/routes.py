@@ -312,7 +312,7 @@ def addPicture(settingsForm):
     except Exception as e:
         print(e)
         image_user.save(save_location)
-    if (current_user.profileImageLocation != "https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="):
+    if (current_user.profileImageLocation != "/static/images/default_profile.png"):
         os.remove("improvisor" + current_user.profileImageLocation)
     current_user.profileImageLocation = relative_path + "/" + filename
     db.session.commit()
@@ -516,6 +516,11 @@ def asset(id=None):
 def asset_delete(id=None):
     if id is not None:
         # Delete the asset with id from db
+        asset = AssetModel.find_by_assetId(id)        
+        # If the tag only belongs to the asset being deleted, remove the tag
+        for tag in asset.tags:
+            if len(tag.assets) <= 1:
+                TagModel.remove_tag(tag.tagname)
         AssetModel.delete_by_assetId(id)
         return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
     return json.dumps({'success':False}), 400, {'ContentType':'application/json'}

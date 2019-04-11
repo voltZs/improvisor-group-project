@@ -258,7 +258,7 @@ function downloadURI(uri, name) {
   link.click();
 }
 
-deleteButton.addEventListener("click", function () {
+deleteButton.addEventListener("click", function (e) {
   if (window.confirm("Are you sure you want to delete this session?")) {
     $.ajax({
       type: "POST",
@@ -266,10 +266,11 @@ deleteButton.addEventListener("click", function () {
       timeout: 60000,
       success: function (data) {
         var retrieved = JSON.parse(data);
-        if (retrieved['success'])
+        if (retrieved['success']) {
           window.location.replace("/sessions");
-        else
+        } else {
           console.log("Could not delete the session id " + sessionID);
+        }
       }
     });
   } else {
