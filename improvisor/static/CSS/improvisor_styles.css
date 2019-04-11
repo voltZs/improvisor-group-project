@@ -596,6 +596,7 @@ h3 {
 }
 
 .inputSection {
+  flex-wrap: wrap;
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -616,7 +617,9 @@ input.growText.growText100{
 .labelDiv {
   display: inline-block;
   font-size: 18px;
-  margin-right: 5px;
+  padding-right: 5px;
+  width: 35%;
+  box-sizing: border-box;
 }
 
 input[type="text"] {
@@ -824,12 +827,14 @@ input.assetTitle{
   padding-top: 10px;
   height: auto!important;
   min-height: 500px;
+  max-height: 500px;
 }
 
 .presenter-view img{
   max-width: 100%;
-  max-height: 100%;
+  height: auto !important;
   object-fit: contain;
+  margin: 0 auto;
 }
 
 .presenter-view #link_display{
@@ -950,9 +955,15 @@ div.presenter-view object{
     margin-bottom: 0;
 }
 
-p.error {
-    color: rgb(255, 0, 0) !important;
-    font-weight: bold;
+.error {
+  border-radius: 5px;
+  background-color: rgba(255, 0, 0, 0.1);
+  width: 100%;
+  margin-top: -5px;
+  margin-bottom: 5px;
+  text-align: center;
+  color: rgb(255, 0, 0) !important;
+  font-weight: bold;
 }
 
 .register .inputs .section input {
