@@ -1,5 +1,3 @@
-
-
 var assetTags = [];
 
 var assetNameInput = document.getElementById("assetNameInput");
@@ -22,6 +20,14 @@ var prevButton =  document.getElementById('prevButton');
 var nextButton =  document.getElementById('nextButton');
 var thumbnailNameCheckboxCont = document.getElementById('thumbnailNameCheckbox');
 var thumbnailNameCheckbox = thumbnailNameCheckboxCont.children[0];
+
+var textFormats = ["txt", "csv"];
+var imageFormats = ["jpg", "jpeg", "png", "bmp", "tiff"];
+$('#embed_display').hide();
+$('#object_display').hide();
+$('#img_display').hide();
+$('#link_display').hide();
+fetchAsset(assetID);
 
 $(".hidden-tags-data").each(function(){
     var tag =$(this).attr("data");
@@ -137,10 +143,6 @@ thumbnailNameCheckbox.addEventListener('change', function(){
   }
 });
 
-
-
-
-
 deleteButton.addEventListener("click", function(){
     $.ajax({
       type: "POST",
@@ -168,7 +170,6 @@ saveButton.addEventListener("click", function(){
     document.getElementById("formUpdate").submit();
 })
 
-
 function fetchTagset(){
   var tmp = null;
   $.ajax({
@@ -180,4 +181,40 @@ function fetchTagset(){
     }
   });
   return tmp;
+}
+
+function fetchAsset(id){
+  $.ajax({
+    url: "/fetch_asset",
+    data: {id: id},
+    timeout: 60000,
+    success: function (data) {
+      asset = JSON.parse(data);
+      console.log(asset);
+      showAsset(asset);
+    }
+  });
+}
+
+function showAsset(receivedData){
+  if (receivedData['assettype'] == "file"){
+      var directory = receivedData['assetLocation'];
+      var temp = directory.split(".");
+      var extension = temp[temp.length-1].toLowerCase();
+
+      if(extension == "pdf"){
+          $('#embed_display').show();
+          $('#embed_display').attr('src', directory);
+      } else if (textFormats.includes(extension)) {
+          $('#object_display').show();
+          $('#object_display').attr('data', directory);
+      } else if (imageFormats.includes(extension)) {
+          $('#img_display').show();
+          $('#img_display').attr('src', directory);
+      }
+  } else if(receivedData['assettype'] == "link"){
+      $('#link_display').show();
+      $('#link_display').html(receivedData['assetLink']);
+      $('#link_display').attr('href', receivedData['assetLink']);
+  }
 }

@@ -167,9 +167,6 @@ def fetch_asset():
     asset = {}
     if id is not None:
         asset = AssetModel.find_by_assetId(id).json()
-        # asset.pop("date-created", None)
-        # asset.pop("dateAdded", None)
-        # date time objects are being removed because they're not JSON serializable..
         return dumps(asset, default = json_serial)
     return None
 
