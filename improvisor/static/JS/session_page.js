@@ -281,8 +281,11 @@ deleteButton.addEventListener("click", function (e) {
 function removeAsset(assetIndex) {
   console.log(assetIndex);
   var assets = getSessionAssets();
-  console.log(assets[assetIndex]);
+  console.log(assets);
+  //console.log(assets[assetIndex]);
   // Send AJAX query to delete from session
+
+  // refresh the page
 }
 
 function applyGestureControls() {
@@ -315,7 +318,6 @@ function applyGestureControls() {
         },
         callbacks: {
           open: function () {
-            console.log("callback");
             $('#btnRemoveAsset').click(function () {
               removeAsset(element.attr('data-index'));
             });
