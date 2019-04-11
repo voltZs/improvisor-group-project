@@ -35,6 +35,22 @@
         {% endfor %}
     </div>
     <div id="data-sorting" data="{{sorting}}"></div>
+
+
+    <div id="helpModal" class="modal">
+      <div class="modal-content">
+        <span class="closeHelp">&times;</span>
+        <h1>Help</h1>
+        <p>
+          All previous sessions are saved and can be accessed from the main menu by clicking on 'Previous Sessions'. You will be presented with a list of all sessions which can be sorted by their date. The last session on the list (the most recent one) will alvays be active, and the status will change to finished only when a new one is started.
+        </p>
+        
+        <p>
+          Clicking on any of the sessions from the list displays the session's details. Here you can amend the session's name (by clicking on it), export assets shown during the session in a pdf file, or delete the session.
+        </p>
+
+      </div>
+    </div>
 {% endblock page_content %}
 
 
@@ -43,4 +59,5 @@
         document.getElementById('prevSessionOption').classList.add('selected');
     </script>
     <script type="text/javascript" src="{{url_for('static', filename='JS/session_pool.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='JS/helpModal.js')}}"></script>
 {% endblock end_body %}
