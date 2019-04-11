@@ -302,6 +302,11 @@ body {
     padding: 5px;
 }
 
+.center {
+    display: flex;
+    justify-content: center;
+}
+
 .centerFlex {
     display: flex;
     width: 100%;
@@ -482,7 +487,7 @@ h3 {
     display: none;
     color: white;
     margin-right: 0px;
-    margin-top: 6px;
+    margin-top: 5px;
 }
 
 .hiddenNavigbar {
@@ -606,6 +611,7 @@ h3 {
         float: right;
         display: block;
         margin-right: 15px;
+        font-size: 22px;
     }
 }
 
@@ -621,7 +627,7 @@ h3 {
 
     .navigbar.responsive .icon {
         position: absolute;
-        right: 12px;
+        right: 63px;
         top: 0;
     }
 
@@ -1275,6 +1281,16 @@ div.presenter-view object {
 
 .mfp-figure:after {
     visibility: hidden;
+}
+
+.popup-btn {
+    position: fixed;
+    margin: 10px 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    width: 240px;
 }
 
 .arrowBtn {

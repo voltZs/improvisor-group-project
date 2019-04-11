@@ -25,7 +25,7 @@
         <div class="currentBlock">
             <div class="imageRow style-2" id="currentRow">
                 {% for asset in session.dates %}
-                    <img src="{{asset.asset.thumbnailLocation}}" data-id="{{asset.asset.id}}" title="{{asset.asset.assetname}}" class="assetThumbnail" style="touch-action: pan-x; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                    <img src="{{asset.asset.thumbnailLocation}}" data-id="{{asset.asset.id}}" data-index={{loop.index - 1}} title="{{asset.asset.assetname}}" class="assetThumbnail" style="touch-action: pan-x; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
                 {% endfor %}
             </div>
         </div>
