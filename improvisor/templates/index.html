@@ -3,9 +3,33 @@
 
 {% block page_content %}
     {% if current_user.is_authenticated %}
-        <h1>Welcome back, {{current_user.firstname}}</h1>
+        <h1 class="darkText">Welcome back, {{current_user.firstname}}</h1>
+
     {% else %}
     <h1 class="darkText">Welcome to Improvisor</h1>
+    <p class="darkText">
+      Improvisor is an application that will allow you create a presentation dynamically from previously saved assets and associated tags. Improvisor uses speech recognition to look for tags in the presenter speech and presents the linked assets on a mobile device for the presenter to choose and display to the audience.
+    </p>
+
+    <!-- credits: Teemu Paananen, at: https://unsplash.com/photos/bzdhc5b3Bxs -->
+  <img class="manualImg" src="{{url_for('static', filename='images/presentation.jpeg')}}" alt="Presentation"
+   style="max-width:80%;">
+  <br>
+<!--   <div class="formFooter">
+  <button class="bubbleButton bubbleButtonDark rowsButton">Login</button>
+  <div class="darkText inbetweenText"> Or </div>
+  <button class="bubbleButton bubbleButtonDark rowsButton">Sign Up</button>
+</div> -->
+
+  <div class="darkText " style="text-align: center;">
+    <a href="/signup"><strong>Sing Up</strong></a> for a free account.
+    <br>
+     Already have an account?
+    <a href="/login"><strong>Login here</strong>.</a>
+
+
+  </div>
+
     {% endif %}
-    <p class="darkText">Some introductory text about the service etc etc </p>
+
 {% endblock %}
