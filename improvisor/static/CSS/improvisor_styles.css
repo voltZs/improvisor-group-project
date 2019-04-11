@@ -617,7 +617,9 @@ input.growText.growText100{
 .labelDiv {
   display: inline-block;
   font-size: 18px;
-  margin-right: 5px;
+  padding-right: 5px;
+  width: 35%;
+  box-sizing: border-box;
 }
 
 input[type="text"] {
