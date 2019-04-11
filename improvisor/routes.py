@@ -327,7 +327,11 @@ def previous_sessions_view():
     if sorting != 'recent' and sorting != 'old':
         sorting = 'recent'
     print(sorting)
-    sessions = SessionModel.find_all_sessions()
+    sessions = []
+    if sorting == "recent":
+        sessions = SessionModel.find_all_sessions().order_by(desc(SessionModel.dateCreated))
+    elif sorting == "old":
+        sessions = SessionModel.find_all_sessions().order_by(asc(SessionModel.dateCreated))
     return render_template('previous_sessions.html', sessions=sessions, sorting=sorting)
 
 
