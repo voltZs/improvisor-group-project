@@ -5,6 +5,7 @@ from flask import session
 from datetime import datetime
 from flask_login import current_user
 from improvisor.models.session_model import SessionModel
+import os
 
 class AssetModel(db.Model):
     __tablename__ = "assets"
@@ -57,7 +58,7 @@ class AssetModel(db.Model):
 
     @classmethod
     def find_by_assetName(cls, assetname):
-        return cls.query.filter_by(assetname = assetname, user_id = session["user_id"]).first()
+        return cls.query.filter_by(assetname = assetname, user_id = session["user_id"]).all()
 
     @classmethod
     def find_by_assetId(cls, id):
@@ -66,5 +67,12 @@ class AssetModel(db.Model):
     @classmethod
     def delete_by_assetId(cls, id):
         obj = cls.query.filter_by(id=id, user_id=current_user.get_id()).first()
+        directories = obj.thumbnailLocation.split("/")
+        del directories[0]
+        directories.insert(0, "improvisor")
+        path = "/".join([directory for directory in directories if "Thumbnail" not in directory])
+        os.remove("improvisor" + obj.assetLocation)
+        os.remove("improvisor" + obj.thumbnailLocation)
+        os.rmdir(path)
         db.session.delete(obj)
         db.session.commit()
