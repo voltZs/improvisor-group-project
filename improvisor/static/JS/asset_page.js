@@ -15,6 +15,7 @@ var thumbnailSpace = document.getElementById('thumbnailSpace');
 var hiddenField = document.getElementById('thumbHidden');
 var file;
 var thumbnailImage = document.getElementById("thumbnailImg");
+var originalThumbnail = thumbnailImage.src;
 var thumbnailUploadHidden = document.getElementById("thumbUploadHidden");
 var prevButton = document.getElementById('prevButton');
 var nextButton = document.getElementById('nextButton');
@@ -138,10 +139,9 @@ thumbnailNameCheckbox.addEventListener('change', function () {
         thumbnailFromAssetName(name, thumbnailSpace, hiddenField);
     } else {
         console.log('The checkbox has been unticked');
-        $(nextButton).parent().show();
         thumbnailSpace.innerHTML = "";
-        createThumbnail(file, thumbnailSpace, hiddenField, nextButton, prevButton);
-
+        thumbnailSpace.appendChild(thumbnailImage);
+        thumbnailImage.src = originalThumbnail;
     }
 });
 
