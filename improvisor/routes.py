@@ -323,8 +323,12 @@ def addPicture(settingsForm):
 @app.route('/sessions', methods=['GET'])
 @login_required
 def previous_sessions_view():
+    sorting = request.args.get('sorting', default = 'recent')
+    if sorting != 'recent' and sorting != 'old':
+        sorting = 'recent'
+    print(sorting)
     sessions = SessionModel.find_all_sessions()
-    return render_template('previous_sessions.html', sessions=sessions)
+    return render_template('previous_sessions.html', sessions=sessions, sorting=sorting)
 
 
 @app.route('/sessions/<id>', methods=['GET'])

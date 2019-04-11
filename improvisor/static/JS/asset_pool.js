@@ -17,7 +17,6 @@ for(tag in tagset){
     suggestions.appendChild(option);
 }
 
-var on_touchscreen = false;
 var isExpanded = false;
 var sortingDiv = document.getElementById("sortingDiv");
 var sortingBtnsCont = document.getElementById("sortBtnContainer");

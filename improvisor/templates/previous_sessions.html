@@ -34,6 +34,7 @@
 
         {% endfor %}
     </div>
+    <div id="data-sorting" data="{{sorting}}"></div>
 {% endblock page_content %}
 
 
@@ -41,4 +42,5 @@
     <script>
         document.getElementById('prevSessionOption').classList.add('selected');
     </script>
+    <script type="text/javascript" src="{{url_for('static', filename='JS/session_pool.js')}}"></script>
 {% endblock end_body %}
