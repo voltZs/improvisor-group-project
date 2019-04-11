@@ -120,6 +120,7 @@ body {
 
 .promptContainer {
     min-width: 320px;
+    box-sizing: border-box;
     width: 30vw;
     padding: 20px;
     background-color: rgb(255, 255, 255, 0.9);
@@ -306,8 +307,22 @@ body {
     width: 100%;
     justify-content: center;
 }
+.flexStart{
+  display:flex;
+  justify-content: flex-start;
+}
+
+.flexGrow{
+  display: flex;
+  flex-grow: 1;
+}
+.flexGrow.center{
+  justify-content: center;
+}
 
 .whiteContainer {
+  box-sizing: border-box;
+  max-width: 100%;
     padding: 20px;
     border-radius: 12px;
     background-color: rgba(28, 80, 165, 0.1);
@@ -721,20 +736,30 @@ h3 {
 }
 
 .inputSection {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
 }
 
 input.growText {
-    flex-grow: 1;
+    box-sizing: border-box;
+    width: 65%;
+}
+
+input.growText.growText100{
+  width:100%;
 }
 
 .labelDiv {
-    display: inline-block;
-    min-width: 110px;
-    font-size: 18px;
-    margin-right: 5px;
+  display: inline-block;
+  font-size: 18px;
+  padding-right: 5px;
+  width: 35%;
+  box-sizing: border-box;
 }
 
 input[type="text"] {
@@ -948,16 +973,18 @@ input.assetTitle {
     box-sizing: border-box;
 }
 
-.asset-preview {
-    padding-top: 10px;
-    height: auto !important;
-    min-height: 500px;
+.asset-preview{
+  padding-top: 10px;
+  height: auto!important;
+  min-height: 500px;
+  max-height: 500px;
 }
 
-.presenter-view img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+.presenter-view img{
+  max-width: 100%;
+  height: auto !important;
+  object-fit: contain;
+  margin: 0 auto;
 }
 
 .presenter-view #link_display {
@@ -985,6 +1012,7 @@ div.presenter-view object {
     width: 100%;
     height: 100%;
     top: 0;
+    padding-top: 45px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -1078,9 +1106,15 @@ div.presenter-view object {
     margin-bottom: 0;
 }
 
-p.error {
-    color: rgb(255, 0, 0) !important;
-    font-weight: bold;
+.error {
+  border-radius: 5px;
+  background-color: rgba(255, 0, 0, 0.1);
+  width: 100%;
+  margin-top: -5px;
+  margin-bottom: 5px;
+  text-align: center;
+  color: rgb(255, 0, 0) !important;
+  font-weight: bold;
 }
 
 .register .inputs .section input {
