@@ -55,7 +55,7 @@
                 </div>
         </div>
         <div class="assetPageRight">
-            {{form.assetname(class="assetTitle darkText boldText", id="assetNameInput", data=asset.assetname, value=asset.assetname )}}
+            {{form.assetname(class="assetTitle darkText boldText", id="assetNameInput", data=asset.assetname, value=asset.assetname, maxlength="30")}}
             {{ form.hidden_tag() }}
             {% if asset.assettype == 'file' %}
               {% set locationList = asset.assetLocation.split('/') %}
@@ -80,7 +80,12 @@
 
 <div class="whiteContainer flexContVertical spaced20top">
     <div class="assetTitle darkText boldText ">Asset Preview</div>
-    <img src="{{ asset.assetLocation }}" class ="assetView" alt="">
+    <div class="presenter-view asset-preview">
+        <img id="img_display" src="">
+        <embed id ="embed_display" type="application/pdf" width="100%" height="100%" src=""/>
+        <object id="object_display" data=""></object>
+        <a id="link_display"></a>
+    </div>
 </div>
 
 

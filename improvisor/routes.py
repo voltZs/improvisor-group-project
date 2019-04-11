@@ -167,9 +167,6 @@ def fetch_asset():
     asset = {}
     if id is not None:
         asset = AssetModel.find_by_assetId(id).json()
-        # asset.pop("date-created", None)
-        # asset.pop("dateAdded", None)
-        # date time objects are being removed because they're not JSON serializable..
         return dumps(asset, default = json_serial)
     return None
 
@@ -346,6 +343,8 @@ def session_page(id=None):
             dates = get_full_session(session)
             setattr(custom_session, "dates", [date.json() for date in dates])
             return render_template('session.html', session=custom_session, form=form)
+        else:
+            return abort(404, "The session you're looking for was not found"), 404
     return redirect('/sessions')
 
 
@@ -358,6 +357,8 @@ def session_page_assets(id=None):
             custom_session = copy.deepcopy(session)
             dates = get_full_session(session)
             return jsonify([date.json() for date in dates])
+        else:
+            return abort(404, "The session you're looking for was not found"), 404
     return None
 
 
@@ -371,8 +372,9 @@ def session_page_info(id=None):
                 'sessionName' : session.sessionName,
                 'sessionAuthor' : current_user.firstname + " " + current_user.lastname
             }
-
             return jsonify(info)
+        else:
+            return abort(404, "The session you're looking for was not found"), 404
     return None
 
 
@@ -394,6 +396,8 @@ def session_update(id=None):
                     return render_template('session.html', session=custom_session, form=form)
             else:
                 return redirect(url_for('session_page', id=id))
+        else:
+            return abort(404, "The session you're looking for was not found"), 404
     return redirect('/sessions')
 
 
