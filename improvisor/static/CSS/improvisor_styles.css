@@ -596,6 +596,7 @@ h3 {
 }
 
 .inputSection {
+  flex-wrap: wrap;
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -950,9 +951,13 @@ div.presenter-view object{
     margin-bottom: 0;
 }
 
-p.error {
-    color: rgb(255, 0, 0) !important;
-    font-weight: bold;
+.error {
+  width: 100%;
+  margin-top: -5px;
+  margin-bottom: 5px;
+  text-align: center;
+  color: rgb(255, 0, 0) !important;
+  font-weight: bold;
 }
 
 .register .inputs .section input {
