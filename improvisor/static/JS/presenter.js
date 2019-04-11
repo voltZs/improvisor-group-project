@@ -14,7 +14,11 @@ var imageFormats = ["jpg", "jpeg", "png", "bmp", "tiff"];
 var bckgrnd_color = document.getElementById("data-color").getAttribute("data");
 var bckgrnd_rgb = hexToRgb(bckgrnd_color);
 var perc_bright = ((bckgrnd_rgb['r']*299) + (bckgrnd_rgb['g']*587) + (bckgrnd_rgb['b']*114)) / 1000;
-
+if(perc_bright>150){
+  $(defaultView.children).css("color", "black");
+} else {
+  $(defaultView.children).css("color", "white");
+}
 var lastAssetDiv = document.getElementById("data-lastAssetData");
 var lastAssetDivData = lastAssetDiv.getAttribute("data");
 if(lastAssetDivData){
@@ -22,12 +26,6 @@ if(lastAssetDivData){
   var lastAsset = JSON.parse(lastAssetDivData);
   showAsset(lastAsset);
 } else {
-  if(perc_bright>150){
-    $(defaultView.children).css("color", "black");
-    $(presenterView.children).css("color", "black");
-  } else {
-    $(presenterView.children).css("color", "white");
-  }
   $(presenterView).hide();
 }
 
