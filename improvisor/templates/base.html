@@ -12,91 +12,85 @@
 <script type="text/javascript" src="{{url_for('static', filename='libraries/nosleep/nosleep.js')}}"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
 <script type="text/javascript" src="{{url_for('static', filename='libraries/hammer/hammer.min.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='libraries/magnific-popup/jquery.magnific-popup.min.js')}}"></script>
+<script type="text/javascript"
+  src="{{url_for('static', filename='libraries/magnific-popup/jquery.magnific-popup.min.js')}}"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.9.661/pdf.worker.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.9.661/pdf.js"></script>
 <script type="text/javascript" src="{{url_for('static', filename='JS/global.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"
+  integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
 {{super()}}
 
 {%- endblock %}
 
 {% block styles -%}
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
-<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='libraries/magnific-popup/magnific-popup.css')}}">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+  integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css"
+  href="{{url_for('static', filename='libraries/magnific-popup/magnific-popup.css')}}">
 <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='CSS/improvisor_styles.css')}}">
 <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='CSS/animate.css')}}">
 <link href="https://fonts.googleapis.com/css?family=Montserrat|Rubik|Nunito" rel="stylesheet">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-  crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 
 
 {% endblock %}
 
+
 {% block body %}
 {% block navigbar %}
-<div class="navigbar floatingShadow">
-  <a href="/sessions">
-    <div class="navigbarItem">
-      Improvisor
-    </div>
-  </a>
-
-<!--   <a href="/manual">
-  <div class="navigbarItem navigbarItemRight">
-    Guide
-  </div>
-</a> -->
-  {% if current_user.is_authenticated %}
-  <a href="/logout">
-    <div class="navigbarItem navigbarItemRight">
-      Log Out
-    </div>
-  </a>
-  <a href="/user_settings">
-    <div class="navigbarItem navigbarItemRight" id="usernameNavigbar">
-      {{current_user.firstname}} {{current_user.lastname}}
-    </div>
-  </a>
-
-  {% else %}
-  <a href="/login">
-    <div class="navigbarItem navigbarItemRight">
-      Login
-    </div>
-  </a>
-  <a href="/signup">
-    <div class="navigbarItem navigbarItemRight">
-      Sign Up
-    </div>
-  </a>
-  {% endif %}
-
-
-  <div class="navigbarItem navigbarItemRight hidden" id="modalHelpIcon">
-    <i class="fa fa-info-circle" aria-hidden="true"></i>
+<div class="navigbar floatingShadow" id="myTopnav">
+  <a href="/sessions" class="navigbarItem logo">Improvisor</a>
+  <div class="items">
+    <a href="/manual" class="navigbarItem navigbarItemRight">Guide</a>
+    {% if current_user.is_authenticated %}
+    <a href="/logout" class="navigbarItem navigbarItemRight">Log Out</a>
+    <a href="/user_settings" class="navigbarItem navigbarItemRight">{{current_user.firstname}}
+      {{current_user.lastname}}</a>
+    {% else %}
+    <a href="/login" class="navigbarItem navigbarItemRight">Login</a>
+    <a href="/signup" class="navigbarItem navigbarItemRight">Sign Up</a>
+    {% endif %}
   </div>
 
-
-
+  <!--
+    <a href="javascript:void(0);" class= "navigbarItem navigbarItemRight hidden" id="modalHelpIcon"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+  -->
+  <a href="javascript:void(0);" style="font-size:20px;" class="icon noSelect" onclick="myFunction()">&#9776;</a>
 </div>
+
+<script>
+  function myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "navigbar floatingShadow") {
+      x.className += " responsive";
+    } else {
+      x.className = "navigbar floatingShadow";
+    }
+
+    
+  }
+</script>
+
 {% endblock navigbar %}
+
 
 
 {% block content %}
 <div class="mainContainer">
   <div class="topSpace"></div>
-  <div class= "sideBySideFlex">
-      {% block main_content %}
+  <div class="sideBySideFlex">
+    {% block main_content %}
 
-      <div class="pageContainer">
-        {% block page_content %}
-        {% endblock page_content %}
-      </div>
-      {% endblock main_content %}
+    <div class="pageContainer">
+      {% block page_content %}
+      {% endblock page_content %}
+    </div>
+    {% endblock main_content %}
   </div>
 </div>
 
