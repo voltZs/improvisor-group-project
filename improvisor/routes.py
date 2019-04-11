@@ -345,17 +345,22 @@ def previous_sessions_view():
 @login_required
 def session_page(id=None):
     if id != None:
-        session = SessionModel.find_by_sessionNumber(id)
-        if session != None:
-            form = FormSession()
-            custom_session = copy.deepcopy(session)
-            dates = get_full_session(session)
-            setattr(custom_session, "dates", [date.json() for date in dates])
+        form = FormSession() 
+        custom_session = createDateList(id)
+        if custom_session:  
             return render_template('session.html', session=custom_session, form=form)
         else:
             return abort(404, "The session you're looking for was not found"), 404
     return redirect('/sessions')
 
+def createDateList(id):
+    session = SessionModel.find_by_sessionNumber(id)
+    if session != None:
+        custom_session = copy.deepcopy(session)
+        dates = get_full_session(session) 
+        setattr(custom_session, "dates", [date.json() for date in dates])
+        return custom_session
+    return None
 
 @app.route('/sessions/<id>/assets', methods=['GET'])
 @login_required
