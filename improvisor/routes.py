@@ -343,6 +343,8 @@ def session_page(id=None):
             dates = get_full_session(session)
             setattr(custom_session, "dates", [date.json() for date in dates])
             return render_template('session.html', session=custom_session, form=form)
+        else:
+            return abort(404, "The session you're looking for was not found"), 404
     return redirect('/sessions')
 
 
@@ -355,6 +357,8 @@ def session_page_assets(id=None):
             custom_session = copy.deepcopy(session)
             dates = get_full_session(session)
             return jsonify([date.json() for date in dates])
+        else:
+            return abort(404, "The session you're looking for was not found"), 404
     return None
 
 
@@ -368,8 +372,9 @@ def session_page_info(id=None):
                 'sessionName' : session.sessionName,
                 'sessionAuthor' : current_user.firstname + " " + current_user.lastname
             }
-
             return jsonify(info)
+        else:
+            return abort(404, "The session you're looking for was not found"), 404
     return None
 
 
@@ -391,6 +396,8 @@ def session_update(id=None):
                     return render_template('session.html', session=custom_session, form=form)
             else:
                 return redirect(url_for('session_page', id=id))
+        else:
+            return abort(404, "The session you're looking for was not found"), 404
     return redirect('/sessions')
 
 
