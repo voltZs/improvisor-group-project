@@ -3,13 +3,14 @@
 {% set page_title = 'Session' %}
 
 {% block page_content %}
-<h2 class="darkText">
+<h2 class="darkText flexStart">
     <a href="/sessions">
         <i class="fas fa-arrow-left darkText"></i>
     </a>
-    Previous Sessions
+    <span class="flexGrow center">
+      <span>Previous Sessions</span>
+    </span>
 </h2>
-
 <div id="{{session.sessionNumber}}" class="session-page whiteContainer">
     <form id="formUpdate" class="flexContVertical" method="POST" action="/sessions/{{session.sessionNumber}}/update" enctype="multipart/form-data">
     {{ form.hidden_tag() }}

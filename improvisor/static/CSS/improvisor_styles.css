@@ -120,6 +120,7 @@ body {
 
 .promptContainer {
     min-width: 320px;
+    box-sizing: border-box;
     width: 30vw;
     padding: 20px;
     background-color: rgb(255, 255, 255, 0.9);
@@ -296,13 +297,28 @@ body {
 .padding5{
     padding: 5px;
 }
+
 .centerFlex {
     display: flex;
     width: 100%;
     justify-content: center;
 }
+.flexStart{
+  display:flex;
+  justify-content: flex-start;
+}
+
+.flexGrow{
+  display: flex;
+  flex-grow: 1;
+}
+.flexGrow.center{
+  justify-content: center;
+}
 
 .whiteContainer {
+  box-sizing: border-box;
+  max-width: 100%;
     padding: 20px;
     border-radius: 12px;
     background-color: rgba(28, 80, 165, 0.1);
@@ -580,20 +596,27 @@ h3 {
 }
 
 .inputSection {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
 }
 
 input.growText {
-    flex-grow: 1;
+    box-sizing: border-box;
+    width: 65%;
+}
+
+input.growText.growText100{
+  width:100%;
 }
 
 .labelDiv {
-    display: inline-block;
-    min-width: 110px;
-    font-size: 18px;
-    margin-right: 5px;
+  display: inline-block;
+  font-size: 18px;
+  margin-right: 5px;
 }
 
 input[type="text"] {
