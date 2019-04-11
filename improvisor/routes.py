@@ -516,7 +516,7 @@ def asset(id=None):
 def asset_delete(id=None):
     if id is not None:
         # Delete the asset with id from db
-        asset = AssetModel.find_by_assetId(id)
+        asset = AssetModel.find_by_assetId(id)        
         # If the tag only belongs to the asset being deleted, remove the tag
         for tag in asset.tags:
             if len(tag.assets) <= 1:
