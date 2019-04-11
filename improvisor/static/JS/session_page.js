@@ -278,6 +278,12 @@ deleteButton.addEventListener("click", function (e) {
   }
 });
 
+function removeAsset(assetIndex) {
+  console.log(assetIndex);
+  var assets = getSessionAssets();
+  console.log(assets[assetIndex]);
+  // Send AJAX query to delete from session
+}
 
 function applyGestureControls() {
   $('.assetThumbnail').each(function () {
@@ -302,8 +308,18 @@ function applyGestureControls() {
       element.magnificPopup({
         items: {
           src: element.attr('src'),
-          title: element.attr('title'),
+          title: function () {
+            return element.attr('title') + "<div class='popup-btn'><button id='btnRemoveAsset' class='bubbleButton darkText rowsButton bubbleButtonDark bubbleButtonRedHover centerFlex' style='margin-left:5px;'>Remove Asset</button></div>";
+          },
           type: 'image'
+        },
+        callbacks: {
+          open: function () {
+            console.log("callback");
+            $('#btnRemoveAsset').click(function () {
+              removeAsset(element.attr('data-index'));
+            });
+          },
         }
       });
     });

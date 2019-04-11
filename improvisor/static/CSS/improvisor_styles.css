@@ -302,6 +302,11 @@ body {
     padding: 5px;
 }
 
+.center {
+    display: flex;
+    justify-content: center;
+}
+
 .centerFlex {
     display: flex;
     width: 100%;
@@ -1276,6 +1281,16 @@ div.presenter-view object {
 
 .mfp-figure:after {
     visibility: hidden;
+}
+
+.popup-btn {
+    position: fixed;
+    margin: 10px 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    width: 240px;
 }
 
 .arrowBtn {
