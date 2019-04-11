@@ -375,6 +375,20 @@ def session_page_assets(id=None):
             return abort(404, "The session you're looking for was not found"), 404
     return None
 
+@app.route('/sessions/<id>/removeAsset', methods=['GET', 'POST'])
+@login_required
+def removeAssetFromSession(id=None):
+    if id !=None:
+        session = SessionModel.find_by_sessionNumber(id)
+        if session:
+            index = json.loads(request.form.get('index'))
+            dates = get_full_session(session)
+            dates[index].remove_from_db()
+            return json.dumps({"success": True}), 200, {'ContentType' : "application/json"}
+        else: 
+            return abort(404, "The session you're looking for was not found"), 404
+    return None
+
 
 @app.route('/sessions/<id>/info', methods=['GET'])
 @login_required
