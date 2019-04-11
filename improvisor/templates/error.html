@@ -1,0 +1,12 @@
+{% extends "with_sidebar.html" %}
+{% set page_title = 'Oops!' %}
+
+{% block page_content %}
+  <h1 class="darkText centerFlex">Oops! {{error_code}}</h1>
+  <h2 class="darkText centerFlex">{{error_msg}}</h2>
+  <h3 class="darkText centerFlex"><i class="fas fa-bug fa-2x"></i></h3>
+{% endblock %}
+
+{% block end_body %}
+<!-- <script type="text/javascript" src="{{url_for('static', filename='JS/session_page.js')}}"></script> -->
+{% endblock end_body %}

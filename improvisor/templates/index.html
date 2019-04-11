@@ -3,7 +3,7 @@
 
 {% block page_content %}
     {% if current_user.is_authenticated %}
-        <h1>You are logged in as: {{current_user.email}}</h1>
+        <h1>Welcome back, {{current_user.firstname}}</h1>
     {% else %}
     <h1>You are not logged in</h1>
     {% endif %}

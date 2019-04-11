@@ -493,7 +493,10 @@ def asset(id=None):
     form = FormUpdateAsset()
     if id is not None:
         asset = AssetModel.find_by_assetId(id)
-        return render_template('asset_page.html', asset=asset, form= form)
+        if asset:
+            return render_template('asset_page.html', asset=asset, form= form)
+        else:
+            return abort(404, "The asset you're looking for was not found"), 404
     return render_template('asset_page.html', asset=None, form = form)
 
 @app.route('/assets/<id>/delete', methods=['POST'])
@@ -781,6 +784,23 @@ def compare_phrases():
 
     return dumps(sorting_obj, default=json_serial)
 
+#================== ERROR HANDLING ==================
+@app.errorhandler(404)
+def error_handling(error):
+    return render_error_page(error)
+
+@app.errorhandler(403)
+def error_handling(error):
+    return render_error_page(error)
+
+@app.errorhandler(500)
+def error_handling(error):
+    return render_error_page(error)
+
+def render_error_page(error):
+    return render_template('error.html',error_code=error.code, error_msg=error.description), error.code
+
+# =======================================
 
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
