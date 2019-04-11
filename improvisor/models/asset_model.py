@@ -57,7 +57,7 @@ class AssetModel(db.Model):
 
     @classmethod
     def find_by_assetName(cls, assetname):
-        return cls.query.filter_by(assetname = assetname, user_id = session["user_id"]).first()
+        return cls.query.filter_by(assetname = assetname, user_id = session["user_id"]).all()
 
     @classmethod
     def find_by_assetId(cls, id):
