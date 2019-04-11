@@ -312,7 +312,7 @@ def addPicture(settingsForm):
     except Exception as e:
         print(e)
         image_user.save(save_location)
-    if (current_user.profileImageLocation != "https://media.istockphoto.com/photos/portrait-of-a-businessman-picture-id619636712?k=6&m=619636712&s=612x612&w=0&h=RlfRmp3IyN5GDmh_Gugxps7c_AYnBCk6nZgg3yf4H3c="):
+    if (current_user.profileImageLocation != "/static/images/default_profile.png"):
         os.remove("improvisor" + current_user.profileImageLocation)
     current_user.profileImageLocation = relative_path + "/" + filename
     db.session.commit()
