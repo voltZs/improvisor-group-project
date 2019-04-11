@@ -44,3 +44,12 @@ class TagModel(db.Model):
             new_tag = TagModel(tagname, current_user.get_id())
             new_tag.save_to_db()
             return new_tag
+
+    @classmethod
+    def remove_tag(cls, tagname):
+        tags = cls.query.filter_by(user_id=current_user.get_id())
+
+        for tag in tags:
+            if tag.tagname.lower() == tagname.lower():
+                db.session.delete(tag)
+                db.session.commit()
