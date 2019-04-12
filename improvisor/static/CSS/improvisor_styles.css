@@ -558,7 +558,7 @@ h3 {
 }
 
 @media screen and (max-width: 600px) {
-    .navigbar a:not(:first-child):not(:last-child) {
+    .navigbar a:not(.stay) {
         display: none;
     }
 
@@ -581,7 +581,7 @@ h3 {
 
     .navigbar.responsive .icon {
         position: absolute;
-        right: 63px;
+        right: 51px;
         top: 0;
     }
 

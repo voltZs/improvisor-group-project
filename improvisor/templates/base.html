@@ -45,7 +45,7 @@
 {% block navigbar %}
 <div class="navigbar floatingShadow" id="myTopnav">
   <a href="/sessions" class="navigbarItem logo stay">Improvisor</a>
-  <a href="javascript:void(0);" class= "info navigbarItem navigbarItemRight " id="modalHelpIcon"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" class= "info navigbarItem navigbarItemRight stay" id="modalHelpIcon"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
   <div class="items">
     {% if current_user.is_authenticated %}
     <a href="/logout" class="navigbarItem navigbarItemRight">Log Out</a>
