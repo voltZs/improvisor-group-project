@@ -29,9 +29,6 @@ if(lastAssetDivData){
   $(presenterView).hide();
 }
 
-console.log(lastAsset);
-
-console.log(bckgrnd_color);
 $("html").css("background", "none");
 $("html").css("background-color", bckgrnd_color );
 
@@ -51,7 +48,6 @@ $(document).ready(function () {
     socket.on('presenter', function (data) {
         $(presenterView).show();
         $(defaultView).hide();
-        console.log(data);
         emptyViews();
         showAsset(data)
     });
@@ -76,7 +72,7 @@ function showAsset(receivedData){
   } else if(receivedData['assettype'] == "link"){
       $('#link_display').show();
       $('#link_display').html(receivedData['assetLink']);
-      $('#link_display').attr('href', receivedData['assetLink']);
+      $('#link_display').attr('href', "//" + receivedData['assetLink']);
   }
 }
 
