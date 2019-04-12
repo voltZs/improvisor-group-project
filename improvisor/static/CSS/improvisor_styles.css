@@ -681,6 +681,16 @@ h3 {
     flex-direction: column;
 }
 
+.verticalFormsContainer .whiteContainer{
+  padding-bottom: 45px;
+}
+
+.verticalFormsContainer .miniBubbleButton{
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+
 .inputSection {
     flex-wrap: wrap;
     max-width: 100%;
@@ -728,6 +738,10 @@ button {
 
 button:focus {
     outline: none !important;
+}
+
+form{
+  position: relative;
 }
 
 input {
