@@ -558,8 +558,7 @@ h3 {
 }
 
 @media screen and (max-width: 600px) {
-
-    .navigbar a:not(:first-child) {
+    .navigbar a:not(:first-child):not(:last-child) {
         display: none;
     }
 

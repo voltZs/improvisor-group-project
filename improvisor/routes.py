@@ -345,17 +345,22 @@ def previous_sessions_view():
 @login_required
 def session_page(id=None):
     if id != None:
-        session = SessionModel.find_by_sessionNumber(id)
-        if session != None:
-            form = FormSession()
-            custom_session = copy.deepcopy(session)
-            dates = get_full_session(session)
-            setattr(custom_session, "dates", [date.json() for date in dates])
+        form = FormSession() 
+        custom_session = createDateList(id)
+        if custom_session:  
             return render_template('session.html', session=custom_session, form=form)
         else:
             return abort(404, "The session you're looking for was not found"), 404
     return redirect('/sessions')
 
+def createDateList(id):
+    session = SessionModel.find_by_sessionNumber(id)
+    if session != None:
+        custom_session = copy.deepcopy(session)
+        dates = get_full_session(session) 
+        setattr(custom_session, "dates", [date.json() for date in dates])
+        return custom_session
+    return None
 
 @app.route('/sessions/<id>/assets', methods=['GET'])
 @login_required
@@ -367,6 +372,20 @@ def session_page_assets(id=None):
             dates = get_full_session(session)
             return jsonify([date.json() for date in dates])
         else:
+            return abort(404, "The session you're looking for was not found"), 404
+    return None
+
+@app.route('/sessions/<id>/removeAsset', methods=['GET', 'POST'])
+@login_required
+def removeAssetFromSession(id=None):
+    if id !=None:
+        session = SessionModel.find_by_sessionNumber(id)
+        if session:
+            index = json.loads(request.form.get('index'))
+            dates = get_full_session(session)
+            dates[index].remove_from_db()
+            return json.dumps({"success": True}), 200, {'ContentType' : "application/json"}
+        else: 
             return abort(404, "The session you're looking for was not found"), 404
     return None
 
@@ -813,15 +832,15 @@ def compare_phrases():
 
 #================== ERROR HANDLING ==================
 @app.errorhandler(404)
-def error_handling(error):
+def error_handling404(error):
     return render_error_page(error)
 
 @app.errorhandler(403)
-def error_handling(error):
+def error_handling403(error):
     return render_error_page(error)
 
 @app.errorhandler(500)
-def error_handling(error):
+def error_handling500(error):
     return render_error_page(error)
 
 def render_error_page(error):

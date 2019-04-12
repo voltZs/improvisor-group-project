@@ -48,8 +48,8 @@ class AssetModel(db.Model):
         self.sessionDates.append(date)
         db.session.commit()
 
-    def get_dates_for_session(self, session_id):
-        actual_session_id = SessionModel.find_by_sessionNumber(session_id)
+    def get_dates_for_session(self, sessionNumber):
+        actual_session_id = SessionModel.find_by_sessionNumber(sessionNumber)
         datesForSession = [date for date in self.sessionDates if date.session_id == actual_session_id.id]
         return datesForSession
 
