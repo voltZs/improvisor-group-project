@@ -1,5 +1,7 @@
 var asset;
 
+$('.backgroundMotive').hide();
+
 var navigBar = document.getElementById("navigBar");
 var presenterView = document.getElementById("presenterView");
 var defaultView = document.getElementById("presenterDefault");

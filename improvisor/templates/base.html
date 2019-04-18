@@ -44,9 +44,14 @@
 
 
 {% block body %}
+<img src="{{url_for('static', filename='images/improvisor_logos/logo_black@10x.png')}}" class="backgroundMotive" alt="">
+
 {% block navigbar %}
 <div class="navigbar floatingShadow" id="myTopnav">
-  <a href="/sessions" class="navigbarItem logo stay">Improvisor</a>
+  <img src="{{url_for('static', filename='images/improvisor_logos/logo_black@1x.png')}}" class="logoIconMotive navbarIcon" alt="">
+  <a href="/" class="navigbarItem logo stay" id="improvisorTitleNavbar">
+    Improvisor
+  </a>
   <a href="javascript:void(0);" class= "info navigbarItem navigbarItemRight hidden stay" id="modalHelpIcon"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
   <div class="items">
     {% if current_user.is_authenticated %}
