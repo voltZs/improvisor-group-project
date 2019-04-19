@@ -264,30 +264,25 @@ function addToCurrentTab(assetID) {
   populateActiveTab();
 }
 
-function loadAssetsFromSession()
-{
+function loadAssetsFromSession() {
   var tabs = JSON.parse(localStorage.getItem('tabs'));
   var maxTab = 0;
 
   var tabs = {
-    '1' : []
+    '1': []
   }
   // Find the maximum tab
-  for (var i = 0; i < assets.length; i++)
-  {
-    if (maxTab < assets[i].tab)
-    {
+  for (var i = 0; i < assets.length; i++) {
+    if (maxTab < assets[i].tab) {
       maxTab = assets[i].tab;
     }
   }
   // Initialise all the tabs
-  for (var i = 1; i <= maxTab; i++)
-  {
+  for (var i = 1; i <= maxTab; i++) {
     tabs[i] = [];
   }
   // Add the asset to the relevant tab
-  for (var i = 0; i < assets.length; i++)
-  {
+  for (var i = 0; i < assets.length; i++) {
     var currentTab = assets[i].tab;
     tabs[currentTab].push(assets[i].asset);
   }
@@ -368,8 +363,7 @@ function storageAvailable(type) {
 
 function flushRecentTags() {
   storedTags = JSON.parse(localStorage.getItem('mentionedTags'));
-  if (storedTags != null)
-  {
+  if (storedTags != null) {
     console.log(storedTags);
     storedTags['recent'] = {};
     localStorage.setItem('mentionedTags', JSON.stringify(storedTags));
@@ -426,8 +420,7 @@ function applyGestureControls() {
               } else {
 
                 // Identify assets that are swiped from the tab view
-                if (element.parent().attr('id') == "currentTabRow")
-                {
+                if (element.parent().attr('id') == "currentTabRow") {
                   popupImage.addClass("fromTabs");
                 }
                 popupImage.addClass("gestures-added");
@@ -457,15 +450,12 @@ function applyGestureControls() {
                   }
 
                   // Check if the asset was swiped from the tab history
-                  if (popupImage.hasClass("fromTabs"))
-                  {
+                  if (popupImage.hasClass("fromTabs")) {
                     data['fromTabs'] = true;
-                  }
-                  else
-                  {
+                  } else {
                     addToCurrentTab(assetID);
-                    flushRecentTags();
                   }
+                  flushRecentTags();
                   socket.emit('event', data);
 
                   console.log("sent ID " + assetID + " to socketIO");
@@ -511,19 +501,19 @@ var span = document.getElementsByClassName("close")[0];
 var textInp = document.getElementById('searchInput');
 
 // When the user clicks on the link, open the modal
-link.onclick = function() {
+link.onclick = function () {
   modal.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+span.onclick = function () {
   searchResults.innerHTML = "";
   textInp.value = "";
   modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
@@ -532,7 +522,7 @@ window.onclick = function(event) {
 var tags = fetchTagset();
 // populate each tag in the datalist to allow easier manual tag search
 var options = document.getElementById('dataList1');
-tags.forEach(function(tag){
+tags.forEach(function (tag) {
   var option = document.createElement('option');
   option.value = tag;
   options.appendChild(option);
@@ -545,13 +535,13 @@ tags.forEach(function(tag){
 var searchTag;
 // used to display only the tag that is searched for but local storage contains
 // all mentioned tags
-$('#searchButton').click(function(){
-  recognisedTags =[];
+$('#searchButton').click(function () {
+  recognisedTags = [];
   recognisedTags.push(textInp.value);
   searchTag = textInp.value;
   console.log('recognised tags ' + recognisedTags);
   makeAjaxRequestTagSearch();
-  recognisedTags =[];
+  recognisedTags = [];
   textInp.value = "";
 });
 
@@ -560,8 +550,8 @@ function updateSearchResults(assets) {
   searchResults.innerHTML = "";
   for (asset in assets['frequent']) {
 
-    if(assets['frequent'][asset]['tags'].includes(searchTag)){
-      console.log('SearchTag found '+ searchTag);
+    if (assets['frequent'][asset]['tags'].includes(searchTag)) {
+      console.log('SearchTag found ' + searchTag);
       var image = document.createElement("IMG");
       var thumbnail = assets['frequent'][asset]['thumbnailLocation'];
       if (thumbnail != null) {
@@ -575,10 +565,10 @@ function updateSearchResults(assets) {
       image.classList.add("animated");
       image.classList.add("faster");
       searchResults.appendChild(image);
-    }else {
+    } else {
       console.log('SearchTag found NOT ');
     }
-    console.log('asset tag:'+ assets['frequent'][asset]['tags']);
+    console.log('asset tag:' + assets['frequent'][asset]['tags']);
 
   }
 
@@ -622,7 +612,7 @@ function makeAjaxRequestTagSearch() {
         timeout: 60000,
         success: function (data) {
           var retrieved = JSON.parse(data);
-          console.log('retreived assets results '+retrieved['assetResults']);
+          console.log('retreived assets results ' + retrieved['assetResults']);
           //updateSearchResults(retrieved['assetResults']);
           localStorage.setItem('mentionedTags', JSON.stringify(retrieved[
             'mentionedTags']));

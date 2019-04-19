@@ -15,27 +15,27 @@ html {
     /* IE6-9 fallback on horizontal gradient */
 }
 
-.backgroundMotive{
-  width: 100%;
-  height: auto;
-  position: fixed;
-  right: 2%;
-  bottom: 2%;
-  filter: invert(1) opacity(0.3);
-  z-index: -1;
+.backgroundMotive {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    right: 2%;
+    bottom: 2%;
+    filter: invert(1) opacity(0.3);
+    z-index: -1;
 }
 
-.logoIconMotive{
-  width: 37px;
-  height: auto;
-  filter: invert(1) opacity(1);
+.logoIconMotive {
+    width: 37px;
+    height: auto;
+    filter: invert(1) opacity(1);
 }
 
-.logoIconMotive.navbarIcon{
-  filter: invert(1) opacity(0.9);
-  position: absolute;
-  margin-top: 7px;
-  margin-left: 20px;
+.logoIconMotive.navbarIcon {
+    filter: invert(1) opacity(0.9);
+    position: absolute;
+    margin-top: 7px;
+    margin-left: 20px;
 }
 
 .container {
@@ -492,7 +492,7 @@ h3 {
     font-size: 20px;
 }
 
-/* NAV BAR START */
+/* NAV BAR START (based on https://www.w3schools.com/howto/howto_js_topnav_responsive.asp) */
 
 .navigbar {
     z-index: 1;
