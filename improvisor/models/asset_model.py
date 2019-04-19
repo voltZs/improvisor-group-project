@@ -71,7 +71,8 @@ class AssetModel(db.Model):
         del directories[0]
         directories.insert(0, "improvisor")
         path = "/".join([directory for directory in directories if "Thumbnail" not in directory])
-        os.remove("improvisor" + obj.assetLocation)
+        if obj.assettype == "file":
+            os.remove("improvisor" + obj.assetLocation)
         os.remove("improvisor" + obj.thumbnailLocation)
         os.rmdir(path)
         db.session.delete(obj)
