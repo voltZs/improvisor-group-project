@@ -42,7 +42,7 @@ class SessionModel(db.Model):
     
     def remove_from_db(self):
         for asset in self.assets:
-            for date in asset.get_dates_for_session(self.id):
+            for date in asset.get_dates_for_session(self.sessionNumber):
                 db.session.delete(date) 
         db.session.delete(self)
         db.session.commit()
