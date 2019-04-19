@@ -15,33 +15,33 @@ var imageFormats = ["jpg", "jpeg", "png", "bmp", "tiff"];
 
 var bckgrnd_color = document.getElementById("data-color").getAttribute("data");
 var bckgrnd_rgb = hexToRgb(bckgrnd_color);
-var perc_bright = ((bckgrnd_rgb['r']*299) + (bckgrnd_rgb['g']*587) + (bckgrnd_rgb['b']*114)) / 1000;
-if(perc_bright>150){
-  $(defaultView.children).css("color", "black");
+var perc_bright = ((bckgrnd_rgb['r'] * 299) + (bckgrnd_rgb['g'] * 587) + (bckgrnd_rgb['b'] * 114)) / 1000;
+if (perc_bright > 150) {
+    $(defaultView.children).css("color", "black");
 } else {
-  $(defaultView.children).css("color", "white");
+    $(defaultView.children).css("color", "white");
 }
 var lastAssetDiv = document.getElementById("data-lastAssetData");
 var lastAssetDivData = lastAssetDiv.getAttribute("data");
-if(lastAssetDivData){
-  $(defaultView).hide();
-  var lastAsset = JSON.parse(lastAssetDivData);
-  showAsset(lastAsset);
+if (lastAssetDivData) {
+    $(defaultView).hide();
+    var lastAsset = JSON.parse(lastAssetDivData);
+    showAsset(lastAsset);
 } else {
-  $(presenterView).hide();
+    $(presenterView).hide();
 }
 
 $("html").css("background", "none");
-$("html").css("background-color", bckgrnd_color );
+$("html").css("background-color", bckgrnd_color);
 
-document.addEventListener("mousemove", function(){
+document.addEventListener("mousemove", function () {
     timer = 0;
     navigBar.classList.remove("hiddenNavigbar");
 });
 
-setInterval(function(){
-    timer ++;
-    if(timer>5) navigBar.classList.add("hiddenNavigbar");
+setInterval(function () {
+    timer++;
+    if (timer > 5) navigBar.classList.add("hiddenNavigbar");
 }, 1000);
 
 $(document).ready(function () {
@@ -55,30 +55,42 @@ $(document).ready(function () {
     });
 });
 
-function showAsset(receivedData){
-  if (receivedData['assettype'] == "file"){
-      var directory = receivedData['assetLocation'];
-      var temp = directory.split(".");
-      var extension = temp[temp.length-1].toLowerCase();
+function showAsset(receivedData) {
+    if (receivedData['assettype'] == "file") {
+        var directory = receivedData['assetLocation'];
+        var temp = directory.split(".");
+        var extension = temp[temp.length - 1].toLowerCase();
 
-      if(extension == "pdf"){
-          $('#embed_display').show();
-          $('#embed_display').attr('src', directory);
-      } else if (textFormats.includes(extension)) {
-          $('#object_display').show();
-          $('#object_display').attr('data', directory);
-      } else if (imageFormats.includes(extension)) {
-          $('#img_display').show();
-          $('#img_display').attr('src', directory);
-      }
-  } else if(receivedData['assettype'] == "link"){
-      $('#link_display').show();
-      $('#link_display').html(receivedData['assetLink']);
-      $('#link_display').attr('href', "//" + receivedData['assetLink']);
-  }
+        if (extension == "pdf") {
+            $('#embed_display').show();
+            $('#embed_display').attr('src', directory);
+        } else if (textFormats.includes(extension)) {
+            $('#object_display').show();
+            $('#object_display').attr('data', directory);
+        } else if (imageFormats.includes(extension)) {
+            $('#img_display').show();
+            $('#img_display').attr('src', directory);
+        }
+    } else if (receivedData['assettype'] == "link") {
+        $('#link_display').show();
+        $('#link_display').html(receivedData['assetLink']);
+        var url = receivedData['assetLink'];
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "//" + url;
+        }
+        $('#link_display').attr('href', url);
+        $('#link_display').attr('rel', "noopener noreferrer");
+        $('#link_display').attr('style', "text-decoration: underline !important; text-decoration-line: underline !important");
+        if (perc_bright > 150) {
+            $('#link_display').css("color", "black");
+        } else {
+            $('#link_display').css("color", "white");
+        }
+        $('#link_display').attr('target', '_blank');
+    }
 }
 
-function emptyViews(){
+function emptyViews() {
     $(presenterView.children).attr("src", "");
     $(presenterView.children).attr("data", "");
     $(presenterView.children).attr("href", "");
