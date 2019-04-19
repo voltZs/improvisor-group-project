@@ -591,6 +591,11 @@ h3 {
         margin-right: 15px;
         font-size: 22px;
     }
+
+    .navigbar a .navigbarItemMid {
+        font-size: 17px;
+        padding: 0 5px;
+    }
 }
 
 @media screen and (max-width: 600px) {
