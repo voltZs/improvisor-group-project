@@ -558,6 +558,21 @@ h3 {
     #usernameNavigbar {
         display: none;
     }
+
+    .navigbar a .navigbarItemMid,
+    .navigbar #searchToggle {
+        font-size: 17px;
+        padding: 0 5px;
+    }
+
+    .navigbar #microphoneToggle.navigbarItem {
+        padding: 0 5px;
+    }
+
+    .navigbar #microphoneToggle.navigbarItem .fa-microphone {
+        padding: 0 5px;
+    }
+
 }
 
 #microphoneToggle {
@@ -590,11 +605,6 @@ h3 {
         display: block;
         margin-right: 15px;
         font-size: 22px;
-    }
-
-    .navigbar a .navigbarItemMid {
-        font-size: 17px;
-        padding: 0 5px;
     }
 }
 
