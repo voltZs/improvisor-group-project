@@ -14,7 +14,7 @@ var textFormats = ["txt", "csv"];
 var imageFormats = ["jpg", "jpeg", "png", "bmp", "tiff"];
 
 var bckgrnd_color = document.getElementById("data-color").getAttribute("data");
-var bckgrnd_rgb = hexToRgb(bckgrnd_color);
+var bckgrnd_rgb = document.getElementById("data-rgb").getAttribute("data2");
 var perc_bright = ((bckgrnd_rgb['r'] * 299) + (bckgrnd_rgb['g'] * 587) + (bckgrnd_rgb['b'] * 114)) / 1000;
 if (perc_bright > 150) {
     $(defaultView.children).css("color", "black");

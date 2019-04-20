@@ -212,7 +212,7 @@ def presenter_view():
         lastAsset = {}
         if(len(activeSession)):
             lastAsset = json.dumps(activeSession[len(activeSession)-1].asset.json())
-    return render_template('presenter.html', background_color=bckgrnd, lastAsset=lastAsset)
+    return render_template('presenter.html', background_color=bckgrnd, background_colorRGB = bckgrnd.rgb, lastAsset=lastAsset)
 
 @app.route('/controller', methods=['GET'])
 @login_required
