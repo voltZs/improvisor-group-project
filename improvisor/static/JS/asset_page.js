@@ -147,14 +147,14 @@ thumbnailNameCheckbox.addEventListener('change', function () {
 
 deleteButton.addEventListener("click", function (e) {
     var sessions = [];
-    for (var i = 0; i < asset.sessions.length; i++) {
-        sessions.push(asset.sessions[i]);
+    for (var i = 0; i < asset.sessions_names.length; i++) {
+        sessions.push(asset.sessions_names[i]);
     }
     var warningString = "Are you sure you want to delete this asset?"
     if (sessions.length > 0) {
         warningString += "\nIt will also be removed from the following sessions:"
         for (var i = 0; i < sessions.length; i++) {
-            warningString += ("\nSession ID: " + sessions[i])
+            warningString += ("\nSession name: " + sessions[i])
         }
     }
 

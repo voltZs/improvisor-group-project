@@ -146,9 +146,6 @@ def upload(asset, assetResource, thumbBase64):
         asset.thumbnailLocation = relative_path + "/Thumbnail_"+thumbBase64[-15:] +".png"
 
 
-
-
-
 @app.route('/', methods=['GET'])
 def index():
 	return render_template('index.html')
@@ -278,7 +275,7 @@ def user_settings_view():
     return render_template('user_settings.html', form=form)
 
 #wtforms' ColorField uses a widget called ColorInput
-#when setting these rgb values there is an issue any value that is a 1, 0 or a float with many values after the decimal point
+#when setting these rgb values there is an issue where any number that is a 1, 0 or a float with many values after the decimal point will not be valid and the colour will default to black
 #this function solves that issue
 def rgbValueCorrection(colourObj):
     rgb = [0,0,0]
