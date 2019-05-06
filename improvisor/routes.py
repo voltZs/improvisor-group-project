@@ -452,7 +452,7 @@ def session_delete(id=None):
 def asset_management_view():
     user = UserModel.find_by_id(current_user.get_id())
     # desc => from most recent to oldest
-    assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(10).all()
+    assets = user.assets.order_by(desc(AssetModel.dateCreated)).limit(12).all()
     return render_template('asset_management.html', assets=assets)
 
 @app.route('/assets/bulk_delete', methods=['POST'])
@@ -487,7 +487,7 @@ def assets_select():
     if limit:
         limit = int(limit)
     else:
-        limit = 10
+        limit = 12
 
     # filtering
     unfiltered = [asset.json() for asset in UserModel.find_by_id(current_user.get_id()).assets.all()]
