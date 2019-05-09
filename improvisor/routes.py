@@ -38,14 +38,18 @@ def inject_active_session():
     else:
         return dict(active=None)
 
+'''
+API ROUTES ARE USED FOR DEBUGGING - THEY ARE CURRENTLY DISABLED
+'''
 
-
+'''
 @app.route('/api/session')
 @login_required
 def json_session():
     return jsonify({"sessionAssets": [session.json() for session in SessionModel.query.all()]})
+'''
 
-
+'''
 #API: extracts all of the current user's tags from the database returning a json
 @app.route('/api/user_tags_list', methods=['GET'])
 @login_required
@@ -55,28 +59,24 @@ def getTags():
     else:
         print("No user is logged in, can't get tags")
         return redirect('/')
+'''
 
-
+'''
 #API: extracts all users from database
 @app.route('/api/userList', methods=['GET'])
 def getUsers():
     return jsonify({"users": [user.json() for user in UserModel.query.all()]})
+'''
 
+'''
 #API: returns all assets in the database
 @app.route('/api/all_assets', methods=["GET"])
 def allAssets():
     print("all_assets")
     return jsonify({"assets" : [asset.json() for asset in AssetModel.query.all()]})
+'''
 
-
-# #API: adds user profile picture to databas
-# @app.route ('/api/profile_picture', methods =["GET", "POST"])
-# @login_required
-
-
-#     return render_template("user_profile.html", form = form)
-
-#API: inserts asset into database and allows tags to be added to asset
+# Inserts asset into database and allows tags to be added to asset
 @app.route('/assets/new', methods=["GET", "POST"])
 @login_required
 def addAsset():
