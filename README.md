@@ -1,7 +1,7 @@
 
 # Improvisor
 
-> Group Project Module 2018-2019 TRI2 @ Edinburgh Napier University
+> Group Project Module 2018-2019 TRI2 @ Edinburgh Napier University (1st place winner)
 
 <img src="misc/home.jpg" width="100%">
 
